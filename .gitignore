@@ -38,3 +38,4 @@ out/
 
 ### properties ###
 application-datasource.properties
+application-api.properties
