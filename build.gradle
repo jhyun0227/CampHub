@@ -31,7 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	//Spring Security, Oauth2.0, Jwt
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	//security jwt 추후 추가
 
 	//QueryDsl
