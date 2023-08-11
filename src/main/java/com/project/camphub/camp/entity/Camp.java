@@ -1,9 +1,13 @@
 package com.project.camphub.camp.entity;
 
+import com.project.camphub.externalapi.dto.openapi.Item;
 import lombok.*;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -43,4 +47,37 @@ public class Camp {
     @OneToOne(mappedBy = "camp", cascade = CascadeType.ALL)
     private CampDetail campDetail;
 
+    /**
+     * OpenApiResponse -> Camp
+     */
+    public static Camp fromOpenApiResponse(Item item) {
+        return Camp.builder()
+                .cpId(UUID.randomUUID().toString())
+                .cpContentId(item.getContentId())
+                .cpFacltNm(item.getFacltNm())
+                .cpTel(item.getTel())
+                .cpHomepage(item.getHomepage())
+                .cpResveCl(item.getResveCl())
+                .cpResveUrl(item.getResveUrl())
+                .cpOperPdCl(item.getOperPdCl())
+                .cpOperDeCl(item.getOperDeCl())
+                .cpHvofBgnde(item.getHvofBgnde())
+                .cpHvofEnddle(item.getHvofEnddle())
+                .cpInduty(item.getInduty())
+                .cpLctCl(item.getLctCl())
+                .cpThemaEnvrnCl(item.getThemaEnvrnCl())
+                .cpTourEraCl(item.getTourEraCl())
+                .cpFirstImageUrl(item.getFirstImageUrl())
+                .cpManageSttus(item.getManageSttus())
+                .cpManageDivNm(item.getMangeDivNm())
+                .cpMgcDiv(item.getMgcDiv())
+                .cpFacltDivNm(item.getFacltDivNm())
+                .cpInsrncAt(item.getInsrncAt())
+                .cpTrsagntNo(item.getTrsagntNo())
+                .cpBizrno(item.getBizrno())
+                .cpPrmisnDe(item.getPrmisnDe())
+                .cpCreatedtime(item.getCreatedtime())
+                .cpModifiedtime(item.getModifiedtime())
+                .build();
+    }
 }

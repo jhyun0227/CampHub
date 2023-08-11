@@ -1,11 +1,16 @@
 package com.project.camphub.externalapi.service;
 
 import com.project.camphub.aop.annotation.OpenApiTime;
+import com.project.camphub.camp.entity.Camp;
+import com.project.camphub.camp.entity.CampDetail;
+import com.project.camphub.camp.entity.CampFacility;
+import com.project.camphub.camp.entity.CampSite;
 import com.project.camphub.camp.repository.CampDetailRepository;
 import com.project.camphub.camp.repository.CampFacilityRepository;
 import com.project.camphub.camp.repository.CampRepository;
 import com.project.camphub.camp.repository.CampSiteRepository;
 import com.project.camphub.externalapi.dto.PropertiesValue;
+import com.project.camphub.externalapi.dto.openapi.Item;
 import com.project.camphub.externalapi.dto.openapi.OpenApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +20,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -47,18 +53,33 @@ public class OpenApiService {
         webClient = WebClient.builder().uriBuilderFactory(factory).build();
     }
 
-    public String saveCampInfo() {
+    /**
+     * OpenApi에서 가져온 데이터를 DB에 저장하는 메서드
+     */
+    @OpenApiTime
+    public String campInfo() {
+
+        int numOfRows = 1;
+        int pageNo = 1;
+        int totalCount;
+
+        OpenApiResponse campInfo = this.getCampInfo(numOfRows, pageNo);
+        log.info("getCampInfo 실행, campInfo = {}", campInfo);
+
+        this.saveCampInfo(campInfo.getResponse().getBody().getItems().getItem());
+
         return "ok";
     }
 
-    @OpenApiTime
-    public String getCampInfo() {
-
-        OpenApiResponse baseInfo = webClient.get()
+    /**
+     * OpenApi에서 데이터를 가져오는 메서드
+     */
+    private OpenApiResponse getCampInfo(int numOfRows, int pageNo) {
+        return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(propertiesValue.getBasePath())
-                        .queryParam("numOfRows", 1)
-                        .queryParam("pageNo", 1)
+                        .queryParam("numOfRows", numOfRows)
+                        .queryParam("pageNo", pageNo)
                         .queryParam("MobileOS", "ETC")
                         .queryParam("MobileApp", "CampHub")
                         .queryParam("serviceKey", propertiesValue.getEncodingKey())
@@ -67,9 +88,32 @@ public class OpenApiService {
                 .retrieve()
                 .bodyToMono(OpenApiResponse.class)
                 .block();
-
-        log.info("baseInfo = {}", baseInfo);
-
-        return "ok";
     }
+
+    /**
+     * 가져온 데이터를 데이터베이스에 저장하는 메서드
+     */
+    private void saveCampInfo(List<Item> items) {
+        for (Item item : items) {
+            //캠프 생성
+            Camp camp = Camp.fromOpenApiResponse(item);
+            campRepository.save(camp);
+
+            //캠프상세 생성
+            CampDetail campDetail = CampDetail.fromOpenApiResponse(camp, item);
+            campDetailRepository.save(campDetail);
+
+            //캠프시설 생성
+            CampFacility campFacility = CampFacility.fromOpenApiResponse(camp, item);
+            campFacilityRepository.save(campFacility);
+
+            //캠프사이트 생성
+            CampSite campSite = CampSite.fromOpenApiResponse(camp, item);
+            campSiteRepository.save(campSite);
+        }
+    }
+
+    /**
+     * openApiResponse
+     */
 }

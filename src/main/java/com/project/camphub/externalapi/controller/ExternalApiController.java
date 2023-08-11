@@ -15,8 +15,11 @@ public class ExternalApiController {
 
     private final OpenApiService openApiService;
 
-    @GetMapping("/campinfo")
-    public String saveCampInfo() {
-        return "ok";
+    /**
+     * OpenApi에서 데이터를 가져와 DB에 저장하는 메서드
+     */
+    @GetMapping("/openapi/campinfo/base")
+    public String campInfo() {
+        return openApiService.campInfo();
     }
 }

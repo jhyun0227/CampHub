@@ -12,8 +12,8 @@ public class PropertiesValue {
     private final String endPoint; //Origin
     private final String basePath; //기본데이터 조회 Path
     private final String syncPath; //데이터 동기화 Path
-    private final String encodingKey;
-    private final String decodingKey;
+    private final String encodingKey; //인코딩Key
+    private final String decodingKey; //디코딩key
 
     public PropertiesValue(
             @Value("${openapi.endpoint}") String endPoint,

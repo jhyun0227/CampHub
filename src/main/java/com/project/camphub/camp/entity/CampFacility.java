@@ -1,9 +1,9 @@
 package com.project.camphub.camp.entity;
 
+import com.project.camphub.externalapi.dto.openapi.Item;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Getter
@@ -41,5 +41,35 @@ public class CampFacility {
     private String cpfFrprvtWrppCo;
     private String cpfFrprvtSandCo;
     private String cpfFireSensorCo;
+
+    /**
+     * OpenApiResponse -> CampFacility
+     */
+    public static CampFacility fromOpenApiResponse(Camp camp, Item item) {
+        return CampFacility.builder()
+                .camp(camp)
+                .cpfManageNmpr(item.getManageNmpr())
+                .cpfAllar(item.getAllar())
+                .cpfSbrsCl(item.getSbrsCl())
+                .cpfSbrsEtc(item.getSbrsEtc())
+                .cpfPosblFcltyCl(item.getPosblFcltyCl())
+                .cpfPosblFcltyEtc(item.getPosblFcltyEtc())
+                .cpfGnrlSiteCo(item.getGnrlSiteCo())
+                .cpfAutoSiteCo(item.getAutoSiteCo())
+                .cpfGlampSiteCo(item.getGlampSiteCo())
+                .cpfCaravSiteCo(item.getCaravSiteCo())
+                .cpfIndvdlCaravSiteCo(item.getIndvdlCaravSiteCo())
+                .cpfGlampInnerFclty(item.getGlampInnerFclty())
+                .cpfCaravInnerFclty(item.getCaravInnerFclty())
+                .cpfBrazierCl(item.getBrazierCl())
+                .cpfWtrplCo(item.getWtrplCo())
+                .cpfToiletCo(item.getToiletCo())
+                .cpfSwrmCo(item.getSwrmCo())
+                .cpfExtshrCo(item.getExtshrCo())
+                .cpfFrprvtWrppCo(item.getFrprvtWrppCo())
+                .cpfFrprvtSandCo(item.getFrprvtSandCo())
+                .cpfFireSensorCo(item.getFireSensorCo())
+                .build();
+    }
 
 }
