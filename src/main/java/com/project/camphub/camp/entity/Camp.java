@@ -3,10 +3,7 @@ package com.project.camphub.camp.entity;
 import com.project.camphub.externalapi.dto.openapi.Item;
 import lombok.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -44,8 +41,12 @@ public class Camp {
     private String cpCreatedtime;
     private String cpModifiedtime;
 
-    @OneToOne(mappedBy = "camp", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CampDetail campDetail;
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private CampFacility campFacility;
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private CampSite campSite;
 
     /**
      * OpenApiResponse -> Camp
@@ -80,4 +81,14 @@ public class Camp {
                 .cpModifiedtime(item.getModifiedtime())
                 .build();
     }
+
+    /**
+     * Camp에 CampDetail, CampFacility, CampSite를 참조
+     */
+    public void refCpdCpfCps(CampDetail campDetail, CampFacility campFacility, CampSite campSite) {
+        this.campDetail = campDetail;
+        this.campFacility = campFacility;
+        this.campSite = campSite;
+    }
+
 }

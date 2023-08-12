@@ -20,6 +20,9 @@ public class ExternalApiController {
      */
     @GetMapping("/openapi/campinfo/base")
     public String campInfo() {
-        return openApiService.campInfo();
+
+        openApiService.campInfo();
+
+        return "ok";
     }
 }
