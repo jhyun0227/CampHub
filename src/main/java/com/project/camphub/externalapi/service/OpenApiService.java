@@ -180,6 +180,39 @@ public class OpenApiService {
     }
 
     /**
-     * openApiResponse
+     * OpenApi에서 날짜를 기준으로 데이터를 동기화 하여 수정하는 메서드
+     * OpenApi syncStatus : A(신규), U(수정), D(삭제)
+     * A : 새로운 데이터이므로 DB에 저장
+     * U : 데이터 수정이므로 DB에서 값을 가져와서 수정
+     * D : manageSttus(운영상태)가 '폐업'이 된 데이터를 표시해주는 것 같다. <- 아니었음
      */
+    @OpenApiTime
+    public String campSyncInfo(String searchDate) {
+
+        OpenApiResponse syncCampInfo = this.getSyncCampInfo(100, 1, searchDate);
+        log.info("syncCampInfo = {}", syncCampInfo);
+
+
+        return "ok";
+    }
+
+    /**
+     * OpenApi에서 날짜를 기준으로 변경사항이 있는 데이터를 가져오는 메서드
+     */
+    private OpenApiResponse getSyncCampInfo(int numOfRows, int pageNo, String searchDate) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(propertiesValue.getSyncPath())
+                        .queryParam("numOfRows", numOfRows)
+                        .queryParam("pageNo", pageNo)
+                        .queryParam("MobileOS", "ETC")
+                        .queryParam("MobileApp", "CampHub")
+                        .queryParam("serviceKey", propertiesValue.getEncodingKey())
+                        .queryParam("_type", "json")
+                        .queryParam("syncModTime", searchDate)
+                        .build())
+                .retrieve()
+                .bodyToMono(OpenApiResponse.class)
+                .block();
+    }
 }

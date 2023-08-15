@@ -90,4 +90,6 @@ public class Item {
     private String siteBottomCl4;
     private String siteBottomCl5;
 
+    private String syncStatus;
+
 }

@@ -16,11 +16,15 @@ class OpenApiServiceTest {
     OpenApiService openApiService;
 
     @Test
-    @Commit
-    void CampInfo() {
+    void campInfo() {
         int totalCount = openApiService.campInfo();
 
         log.info("totalCount = {}", totalCount);
+    }
+
+    @Test
+    void campSyncInfo() {
+//        openApiService.campSyncInfo();
     }
 
 }
