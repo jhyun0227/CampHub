@@ -16,12 +16,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -48,28 +47,55 @@ public class OpenApiService {
          * WebClient의 인코딩방식이 UriComponentsBuilder#encode() 라는 옵션을 사용한다.
          * 이 옵션은 url의 예약 문자들을 치환하기 때문에, WebClient의 기본 인코딩으로 인해 Key 값이 변경되는 문제가 발생
          * url 인코딩 모드를 없애기 위해 DefaultUriBuilderFactory 클래스를 사용했다.
+         *
+         * 노션 정리4
+         * org.springframework.core.io.buffer.DataBufferLimitException: Exceeded limit on max bytes to buffer : 262144
+         * WebClient에 설정되는 Default codec buffer size가 256KB로 제한된다. 애플리케이션 메모리 문제 때문....
+         * campInfo() 메서드로 인해 메모리를 많이 사용하게 되어서 발생하는 에러인데
+         * codec의 buffer size를 10MB로 올려주었다.
          */
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(propertiesValue.getEndPoint());
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.NONE);
 
-        webClient = WebClient.builder().uriBuilderFactory(factory).build();
+        ExchangeStrategies strategies = ExchangeStrategies.builder()
+                .codecs(clientCodecConfigurer -> clientCodecConfigurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)).build();
+
+        webClient = WebClient.builder().uriBuilderFactory(factory).exchangeStrategies(strategies).build();
     }
 
     /**
      * OpenApi에서 가져온 데이터를 DB에 저장하는 메서드
      */
     @OpenApiTime
-    public List<Camp> campInfo() {
+    public int campInfo() {
 
-        int numOfRows = 10;
+        int numOfRows = 100;
         int pageNo = 1;
-        int totalCount;
+        int totalCount = 0;
+        int loopCount = 0;
+        boolean isFirstIter = true;
 
-        OpenApiResponse campInfo = this.getCampInfo(numOfRows, pageNo);
+        do {
+            OpenApiResponse campInfo = this.getCampInfo(numOfRows, pageNo);
 
-        List<Camp> camps = this.saveCampInfo(campInfo.getResponse().getBody().getItems().getItem());
+            this.saveCampInfo(campInfo.getResponse().getBody().getItems().getItem());
 
-        return camps;
+            if (isFirstIter) {
+                totalCount = campInfo.getResponse().getBody().getTotalCount();
+                log.info("totalCount = {}",  totalCount);
+                loopCount = totalCount % numOfRows==0 ? totalCount / numOfRows : totalCount / numOfRows + 1;
+                log.info("loopCount = {}", loopCount);
+
+                isFirstIter = false;
+            }
+
+            log.info("pageNo = {}",  pageNo);
+
+            pageNo += 1;
+
+        } while (pageNo <= loopCount);
+
+        return totalCount;
     }
 
     /**
@@ -94,8 +120,7 @@ public class OpenApiService {
     /**
      * 가져온 데이터를 데이터베이스에 저장하는 메서드
      */
-    private List<Camp> saveCampInfo(List<Item> items) {
-        List<Camp> camps = new ArrayList<>();
+    private void saveCampInfo(List<Item> items) {
 
         for (Item item : items) {
             //캠프 생성
@@ -108,8 +133,6 @@ public class OpenApiService {
 
             camp.refCpdCpfCps(campDetail, campFacility, campSite);
             campRepository.save(camp);
-
-            camps.add(camp);
 
             /*
             원래 처음 작성했던 코드
@@ -154,8 +177,6 @@ public class OpenApiService {
             camps.add(camp);
             */
         }
-
-        return camps;
     }
 
     /**

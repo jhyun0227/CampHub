@@ -20,12 +20,14 @@ public class CampDetail {
     @MapsId //해당 엔터티의 주키를 현재 엔터티의 주키로 설정한다. 노션 정리2
     private Camp camp;
 
-    @Column(length = 2000)
+    @Column(length = 5000)
     private String cpdIntro;
     private String cpdLineIntro;
     @Column(length = 1000)
     private String cpdFeatureNm;
+    @Column(length = 2000)
     private String cpdTooltip;
+    @Column(length = 2000)
     private String cpdDirection;
     private String cpdDoNm;
     private String cpdSigunguNm;

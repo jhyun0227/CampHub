@@ -20,6 +20,7 @@ public class Camp {
     private String cpTel;
     private String cpHomepage;
     private String cpResveCl;
+    @Column(length = 2000)
     private String cpResveUrl;
     private String cpOperPdCl;
     private String cpOperDeCl;
