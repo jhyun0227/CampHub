@@ -100,11 +100,15 @@ public class OpenApiService {
 
     /**
      * OpenApi에서 데이터를 가져오는 메서드
+     *
+     * 2023.08.16 변경사항
+     * 원래 OpenApi의 '/basedList(기본 정보 목록 조회)'를 사용하였지만, 해당 데이터는 삭제 되거나, 비공개 데이터는 가져오지 않음 (syncStatus = 'D')
+     * DB 데이터 저장 방식이므로 '/basedSyncList(동기화 목록 조회)'를 이용하여 전체 데이터를 가져오는 것으로 변경
      */
     private OpenApiResponse getCampInfo(int numOfRows, int pageNo) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path(propertiesValue.getBasePath())
+                        .path(propertiesValue.getSyncPath())
                         .queryParam("numOfRows", numOfRows)
                         .queryParam("pageNo", pageNo)
                         .queryParam("MobileOS", "ETC")
@@ -184,7 +188,7 @@ public class OpenApiService {
      * OpenApi syncStatus : A(신규), U(수정), D(삭제)
      * A : 새로운 데이터이므로 DB에 저장
      * U : 데이터 수정이므로 DB에서 값을 가져와서 수정
-     * D : manageSttus(운영상태)가 '폐업'이 된 데이터를 표시해주는 것 같다. <- 아니었음
+     * D : TourApi DB상으로 삭제된 데이터이거나 비공개 데이터를 의미한다.
      */
     @OpenApiTime
     public String campSyncInfo(String searchDate) {

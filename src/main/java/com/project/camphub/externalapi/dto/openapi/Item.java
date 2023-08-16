@@ -30,6 +30,7 @@ public class Item {
     private String prmisnDe;
     private String createdtime;
     private String modifiedtime;
+    private String syncStatus;
 
     private String intro;
     private String lineIntro;
@@ -89,7 +90,5 @@ public class Item {
     private String siteBottomCl3;
     private String siteBottomCl4;
     private String siteBottomCl5;
-
-    private String syncStatus;
 
 }

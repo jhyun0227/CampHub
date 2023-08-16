@@ -41,6 +41,7 @@ public class Camp {
     private String cpPrmisnDe;
     private String cpCreatedtime;
     private String cpModifiedtime;
+    private String cpSyncStatus;
 
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CampDetail campDetail;
@@ -80,6 +81,7 @@ public class Camp {
                 .cpPrmisnDe(item.getPrmisnDe())
                 .cpCreatedtime(item.getCreatedtime())
                 .cpModifiedtime(item.getModifiedtime())
+                .cpSyncStatus(item.getSyncStatus())
                 .build();
     }
 
