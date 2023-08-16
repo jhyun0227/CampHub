@@ -1,5 +1,7 @@
 package com.project.camphub.externalapi.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.camphub.aop.annotation.OpenApiTime;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.camp.entity.CampDetail;
@@ -21,7 +23,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -29,9 +34,8 @@ import java.util.List;
 @Transactional
 public class OpenApiService {
 
-    //API 객체
     private WebClient webClient;
-
+    private final ObjectMapper objectMapper;
     private final PropertiesValue propertiesValue; //프로퍼티 값이 담긴 객체
 
     //비즈니스 객체
@@ -73,7 +77,9 @@ public class OpenApiService {
         int pageNo = 1;
         int totalCount = 0;
         int loopCount = 0;
+
         boolean isFirstIter = true;
+        boolean boolLoop = true;
 
         do {
             OpenApiResponse campInfo = this.getCampInfo(numOfRows, pageNo);
@@ -83,7 +89,7 @@ public class OpenApiService {
             if (isFirstIter) {
                 totalCount = campInfo.getResponse().getBody().getTotalCount();
                 log.info("totalCount = {}",  totalCount);
-                loopCount = totalCount % numOfRows==0 ? totalCount / numOfRows : totalCount / numOfRows + 1;
+                loopCount = totalCount % numOfRows == 0 ? totalCount / numOfRows : totalCount / numOfRows + 1;
                 log.info("loopCount = {}", loopCount);
 
                 isFirstIter = false;
@@ -93,7 +99,12 @@ public class OpenApiService {
 
             pageNo += 1;
 
-        } while (pageNo <= loopCount);
+            //페이지번호가 반복횟수보다 많으면 중지한다.
+            if (pageNo > loopCount) {
+                boolLoop = false;
+            }
+
+        } while (boolLoop);
 
         return totalCount;
     }
@@ -191,10 +202,67 @@ public class OpenApiService {
      * D : TourApi DB상으로 삭제된 데이터이거나 비공개 데이터를 의미한다.
      */
     @OpenApiTime
-    public String campSyncInfo(String searchDate) {
+    public String campSyncInfo() {
 
-        OpenApiResponse syncCampInfo = this.getSyncCampInfo(100, 1, searchDate);
-        log.info("syncCampInfo = {}", syncCampInfo);
+        String searchDate = "202309";
+
+        int numOfRows = 100;
+        int pageNo = 1;
+        int totalCount = 0;
+        int loopCount = 0;
+
+        boolean isFirstIter = true;
+        boolean boolLoop = true;
+
+        //동기화 사항이 있는 정보들을 저장하는 Collection
+        Map<String, Item> savedItems = new HashMap<>();
+
+        do {
+            /**
+             * Sync의 경우 해당 날짜의 변경사항이 없다면 JSON에서 items가 배열이 아닌 "" 가 넘어오게 된다.
+             * Items 객채안에 'List<Item> items' 로 정의 되어있기 때문에 에러가 발생한다.
+             * 해서 String으로 값을 받아온 후 ObjectMapper로 수동적으로 데이터를 동기화한다.
+             */
+            String stringSyncCampInfo = this.getSyncCampInfo(numOfRows, pageNo, searchDate);
+            OpenApiResponse syncCampInfo = this.mappingResponse(stringSyncCampInfo);
+
+            if (isFirstIter) {
+                totalCount = syncCampInfo.getResponse().getBody().getTotalCount();
+                log.info("totalCount = {}", totalCount);
+
+                int quotient = totalCount / numOfRows; //몫
+                int remainder = totalCount % numOfRows; //나머지
+                loopCount = remainder == 0 ? quotient : quotient + 1;
+
+                //1.동기화 목록이 없으면 코드를 반복문을 수행할 필요가 없다.
+                if (totalCount == 0) {
+                    break;
+                }
+
+                //2.해당날짜에 변경 데이터가 100개 넘지 않으면 반복문을 수행할 필요가 없다.
+                if (quotient == 0 && remainder != 0) {
+                    boolLoop = false;
+                }
+
+                isFirstIter = false;
+            }
+
+            //contentId 값을 Key, Item을 value로 임시 저장
+            List<Item> items = syncCampInfo.getResponse().getBody().getItems().getItem();
+            items.forEach(item -> {
+                savedItems.put(item.getContentId(), item);
+            });
+
+            pageNo += 1;
+
+            //3.페이지번호가 반복횟수보다 높으면 반복문을 수행할 필요가 없다.
+            if (pageNo > loopCount) {
+                boolLoop = false;
+            }
+
+        } while (boolLoop);
+
+        log.info("savedItem.size() = {}", savedItems.size());
 
 
         return "ok";
@@ -203,7 +271,7 @@ public class OpenApiService {
     /**
      * OpenApi에서 날짜를 기준으로 변경사항이 있는 데이터를 가져오는 메서드
      */
-    private OpenApiResponse getSyncCampInfo(int numOfRows, int pageNo, String searchDate) {
+    private String getSyncCampInfo(int numOfRows, int pageNo, String searchDate) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(propertiesValue.getSyncPath())
@@ -216,7 +284,25 @@ public class OpenApiService {
                         .queryParam("syncModTime", searchDate)
                         .build())
                 .retrieve()
-                .bodyToMono(OpenApiResponse.class)
+                .bodyToMono(String.class)
                 .block();
+    }
+
+    /**
+     * OpenApi를 통해 가져온 데이터(String)을 객체에 매핑시켜주는 메서드
+     */
+    private OpenApiResponse mappingResponse(String stringSyncCampInfo) {
+
+        if (stringSyncCampInfo.contains("\"items\": \"\"")) {
+            stringSyncCampInfo = stringSyncCampInfo.replace("{\"items\": \"\"", "{\"items\": {\"item\":[]}");
+        }
+
+        log.info("stringSyncCampInfo = {}", stringSyncCampInfo);
+
+        try {
+            return new ObjectMapper().readValue(stringSyncCampInfo, OpenApiResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

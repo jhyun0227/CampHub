@@ -24,7 +24,7 @@ class OpenApiServiceTest {
 
     @Test
     void campSyncInfo() {
-//        openApiService.campSyncInfo();
+        openApiService.campSyncInfo();
     }
 
 }
