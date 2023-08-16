@@ -204,7 +204,7 @@ public class OpenApiService {
     @OpenApiTime
     public String campSyncInfo() {
 
-        String searchDate = "202309";
+        String searchDate = "202308";
 
         int numOfRows = 100;
         int pageNo = 1;
@@ -264,7 +264,6 @@ public class OpenApiService {
 
         log.info("savedItem.size() = {}", savedItems.size());
 
-
         return "ok";
     }
 
@@ -293,8 +292,9 @@ public class OpenApiService {
      */
     private OpenApiResponse mappingResponse(String stringSyncCampInfo) {
 
+        //변경 데이터가 없을 경우 JSON 매핑을 위해 String 변경
         if (stringSyncCampInfo.contains("\"items\": \"\"")) {
-            stringSyncCampInfo = stringSyncCampInfo.replace("{\"items\": \"\"", "{\"items\": {\"item\":[]}");
+            stringSyncCampInfo = stringSyncCampInfo.replace("\"items\": \"\"", "\"items\": {\"item\":[]}");
         }
 
         log.info("stringSyncCampInfo = {}", stringSyncCampInfo);
@@ -302,6 +302,7 @@ public class OpenApiService {
         try {
             return new ObjectMapper().readValue(stringSyncCampInfo, OpenApiResponse.class);
         } catch (JsonProcessingException e) {
+            log.error("OpenApi JSON Mapping Error");
             throw new RuntimeException(e);
         }
     }
