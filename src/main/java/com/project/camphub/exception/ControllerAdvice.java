@@ -1,0 +1,26 @@
+package com.project.camphub.exception;
+
+import com.project.camphub.exception.externalapi.ExternalApiError;
+import com.project.camphub.exception.externalapi.ExternalApiException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+@Slf4j
+@RestControllerAdvice
+public class ControllerAdvice {
+
+    @ExceptionHandler(ExternalApiException.class)
+    public ResponseEntity<ExResponseDto> externalApiException(ExternalApiException e) {
+
+        log.info("ExternalApiException 발생!!! Throwable = {}", e.getCause());
+
+        ExternalApiError externalApiError = e.getExternalApiError();
+        ExResponseDto exResponseDto =
+                new ExResponseDto(externalApiError.getHttpStatus(), externalApiError.getErrorCode(), externalApiError.getErrorMessage());
+
+        return ResponseEntity.status(e.getExternalApiError().getHttpStatus()).body(exResponseDto);
+    }
+
+}

@@ -11,6 +11,8 @@ import com.project.camphub.camp.repository.CampDetailRepository;
 import com.project.camphub.camp.repository.CampFacilityRepository;
 import com.project.camphub.camp.repository.CampRepository;
 import com.project.camphub.camp.repository.CampSiteRepository;
+import com.project.camphub.exception.externalapi.ExternalApiError;
+import com.project.camphub.exception.externalapi.ExternalApiException;
 import com.project.camphub.externalapi.dto.PropertiesValue;
 import com.project.camphub.externalapi.dto.openapi.Item;
 import com.project.camphub.externalapi.dto.openapi.ItemMapDto;
@@ -203,9 +205,7 @@ public class OpenApiService {
      * syncStatus가 A인 경우 데이터를 저장하고, U와 D인 경우에는 수정을 한다.
      */
     @OpenApiTime
-    public String campSyncInfo() {
-
-        String searchDate = "202308";
+    public String campSyncInfo(String searchDate) {
 
         ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
         List<Item> newCamps = itemMapDto.getNewCamps();
@@ -332,9 +332,9 @@ public class OpenApiService {
         try {
             return objectMapper.readValue(stringSyncCampInfo, OpenApiResponse.class);
         } catch (JsonProcessingException e) {
-            log.error("OpenApi JSON Mapping Error");
-            throw new RuntimeException(e);
+            throw new ExternalApiException(e, ExternalApiError.FAIL_JSON_MAPPING);
         }
+
     }
 
     /**

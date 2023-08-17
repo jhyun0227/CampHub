@@ -16,20 +16,25 @@ public class OpenApiTimeAspect {
 
         String methodName = joinPoint.getSignature().getName();
 
+        long startTime = System.currentTimeMillis();
+        long endTime;
+
         try {
 
-            long startTime = System.currentTimeMillis();
             log.info("[OpenApiTimeAspect] OpenApi {} 실행", methodName);
 
             Object result = joinPoint.proceed();
 
-            long endTime = System.currentTimeMillis();
-            log.info("[OpenApiTimeAspect] OpenApi {} 종료, 걸린시간 = {}", methodName, endTime-startTime);
+            endTime = System.currentTimeMillis();
+            log.info("[OpenApiTimeAspect] OpenApi {} 종료(성공), 걸린시간 = {}", methodName, endTime-startTime);
 
             return result;
 
         } catch (Exception e) {
-            log.error("[OpenApiTimeAspect] OpenApi {} 예외 발생", methodName);
+
+            endTime = System.currentTimeMillis();
+            log.info("[OpenApiTimeAspect] OpenApi {} 종료(예외), 걸린시간 = {}", methodName, endTime-startTime);
+
             throw e;
         }
 
