@@ -10,14 +10,15 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString
 public class CampSite {
 
     @Id
     private String cpId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId //해당 엔터티의 주키를 현재 엔터티의 주키로 설정한다. 노션 정리2
     @JoinColumn(name = "cp_id")
-    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
     private Camp camp;
 
     private String cpsSitedStnc;
@@ -37,6 +38,7 @@ public class CampSite {
     private String cpsSiteBottomCl5;
 
     /**
+     * 데이터 저장
      * OpenApiResponse -> CampSite
      */
     public static CampSite fromOpenApiResponse(Camp camp, Item item) {
@@ -58,5 +60,28 @@ public class CampSite {
                 .cpsSiteBottomCl4(item.getSiteBottomCl4())
                 .cpsSiteBottomCl5(item.getSiteBottomCl5())
                 .build();
+    }
+
+    /**
+     * 데이터 수정
+     * OpenApiResponse -> Camp
+     */
+    public void fromSyncOpenApiResponse(Camp camp, Item item) {
+        this.camp = camp;
+        this.cpsSitedStnc = item.getSitedStnc();
+        this.cpsSiteMg1Co = item.getSiteMg1Co();
+        this.cpsSiteMg2Co = item.getSiteMg2Co();
+        this.cpsSiteMg3Co = item.getSiteMg3Co();
+        this.cpsSiteMg1Width = item.getSiteMg1Width();
+        this.cpsSiteMg1Vrticl = item.getSiteMg1Vrticl();
+        this.cpsSiteMg2Width = item.getSiteMg2Width();
+        this.cpsSiteMg2Vrticl = item.getSiteMg2Vrticl();
+        this.cpsSiteMg3Width = item.getSiteMg3Width();
+        this.cpsSiteMg3Vrticl = item.getSiteMg3Vrticl();
+        this.cpsSiteBottomCl1 = item.getSiteBottomCl1();
+        this.cpsSiteBottomCl2 = item.getSiteBottomCl2();
+        this.cpsSiteBottomCl3 = item.getSiteBottomCl3();
+        this.cpsSiteBottomCl4 = item.getSiteBottomCl4();
+        this.cpsSiteBottomCl5 = item.getSiteBottomCl5();
     }
 }

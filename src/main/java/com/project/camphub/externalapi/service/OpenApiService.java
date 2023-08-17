@@ -13,6 +13,7 @@ import com.project.camphub.camp.repository.CampRepository;
 import com.project.camphub.camp.repository.CampSiteRepository;
 import com.project.camphub.externalapi.dto.PropertiesValue;
 import com.project.camphub.externalapi.dto.openapi.Item;
+import com.project.camphub.externalapi.dto.openapi.ItemMapDto;
 import com.project.camphub.externalapi.dto.openapi.OpenApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -200,11 +200,38 @@ public class OpenApiService {
      * A : 새로운 데이터이므로 DB에 저장
      * U : 데이터 수정이므로 DB에서 값을 가져와서 수정
      * D : TourApi DB상으로 삭제된 데이터이거나 비공개 데이터를 의미한다.
+     * syncStatus가 A인 경우 데이터를 저장하고, U와 D인 경우에는 수정을 한다.
      */
     @OpenApiTime
     public String campSyncInfo() {
 
         String searchDate = "202308";
+
+        ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
+        List<Item> newCamps = itemMapDto.getNewCamps();
+        Map<String, Item> updatedCamps = itemMapDto.getUpdatedCamps();
+        log.info("newCamps.size() = {}", newCamps.size());
+        log.info("updatedCamps.size() = {}", updatedCamps.size());
+
+        if (newCamps.size() == 0 && updatedCamps.size() == 0) {
+            return "신규 캠프, 변경된 캠프가 존재하지 않습니다.";
+        }
+
+//        if (newCamps.size() != 0) {
+//            this.saveCampInfo(newCamps);
+//        }
+
+        if (updatedCamps.size() != 0) {
+            this.updateCampInfo(updatedCamps);
+        }
+
+        return "ok";
+    }
+
+    /**
+     * 날짜 기반의 동기화 데이터를 반복문을 실행하여 가져오는 메서드
+     */
+    private ItemMapDto iterSyncCampInfo(String searchDate) {
 
         int numOfRows = 100;
         int pageNo = 1;
@@ -214,8 +241,12 @@ public class OpenApiService {
         boolean isFirstIter = true;
         boolean boolLoop = true;
 
-        //동기화 사항이 있는 정보들을 저장하는 Collection
-        Map<String, Item> savedItems = new HashMap<>();
+        /**
+         * 동기화 사항이 있는 정보들을 저장하는 Collection
+         * syncStatus가 A일 경우 newCamp Map에 저장
+         * syncStatus가 U, D일 경우 updatedCamp Map에 저장
+         */
+        ItemMapDto itemMapDto = new ItemMapDto();
 
         do {
             /**
@@ -247,10 +278,13 @@ public class OpenApiService {
                 isFirstIter = false;
             }
 
-            //contentId 값을 Key, Item을 value로 임시 저장
             List<Item> items = syncCampInfo.getResponse().getBody().getItems().getItem();
             items.forEach(item -> {
-                savedItems.put(item.getContentId(), item);
+                if ("A".equals(item.getSyncStatus())) {
+                    itemMapDto.getNewCamps().add(item);
+                } else {
+                    itemMapDto.getUpdatedCamps().put(item.getContentId(), item);
+                }
             });
 
             pageNo += 1;
@@ -262,9 +296,7 @@ public class OpenApiService {
 
         } while (boolLoop);
 
-        log.info("savedItem.size() = {}", savedItems.size());
-
-        return "ok";
+        return itemMapDto;
     }
 
     /**
@@ -297,13 +329,40 @@ public class OpenApiService {
             stringSyncCampInfo = stringSyncCampInfo.replace("\"items\": \"\"", "\"items\": {\"item\":[]}");
         }
 
-        log.info("stringSyncCampInfo = {}", stringSyncCampInfo);
-
         try {
-            return new ObjectMapper().readValue(stringSyncCampInfo, OpenApiResponse.class);
+            return objectMapper.readValue(stringSyncCampInfo, OpenApiResponse.class);
         } catch (JsonProcessingException e) {
             log.error("OpenApi JSON Mapping Error");
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * OpenApi에서 변경된 데이터를 데이터베이스에 동기화 시키는 메서드
+     */
+    private void updateCampInfo(Map<String, Item> updatedCamps) {
+
+        //contentsId로 데이터베이스에서 업데이트 동기화에 해당되는 정보들을 조회한다.
+        Set<String> updateCampsContentIds = updatedCamps.keySet();
+        log.info(updateCampsContentIds.toString());
+
+        List<Camp> campList = campRepository.findCampFetchAll(updateCampsContentIds);
+
+        //가져온 정보들을 업데이트 한다.
+        campList.forEach(camp -> {
+            CampDetail campDetail = camp.getCampDetail();
+            CampFacility campFacility = camp.getCampFacility();
+            CampSite campSite = camp.getCampSite();
+
+            String cpContentId = camp.getCpContentId();
+            Item item = updatedCamps.get(cpContentId);
+
+            camp.fromSyncOpenApiResponse(item);
+            campDetail.fromSyncOpenApiResponse(camp, item);
+            campFacility.fromSyncOpenApiResponse(camp, item);
+            campSite.fromSyncOpenApiResponse(camp, item);
+
+            camp.refCpdCpfCps(campDetail, campFacility, campSite);
+        });
     }
 }

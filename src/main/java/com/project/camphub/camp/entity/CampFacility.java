@@ -10,14 +10,15 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString
 public class CampFacility {
 
     @Id
     private String cpId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId //해당 엔터티의 주키를 현재 엔터티의 주키로 설정한다. 노션 정리2
     @JoinColumn(name = "cp_id")
-    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
     private Camp camp;
 
     private String cpfManageNmpr;
@@ -43,6 +44,7 @@ public class CampFacility {
     private String cpfFireSensorCo;
 
     /**
+     * 데이터 저장
      * OpenApiResponse -> CampFacility
      */
     public static CampFacility fromOpenApiResponse(Camp camp, Item item) {
@@ -72,4 +74,32 @@ public class CampFacility {
                 .build();
     }
 
+    /**
+     * 데이터 수정
+     * OpenApiResponse -> Camp
+     */
+    public void fromSyncOpenApiResponse(Camp camp, Item item) {
+        this.camp = camp;
+        this.cpfManageNmpr = item.getManageNmpr();
+        this.cpfAllar = item.getAllar();
+        this.cpfSbrsCl = item.getSbrsCl();
+        this.cpfSbrsEtc = item.getSbrsEtc();
+        this.cpfPosblFcltyCl = item.getPosblFcltyCl();
+        this.cpfPosblFcltyEtc = item.getPosblFcltyEtc();
+        this.cpfGnrlSiteCo = item.getGnrlSiteCo();
+        this.cpfAutoSiteCo = item.getAutoSiteCo();
+        this.cpfGlampSiteCo = item.getGlampSiteCo();
+        this.cpfCaravSiteCo = item.getCaravSiteCo();
+        this.cpfIndvdlCaravSiteCo = item.getIndvdlCaravSiteCo();
+        this.cpfGlampInnerFclty = item.getGlampInnerFclty();
+        this.cpfCaravInnerFclty = item.getCaravInnerFclty();
+        this.cpfBrazierCl = item.getBrazierCl();
+        this.cpfWtrplCo = item.getWtrplCo();
+        this.cpfToiletCo = item.getToiletCo();
+        this.cpfSwrmCo = item.getSwrmCo();
+        this.cpfExtshrCo = item.getExtshrCo();
+        this.cpfFrprvtWrppCo = item.getFrprvtWrppCo();
+        this.cpfFrprvtSandCo = item.getFrprvtSandCo();
+        this.cpfFireSensorCo = item.getFireSensorCo();
+    }
 }

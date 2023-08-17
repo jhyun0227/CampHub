@@ -45,12 +45,15 @@ public class Camp {
 
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CampDetail campDetail;
+
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CampFacility campFacility;
+
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CampSite campSite;
 
     /**
+     * 데이터 저장
      * OpenApiResponse -> Camp
      */
     public static Camp fromOpenApiResponse(Item item) {
@@ -83,6 +86,38 @@ public class Camp {
                 .cpModifiedtime(item.getModifiedtime())
                 .cpSyncStatus(item.getSyncStatus())
                 .build();
+    }
+
+    /**
+     * 데이터 수정
+     * OpenApiResponse -> Camp
+     */
+    public void fromSyncOpenApiResponse(Item item) {
+        this.cpFacltNm = item.getFacltNm();
+        this.cpTel = item.getTel();
+        this.cpHomepage = item.getHomepage();
+        this.cpResveCl = item.getResveCl();
+        this.cpResveUrl = item.getResveUrl();
+        this.cpOperPdCl = item.getOperPdCl();
+        this.cpOperDeCl = item.getOperDeCl();
+        this.cpHvofBgnde = item.getHvofBgnde();
+        this.cpHvofEnddle = item.getHvofEnddle();
+        this.cpInduty = item.getInduty();
+        this.cpLctCl = item.getLctCl();
+        this.cpThemaEnvrnCl = item.getThemaEnvrnCl();
+        this.cpTourEraCl = item.getTourEraCl();
+        this.cpFirstImageUrl = item.getFirstImageUrl();
+        this.cpManageSttus = item.getManageSttus();
+        this.cpManageDivNm = item.getMangeDivNm();
+        this.cpMgcDiv = item.getMgcDiv();
+        this.cpFacltDivNm = item.getFacltDivNm();
+        this.cpInsrncAt = item.getInsrncAt();
+        this.cpTrsagntNo = item.getTrsagntNo();
+        this.cpBizrno = item.getBizrno();
+        this.cpPrmisnDe = item.getPrmisnDe();
+        this.cpCreatedtime = item.getCreatedtime();
+        this.cpModifiedtime = item.getModifiedtime();
+        this.cpSyncStatus = item.getSyncStatus();
     }
 
     /**

@@ -16,6 +16,7 @@ class OpenApiServiceTest {
     OpenApiService openApiService;
 
     @Test
+    @Commit
     void campInfo() {
         int totalCount = openApiService.campInfo();
 
@@ -24,7 +25,7 @@ class OpenApiServiceTest {
 
     @Test
     void campSyncInfo() {
-        openApiService.campSyncInfo();
+        String string = openApiService.campSyncInfo();
     }
 
 }
