@@ -217,15 +217,15 @@ public class OpenApiService {
             return "신규 캠프, 변경된 캠프가 존재하지 않습니다.";
         }
 
-//        if (newCamps.size() != 0) {
-//            this.saveCampInfo(newCamps);
-//        }
+        if (newCamps.size() != 0) {
+            this.saveCampInfo(newCamps);
+        }
 
         if (updatedCamps.size() != 0) {
             this.updateCampInfo(updatedCamps);
         }
 
-        return "ok";
+        return "정상적으로 데이터 동기화 하였습니다.";
     }
 
     /**
