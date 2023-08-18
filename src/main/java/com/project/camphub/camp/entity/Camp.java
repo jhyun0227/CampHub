@@ -1,5 +1,8 @@
 package com.project.camphub.camp.entity;
 
+import com.project.camphub.camp.entity.enumcode.CpManageDivNm;
+import com.project.camphub.camp.entity.enumcode.CpManageSttus;
+import com.project.camphub.camp.entity.enumcode.CpOperDeCl;
 import com.project.camphub.externalapi.dto.openapi.Item;
 import lombok.*;
 
@@ -127,6 +130,39 @@ public class Camp {
         this.campDetail = campDetail;
         this.campFacility = campFacility;
         this.campSite = campSite;
+    }
+
+    /**
+     * cp_oper_de_cl
+     * OpenApiValue -> DataBaseValue
+     */
+    private String cpOperDeClToCode(String operDeCl) {
+        return CpOperDeCl.ALL.getOpenApiValue().equals(operDeCl) ? CpOperDeCl.ALL.getDatabaseValue() :
+                CpOperDeCl.WEEKDAY.getOpenApiValue().equals(operDeCl) ? CpOperDeCl.WEEKDAY.getDatabaseValue() :
+                        CpOperDeCl.WEEKEND.getOpenApiValue().equals(operDeCl) ? CpOperDeCl.WEEKEND.getDatabaseValue() :
+                                operDeCl;
+    }
+
+    /**
+     * cp_oper_de_cl
+     * OpenApiValue -> DataBaseValue
+     */
+    private String cpManageSttusToCode(String manageSttus) {
+        return CpManageSttus.OPERATE.getOpenApiValue().equals(manageSttus) ? CpManageSttus.OPERATE.getDatabaseValue() :
+                CpManageSttus.TEMPORARY_CLOSED.getOpenApiValue().equals(manageSttus) ? CpManageSttus.TEMPORARY_CLOSED.getDatabaseValue() :
+                        CpManageSttus.OUT_OF_BUSINESS.getOpenApiValue().equals(manageSttus) ? CpManageSttus.OUT_OF_BUSINESS.getDatabaseValue() :
+                                manageSttus;
+    }
+
+    /**
+     * cp_manage_div_nm
+     * OpenApiValue -> DataBaseValue
+     */
+    private String cpManageDivNmToCode(String manageDivNm) {
+        return CpManageSttus.OPERATE.getOpenApiValue().equals(manageDivNm) ? CpManageSttus.OPERATE.getDatabaseValue() :
+                CpManageSttus.TEMPORARY_CLOSED.getOpenApiValue().equals(manageDivNm) ? CpManageSttus.TEMPORARY_CLOSED.getDatabaseValue() :
+                        CpManageSttus.OUT_OF_BUSINESS.getOpenApiValue().equals(manageDivNm) ? CpManageSttus.OUT_OF_BUSINESS.getDatabaseValue() :
+                                manageDivNm;
     }
 
 }
