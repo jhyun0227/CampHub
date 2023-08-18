@@ -152,6 +152,8 @@ public class OpenApiService {
             campRepository.save(camp);
 
             /*
+            노션 정리3
+
             원래 처음 작성했던 코드
             아래에 따로 저장하는 형식으로 코드를 작성했었는데 에러가 계속 발생...
             이유를 잘모르겠음.. 일단 더 공부...

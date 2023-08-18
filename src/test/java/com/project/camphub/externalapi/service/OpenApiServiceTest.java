@@ -16,6 +16,7 @@ class OpenApiServiceTest {
     OpenApiService openApiService;
 
     @Test
+    @Commit
     void campInfo() {
         int totalCount = openApiService.campInfo();
 
