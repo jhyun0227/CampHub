@@ -3,14 +3,8 @@ package com.project.camphub.externalapi.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.camphub.aop.annotation.OpenApiTime;
-import com.project.camphub.camp.entity.Camp;
-import com.project.camphub.camp.entity.CampDetail;
-import com.project.camphub.camp.entity.CampFacility;
-import com.project.camphub.camp.entity.CampSite;
-import com.project.camphub.camp.repository.CampDetailRepository;
-import com.project.camphub.camp.repository.CampFacilityRepository;
-import com.project.camphub.camp.repository.CampRepository;
-import com.project.camphub.camp.repository.CampSiteRepository;
+import com.project.camphub.camp.entity.*;
+import com.project.camphub.camp.repository.*;
 import com.project.camphub.exception.externalapi.ExternalApiError;
 import com.project.camphub.exception.externalapi.ExternalApiException;
 import com.project.camphub.externalapi.dto.PropertiesValue;
@@ -45,6 +39,7 @@ public class OpenApiService {
     private final CampDetailRepository campDetailRepository;
     private final CampFacilityRepository campFacilityRepository;
     private final CampSiteRepository campSiteRepository;
+    private final CampSyncLogRepository campSyncLogRepository;
 
     @PostConstruct
     private void setWebClient() {
@@ -209,31 +204,45 @@ public class OpenApiService {
     @OpenApiTime
     public String campSyncInfo(String searchDate) {
 
-        ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
-        List<Item> newCamps = itemMapDto.getNewCamps();
-        Map<String, Item> updatedCamps = itemMapDto.getUpdatedCamps();
-        log.info("newCamps.size() = {}", newCamps.size());
-        log.info("updatedCamps.size() = {}", updatedCamps.size());
+        try {
+            ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
+            List<Item> newCamps = itemMapDto.getNewCamps();
+            Map<String, Item> updatedCamps = itemMapDto.getUpdatedCamps();
+            log.info("newCamps.size() = {}", newCamps.size());
+            log.info("updatedCamps.size() = {}", updatedCamps.size());
 
-        if (newCamps.size() == 0 && updatedCamps.size() == 0) {
-            return "신규 캠프, 변경된 캠프가 존재하지 않습니다.";
+            if (newCamps.size() == 0 && updatedCamps.size() == 0) {
+                return "신규 캠프, 변경된 캠프가 존재하지 않습니다.";
+            }
+
+            if (newCamps.size() != 0) {
+                this.saveCampInfo(newCamps);
+            }
+
+            if (updatedCamps.size() != 0) {
+                this.updateCampInfo(updatedCamps);
+            }
+
+            //데이터 동기화 성공 시 성공 로그 남기기
+            campSyncLogRepository.save(CampSyncLog.syncSuccess());
+
+            return "정상적으로 데이터 동기화 하였습니다.";
+
+        } catch (Exception e) {
+
+            //데이터 동기화 실패 시 실패 로그 남기기
+            campSyncLogRepository.save(CampSyncLog.syncFail());
+
+            throw new ExternalApiException(e, ExternalApiError.CAMP_SYNC_FAIL);
+
         }
 
-        if (newCamps.size() != 0) {
-            this.saveCampInfo(newCamps);
-        }
-
-        if (updatedCamps.size() != 0) {
-            this.updateCampInfo(updatedCamps);
-        }
-
-        return "정상적으로 데이터 동기화 하였습니다.";
     }
 
     /**
      * 날짜 기반의 동기화 데이터를 반복문을 실행하여 가져오는 메서드
      */
-    private ItemMapDto iterSyncCampInfo(String searchDate) {
+    private ItemMapDto iterSyncCampInfo(String searchDate) throws JsonProcessingException {
 
         int numOfRows = 100;
         int pageNo = 1;
@@ -324,19 +333,14 @@ public class OpenApiService {
     /**
      * OpenApi를 통해 가져온 데이터(String)을 객체에 매핑시켜주는 메서드
      */
-    private OpenApiResponse mappingResponse(String stringSyncCampInfo) {
+    private OpenApiResponse mappingResponse(String stringSyncCampInfo) throws JsonProcessingException {
 
         //변경 데이터가 없을 경우 JSON 매핑을 위해 String 변경
         if (stringSyncCampInfo.contains("\"items\": \"\"")) {
             stringSyncCampInfo = stringSyncCampInfo.replace("\"items\": \"\"", "\"items\": {\"item\":[]}");
         }
 
-        try {
-            return objectMapper.readValue(stringSyncCampInfo, OpenApiResponse.class);
-        } catch (JsonProcessingException e) {
-            throw new ExternalApiException(e, ExternalApiError.FAIL_JSON_MAPPING);
-        }
-
+        return objectMapper.readValue(stringSyncCampInfo, OpenApiResponse.class);
     }
 
     /**

@@ -109,3 +109,11 @@ CREATE TABLE `camp_site` (
     PRIMARY KEY (`cp_id`),
     CONSTRAINT cps_cp_id_FK FOREIGN KEY (`cp_id`) REFERENCES `camp` (`cp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '캠프사이트';
+
+
+CREATE TABLE `camp_sync_log` (
+    `csl_id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '캠프동기화로그ID',
+    `csl_time` date COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '캠프동기화시간',
+    `csl_result` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '캠프동기화결과',
+    PRIMARY KEY (`csl_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT '캠프동기화로그';

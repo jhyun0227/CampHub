@@ -24,8 +24,9 @@ class OpenApiServiceTest {
     }
 
     @Test
+    @Commit
     void campSyncInfo() {
-        String string = openApiService.campSyncInfo("230817");
+        String string = openApiService.campSyncInfo("2308");
     }
 
 }
