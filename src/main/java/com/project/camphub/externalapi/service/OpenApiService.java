@@ -226,6 +226,8 @@ public class OpenApiService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
         String searchDate = today.format(formatter);
 
+        log.info("searchDate = {}", searchDate);
+
         try {
             ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
             Map<String, Item> newCampItems = itemMapDto.getNewCampItems();
@@ -449,6 +451,8 @@ public class OpenApiService {
             }
 
         });
+
+        log.info("unsavedItems = {}", unsavedItems);
 
         //해당 데이터가 있다면 저장한다.
         if (!unsavedItems.isEmpty() || unsavedItems.size() != 0) {
