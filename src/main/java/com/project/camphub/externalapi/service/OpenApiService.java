@@ -20,6 +20,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -218,7 +220,11 @@ public class OpenApiService {
      * 수정의 비즈니스 로직에서 누락되는 데이터가 없도록 위와 같은 경우에는 데이터가 저장되도록 코드를 작성해야한다.
      */
     @OpenApiTime
-    public String campSyncInfo(String searchDate) {
+    public String campSyncInfo() {
+
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
+        String searchDate = today.format(formatter);
 
         try {
             ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
