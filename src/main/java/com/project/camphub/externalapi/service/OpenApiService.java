@@ -222,18 +222,18 @@ public class OpenApiService {
 
         try {
             ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
-            Map<String, Item> newCamps = itemMapDto.getNewCamps();
-            Map<String, Item> updatedCamps = itemMapDto.getUpdatedCamps();
-            log.info("newCamps.size() = {}", newCamps.size());
-            log.info("updatedCamps.size() = {}", updatedCamps.size());
+            Map<String, Item> newCampItems = itemMapDto.getNewCampItems();
+            Map<String, Item> updatedCampItems = itemMapDto.getUpdatedCampItems();
+            log.info("newCampItems.size() = {}", newCampItems.size());
+            log.info("updatedCamps.size() = {}", updatedCampItems.size());
 
-            if (newCamps.size() == 0 && updatedCamps.size() == 0) {
+            if (newCampItems.size() == 0 && updatedCampItems.size() == 0) {
                 return "신규 캠프, 변경된 캠프가 존재하지 않습니다.";
             }
 
-            if (newCamps.size() != 0) {
+            if (newCampItems.size() != 0) {
                 //중복 가능성이 있는 데이터를 조회
-                List<Item> checkNewCamps = this.checkNewCamps(newCamps);
+                List<Item> checkNewCamps = this.checkNewCamps(newCampItems);
 
                 //검증된 데이터가 존재할 경우 데이터를 저장
                 if (!checkNewCamps.isEmpty() || checkNewCamps.size() != 0) {
@@ -241,8 +241,8 @@ public class OpenApiService {
                 }
             }
 
-            if (updatedCamps.size() != 0) {
-                this.updateCampInfo(updatedCamps);
+            if (updatedCampItems.size() != 0) {
+                this.updateCampInfo(updatedCampItems);
             }
 
             //데이터 동기화 성공 시 성공 로그 남기기
@@ -314,9 +314,9 @@ public class OpenApiService {
             List<Item> items = syncCampInfo.getResponse().getBody().getItems().getItem();
             items.forEach(item -> {
                 if ("A".equals(item.getSyncStatus())) {
-                    itemMapDto.getNewCamps().put(item.getContentId(), item);
+                    itemMapDto.getNewCampItems().put(item.getContentId(), item);
                 } else {
-                    itemMapDto.getUpdatedCamps().put(item.getContentId(), item);
+                    itemMapDto.getUpdatedCampItems().put(item.getContentId(), item);
                 }
             });
 
@@ -365,19 +365,19 @@ public class OpenApiService {
         return objectMapper.readValue(stringSyncCampInfo, OpenApiResponse.class);
     }
 
-    private List<Item> checkNewCamps(Map<String, Item> newCamps) {
+    private List<Item> checkNewCamps(Map<String, Item> newCampItems) {
         //중복 저장되지 않을 데이터들을 전달할 Collection
         List<Item> checkNewCamps = new ArrayList<>();
 
-        Set<String> newCampsContentIds = newCamps.keySet();
-        log.info("newCampsContentIds = {}", newCampsContentIds);
+        Set<String> newCampItemsContentIds = newCampItems.keySet();
+        log.info("newCampItemsContentIds = {}", newCampItemsContentIds);
 
         //중복 저장되는 캠프가 있는지 조회
-        List<Camp> findCamps = campRepository.findCampFetchAll(newCampsContentIds);
+        List<Camp> findCamps = campRepository.findCampFetchAll(newCampItemsContentIds);
 
         //조회되는 캠프가 없다면 전부 새로운 캠프이므로 List에 담는다.
         if (findCamps.isEmpty() || findCamps.size() == 0) {
-            checkNewCamps = new ArrayList<>(newCamps.values());
+            checkNewCamps = new ArrayList<>(newCampItems.values());
             return checkNewCamps;
         }
 
@@ -388,7 +388,7 @@ public class OpenApiService {
 
         log.info("findCampsContentsIds = {}", findCampsContentIds);
 
-        for (Item item : newCamps.values()) {
+        for (Item item : newCampItems.values()) {
             if (!findCampsContentIds.contains(item.getContentId())) {
                 checkNewCamps.add(item);
             }
@@ -406,29 +406,25 @@ public class OpenApiService {
      * 동기화 날짜에 따라서 OpenApi측에서 업데이트로 표시되는 데이터중에 현재 우리 데이터베이스에 없는 정보가 있을 가능성이 있다.
      * 현재 DB에 없는 정보의 경우 '수정'이 아닌 '저장'을 하도록 코드를 작성한다.
      */
-    private void updateCampInfo(Map<String, Item> updatedCamps) {
+    private void updateCampInfo(Map<String, Item> updatedCampItems) {
 
         //contentsId로 데이터베이스에서 업데이트 동기화에 해당되는 정보들을 조회한다.
-        Set<String> updateCampsContentIds = updatedCamps.keySet();
-        List<Item> updateCamps = new ArrayList<>(updatedCamps.values());
-        log.info(updateCampsContentIds.toString());
+        Set<String> updateCampsContentIds = updatedCampItems.keySet();
+        List<Item> updateCampItems = new ArrayList<>(updatedCampItems.values());
+        log.info("updateCampsContentIds = {}", updateCampsContentIds);
 
         //DB에 존재하는 데이터를 가져오고 cpContentId를 Key값으로 하는 Map을 생성한다.
         List<Camp> findCamps = campRepository.findCampFetchAll(updateCampsContentIds);
-        List<String> findCampsContentIds = findCamps.stream()
-                .map(Camp::getCpContentId)
-                .collect(Collectors.toList());
         Map<String, Camp> findCampsMap = findCamps.stream()
                 .collect(Collectors.toMap(Camp::getCpContentId, camp -> camp));
 
-
-        List<Item> unsavedItem = new ArrayList<>();
-
+        //DB에 존재하지 않는 데이터를 담을 Collection
+        List<Item> unsavedItems = new ArrayList<>();
 
         //OpenApi를 통해 넘어온 데이터가 DB에 저장되어있지 않은 데이터라면 DB에 저장한다.
-        updateCamps.forEach(item -> {
+        updateCampItems.forEach(item -> {
 
-            if (findCampsContentIds.contains(item.getContentId())) { //기존데이터 베이스에 데이터가 저장되어 있는 경우
+            if (findCampsMap.containsKey(item.getContentId())) { //기존데이터 베이스에 데이터가 저장되어 있는 경우
 
                 Camp camp = findCampsMap.get(item.getContentId());
                 CampDetail campDetail = camp.getCampDetail();
@@ -443,14 +439,14 @@ public class OpenApiService {
                 camp.refCpdCpfCps(campDetail, campFacility, campSite);
 
             } else { //기존데이터 베이스에 데이터가 저장되어있지 않은 경우
-                unsavedItem.add(item);
+                unsavedItems.add(item);
             }
 
         });
 
         //해당 데이터가 있다면 저장한다.
-        if (!unsavedItem.isEmpty() || unsavedItem.size() != 0) {
-            this.saveCampInfo(unsavedItem);
+        if (!unsavedItems.isEmpty() || unsavedItems.size() != 0) {
+            this.saveCampInfo(unsavedItems);
         }
     }
 }
