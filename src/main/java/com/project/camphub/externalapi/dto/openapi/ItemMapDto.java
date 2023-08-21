@@ -10,11 +10,11 @@ import java.util.Map;
 @Data
 public class ItemMapDto {
 
-    List<Item> newCamps;
+    Map<String, Item> newCamps;
     Map<String, Item> updatedCamps;
 
     public ItemMapDto() {
-        this.newCamps = new ArrayList<>();
+        this.newCamps = new HashMap<>();
         this.updatedCamps = new HashMap<>();
     }
 

@@ -20,9 +20,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -200,13 +202,27 @@ public class OpenApiService {
      * U : 데이터 수정이므로 DB에서 값을 가져와서 수정
      * D : TourApi DB상으로 삭제된 데이터이거나 비공개 데이터를 의미한다.
      * syncStatus가 A인 경우 데이터를 저장하고, U와 D인 경우에는 수정을 한다.
+     *
+     *
+     * 2023.08.21 변경사항
+     * 동기화의 경우, 해당 연월을 기준으로 동기화 데이터를 가져온다.
+     *
+     * 1) syncStatus가 'A'인 데이터의 경우 '저장'
+     * 8월 1일에 동기화하여 데이터가 저장된 후 8월의 어느 날짜에도 OpenApi측의 데이터 변경사항이 없을 경우 syncStatus가 'A'인 데이터로 반복해서 데이터를 받는다.
+     * 8월 1일 이후로 202308로 동기화 할 경우 이미 데이터가 DB에 있어 Unique가 위반된다.
+     * 데이터 베이스에서 해당 contentId를 가지고 있는지 체크 후, 이미 저장된 데이터는 저장이 안되도록 해야한다.
+     *
+     * 2) syncStatus가 'U', 'D'인 데이터의 경우 '수정'
+     * 예를들어 8월 1일에 동기화를 한 후, OpenApi 측에서 8월 3일에 데이터가 추가되고, 8월 5일에 데이터가 데이터가 변경된다고 가정하였을 때,
+     * 8월 7일에 동기화를 하면 추가되고 변경된 데이터는 DB에서 누락이 되어진다.
+     * 수정의 비즈니스 로직에서 누락되는 데이터가 없도록 위와 같은 경우에는 데이터가 저장되도록 코드를 작성해야한다.
      */
     @OpenApiTime
     public String campSyncInfo(String searchDate) {
 
         try {
             ItemMapDto itemMapDto = this.iterSyncCampInfo(searchDate);
-            List<Item> newCamps = itemMapDto.getNewCamps();
+            Map<String, Item> newCamps = itemMapDto.getNewCamps();
             Map<String, Item> updatedCamps = itemMapDto.getUpdatedCamps();
             log.info("newCamps.size() = {}", newCamps.size());
             log.info("updatedCamps.size() = {}", updatedCamps.size());
@@ -216,7 +232,13 @@ public class OpenApiService {
             }
 
             if (newCamps.size() != 0) {
-                this.saveCampInfo(newCamps);
+                //중복 가능성이 있는 데이터를 조회
+                List<Item> checkNewCamps = this.checkNewCamps(newCamps);
+
+                //검증된 데이터가 존재할 경우 데이터를 저장
+                if (!checkNewCamps.isEmpty() || checkNewCamps.size() != 0) {
+                    this.saveCampInfo(checkNewCamps);
+                }
             }
 
             if (updatedCamps.size() != 0) {
@@ -292,7 +314,7 @@ public class OpenApiService {
             List<Item> items = syncCampInfo.getResponse().getBody().getItems().getItem();
             items.forEach(item -> {
                 if ("A".equals(item.getSyncStatus())) {
-                    itemMapDto.getNewCamps().add(item);
+                    itemMapDto.getNewCamps().put(item.getContentId(), item);
                 } else {
                     itemMapDto.getUpdatedCamps().put(item.getContentId(), item);
                 }
@@ -343,32 +365,92 @@ public class OpenApiService {
         return objectMapper.readValue(stringSyncCampInfo, OpenApiResponse.class);
     }
 
+    private List<Item> checkNewCamps(Map<String, Item> newCamps) {
+        //중복 저장되지 않을 데이터들을 전달할 Collection
+        List<Item> checkNewCamps = new ArrayList<>();
+
+        Set<String> newCampsContentIds = newCamps.keySet();
+        log.info("newCampsContentIds = {}", newCampsContentIds);
+
+        //중복 저장되는 캠프가 있는지 조회
+        List<Camp> findCamps = campRepository.findCampFetchAll(newCampsContentIds);
+
+        //조회되는 캠프가 없다면 전부 새로운 캠프이므로 List에 담는다.
+        if (findCamps.isEmpty() || findCamps.size() == 0) {
+            checkNewCamps = new ArrayList<>(newCamps.values());
+            return checkNewCamps;
+        }
+
+        //조회되는 캠프가 존재한다면 해당 데이터는 List에 포함 시키지 않는다.
+        List<String> findCampsContentIds = findCamps.stream()
+                .map(Camp::getCpContentId)
+                .collect(Collectors.toList());
+
+        log.info("findCampsContentsIds = {}", findCampsContentIds);
+
+        for (Item item : newCamps.values()) {
+            if (!findCampsContentIds.contains(item.getContentId())) {
+                checkNewCamps.add(item);
+            }
+        }
+
+        log.info("checkNewCamps = {}", checkNewCamps);
+        return checkNewCamps;
+    }
+
     /**
      * OpenApi에서 변경된 데이터를 데이터베이스에 동기화 시키는 메서드
+     *
+     *
+     * 2023.08.21 변경사항
+     * 동기화 날짜에 따라서 OpenApi측에서 업데이트로 표시되는 데이터중에 현재 우리 데이터베이스에 없는 정보가 있을 가능성이 있다.
+     * 현재 DB에 없는 정보의 경우 '수정'이 아닌 '저장'을 하도록 코드를 작성한다.
      */
     private void updateCampInfo(Map<String, Item> updatedCamps) {
 
         //contentsId로 데이터베이스에서 업데이트 동기화에 해당되는 정보들을 조회한다.
         Set<String> updateCampsContentIds = updatedCamps.keySet();
+        List<Item> updateCamps = new ArrayList<>(updatedCamps.values());
         log.info(updateCampsContentIds.toString());
 
-        List<Camp> campList = campRepository.findCampFetchAll(updateCampsContentIds);
+        //DB에 존재하는 데이터를 가져오고 cpContentId를 Key값으로 하는 Map을 생성한다.
+        List<Camp> findCamps = campRepository.findCampFetchAll(updateCampsContentIds);
+        List<String> findCampsContentIds = findCamps.stream()
+                .map(Camp::getCpContentId)
+                .collect(Collectors.toList());
+        Map<String, Camp> findCampsMap = findCamps.stream()
+                .collect(Collectors.toMap(Camp::getCpContentId, camp -> camp));
 
-        //가져온 정보들을 업데이트 한다.
-        campList.forEach(camp -> {
-            CampDetail campDetail = camp.getCampDetail();
-            CampFacility campFacility = camp.getCampFacility();
-            CampSite campSite = camp.getCampSite();
 
-            String cpContentId = camp.getCpContentId();
-            Item item = updatedCamps.get(cpContentId);
+        List<Item> unsavedItem = new ArrayList<>();
 
-            camp.fromSyncOpenApiResponse(item);
-            campDetail.fromSyncOpenApiResponse(camp, item);
-            campFacility.fromSyncOpenApiResponse(camp, item);
-            campSite.fromSyncOpenApiResponse(camp, item);
 
-            camp.refCpdCpfCps(campDetail, campFacility, campSite);
+        //OpenApi를 통해 넘어온 데이터가 DB에 저장되어있지 않은 데이터라면 DB에 저장한다.
+        updateCamps.forEach(item -> {
+
+            if (findCampsContentIds.contains(item.getContentId())) { //기존데이터 베이스에 데이터가 저장되어 있는 경우
+
+                Camp camp = findCampsMap.get(item.getContentId());
+                CampDetail campDetail = camp.getCampDetail();
+                CampFacility campFacility = camp.getCampFacility();
+                CampSite campSite = camp.getCampSite();
+
+                camp.fromSyncOpenApiResponse(item);
+                campDetail.fromSyncOpenApiResponse(camp, item);
+                campFacility.fromSyncOpenApiResponse(camp, item);
+                campSite.fromSyncOpenApiResponse(camp, item);
+
+                camp.refCpdCpfCps(campDetail, campFacility, campSite);
+
+            } else { //기존데이터 베이스에 데이터가 저장되어있지 않은 경우
+                unsavedItem.add(item);
+            }
+
         });
+
+        //해당 데이터가 있다면 저장한다.
+        if (!unsavedItem.isEmpty() || unsavedItem.size() != 0) {
+            this.saveCampInfo(unsavedItem);
+        }
     }
 }
