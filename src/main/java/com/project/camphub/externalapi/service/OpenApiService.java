@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.camphub.aop.annotation.OpenApiTime;
 import com.project.camphub.camp.entity.*;
 import com.project.camphub.camp.repository.*;
+import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.exception.externalapi.ExternalApiError;
 import com.project.camphub.exception.externalapi.ExternalApiException;
 import com.project.camphub.externalapi.dto.PropertiesValue;
@@ -13,6 +14,7 @@ import com.project.camphub.externalapi.dto.openapi.ItemMapDto;
 import com.project.camphub.externalapi.dto.openapi.OpenApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -72,7 +74,7 @@ public class OpenApiService {
      * OpenApi에서 가져온 데이터를 DB에 저장하는 메서드
      */
     @OpenApiTime
-    public int campInfo() {
+    public ResponseDto campInfo() {
 
         int numOfRows = 100;
         int pageNo = 1;
@@ -114,7 +116,7 @@ public class OpenApiService {
 
         }
 
-        return totalCount;
+        return new ResponseDto(HttpStatus.OK, null, "정상적으로 데이터를 저장하였습니다. totalCount = " + totalCount);
     }
 
     /**
@@ -227,7 +229,7 @@ public class OpenApiService {
      * 수정의 비즈니스 로직에서 누락되는 데이터가 없도록 위와 같은 경우에는 데이터가 저장되도록 코드를 작성해야한다.
      */
     @OpenApiTime
-    public String campSyncInfo() {
+    public ResponseDto campSyncInfo() {
 
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMM");
@@ -243,7 +245,7 @@ public class OpenApiService {
             log.info("updatedCamps.size() = {}", updatedCampItems.size());
 
             if (newCampItems.size() == 0 && updatedCampItems.size() == 0) {
-                return "신규 캠프, 변경된 캠프가 존재하지 않습니다.";
+                return new ResponseDto(HttpStatus.OK, null, "신규 캠프, 변경된 캠프가 존재하지 않습니다.");
             }
 
             if (newCampItems.size() != 0) {
@@ -263,7 +265,7 @@ public class OpenApiService {
             //데이터 동기화 성공 시 성공 로그 남기기
             campSyncLogRepository.save(CampSyncLog.syncSuccess());
 
-            return "정상적으로 데이터 동기화 하였습니다.";
+            return new ResponseDto(HttpStatus.OK, null, "정상적으로 데이터 동기화 하였습니다.");
 
         } catch (Exception e) {
 
