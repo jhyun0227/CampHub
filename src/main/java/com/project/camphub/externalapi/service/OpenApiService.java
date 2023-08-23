@@ -82,30 +82,37 @@ public class OpenApiService {
         boolean isFirstIter = true;
         boolean boolLoop = true;
 
-        do {
-            OpenApiResponse campInfo = this.getCampInfo(numOfRows, pageNo);
+        try {
+            do {
+                OpenApiResponse campInfo = this.getCampInfo(numOfRows, pageNo);
 
-            this.saveCampInfo(campInfo.getResponse().getBody().getItems().getItem());
+                this.saveCampInfo(campInfo.getResponse().getBody().getItems().getItem());
 
-            if (isFirstIter) {
-                totalCount = campInfo.getResponse().getBody().getTotalCount();
-                log.info("totalCount = {}",  totalCount);
-                loopCount = totalCount % numOfRows == 0 ? totalCount / numOfRows : totalCount / numOfRows + 1;
-                log.info("loopCount = {}", loopCount);
+                if (isFirstIter) {
+                    totalCount = campInfo.getResponse().getBody().getTotalCount();
+                    log.info("totalCount = {}",  totalCount);
+                    loopCount = totalCount % numOfRows == 0 ? totalCount / numOfRows : totalCount / numOfRows + 1;
+                    log.info("loopCount = {}", loopCount);
 
-                isFirstIter = false;
-            }
+                    isFirstIter = false;
+                }
 
-            log.info("pageNo = {}",  pageNo);
+                log.info("pageNo = {}",  pageNo);
 
-            pageNo += 1;
+                pageNo += 1;
 
-            //페이지번호가 반복횟수보다 많으면 중지한다.
-            if (pageNo > loopCount) {
-                boolLoop = false;
-            }
+                //페이지번호가 반복횟수보다 많으면 중지한다.
+                if (pageNo > loopCount) {
+                    boolLoop = false;
+                }
 
-        } while (boolLoop);
+            } while (boolLoop);
+
+        } catch (Exception e) {
+
+            throw new ExternalApiException(e, ExternalApiError.CAMP_INFO_FAIL);
+
+        }
 
         return totalCount;
     }
@@ -263,7 +270,7 @@ public class OpenApiService {
             //데이터 동기화 실패 시 실패 로그 남기기
             campSyncLogRepository.save(CampSyncLog.syncFail());
 
-            throw new ExternalApiException(e, ExternalApiError.CAMP_SYNC_FAIL);
+            throw new ExternalApiException(e, ExternalApiError.CAMP_SYNC_INFO_FAIL);
 
         }
 

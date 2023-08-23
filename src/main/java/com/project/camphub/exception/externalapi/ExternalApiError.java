@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ExternalApiError {
 
-    FAIL_JSON_MAPPING(HttpStatus.INTERNAL_SERVER_ERROR, "500", "JSON 파싱 예외, OpenApiService.mappingResponse() 확인"),
-    CAMP_SYNC_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "500", "CAMP 데이터 동기화 예외, OpenApiService.campSyncInfo() 확인");
+    CAMP_INFO_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "500", "OpenApi -> DB 데이터 가져오기 예외, OpenApiService.campInfo() 확인"),
+    CAMP_SYNC_INFO_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "500", "OpenApi -> DB 데이터 동기화 예외, OpenApiService.campSyncInfo() 확인");
 
     private HttpStatus httpStatus;
     private String errorCode;
