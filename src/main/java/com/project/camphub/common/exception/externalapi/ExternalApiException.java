@@ -1,4 +1,4 @@
-package com.project.camphub.exception.externalapi;
+package com.project.camphub.common.exception.externalapi;
 
 import lombok.Getter;
 

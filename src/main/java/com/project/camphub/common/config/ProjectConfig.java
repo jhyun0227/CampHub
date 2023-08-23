@@ -1,4 +1,4 @@
-package com.project.camphub.config;
+package com.project.camphub.common.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;

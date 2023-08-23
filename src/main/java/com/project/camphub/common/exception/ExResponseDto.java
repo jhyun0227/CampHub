@@ -1,4 +1,4 @@
-package com.project.camphub.exception;
+package com.project.camphub.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

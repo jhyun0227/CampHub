@@ -1,7 +1,7 @@
-package com.project.camphub.exception;
+package com.project.camphub.common.exception;
 
-import com.project.camphub.exception.externalapi.ExternalApiError;
-import com.project.camphub.exception.externalapi.ExternalApiException;
+import com.project.camphub.common.exception.externalapi.ExternalApiError;
+import com.project.camphub.common.exception.externalapi.ExternalApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

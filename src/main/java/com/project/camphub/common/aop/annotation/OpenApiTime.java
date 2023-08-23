@@ -1,4 +1,4 @@
-package com.project.camphub.aop.annotation;
+package com.project.camphub.common.aop.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

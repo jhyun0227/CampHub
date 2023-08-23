@@ -2,12 +2,12 @@ package com.project.camphub.externalapi.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.camphub.aop.annotation.OpenApiTime;
+import com.project.camphub.common.aop.annotation.OpenApiTime;
 import com.project.camphub.camp.entity.*;
 import com.project.camphub.camp.repository.*;
 import com.project.camphub.common.dto.ResponseDto;
-import com.project.camphub.exception.externalapi.ExternalApiError;
-import com.project.camphub.exception.externalapi.ExternalApiException;
+import com.project.camphub.common.exception.externalapi.ExternalApiError;
+import com.project.camphub.common.exception.externalapi.ExternalApiException;
 import com.project.camphub.externalapi.dto.PropertiesValue;
 import com.project.camphub.externalapi.dto.openapi.Item;
 import com.project.camphub.externalapi.dto.openapi.ItemMapDto;

@@ -1,4 +1,4 @@
-package com.project.camphub.aop.aspect;
+package com.project.camphub.common.aop.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpenApiTimeAspect {
 
-    @Around("@annotation(com.project.camphub.aop.annotation.OpenApiTime)")
+    @Around("@annotation(com.project.camphub.common.aop.annotation.OpenApiTime)")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String methodName = joinPoint.getSignature().getName();
