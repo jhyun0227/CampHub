@@ -49,4 +49,12 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
 
         return camp.cpFacltNm.contains(facltNm);
     }
+
+    /**
+     * 지역 검색 조건
+     */
+
+    /**
+     * 테마 검색 조건
+     */
 }
