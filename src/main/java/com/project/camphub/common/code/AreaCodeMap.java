@@ -167,7 +167,7 @@ public class AreaCodeMap {
         usSigunguMap.put("0701", "남구");
         usSigunguMap.put("0702", "동구");
         usSigunguMap.put("0703", "북구");
-        usSigunguMap.put("0704", "울주구");
+        usSigunguMap.put("0704", "울주군");
         usSigunguMap.put("0705", "중구");
         relationMap.put("07", gjSigunguMap);
 
@@ -313,7 +313,7 @@ public class AreaCodeMap {
         jnSigunguMap.put("1419", "진도군");
         jnSigunguMap.put("1420", "함평군");
         jnSigunguMap.put("1421", "해남군");
-        jnSigunguMap.put("1422", "회순군");
+        jnSigunguMap.put("1422", "화순군");
         relationMap.put("14", jnSigunguMap);
 
         //경상북도
