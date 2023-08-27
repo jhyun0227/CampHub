@@ -30,7 +30,9 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                 .join(camp.campFacility, campFacility).fetchJoin()
                 .join(camp.campSite, campSite).fetchJoin()
                 .where(
-                        facltNmCond(searchCampRequestDto.getFacltNm())
+                        facltNmCond(searchCampRequestDto.getFacltNm()),
+                        doNmCond(searchCampRequestDto.getDoNm()),
+                        sigunguNmCond(searchCampRequestDto.getSigunguNm())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -53,6 +55,20 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     /**
      * 지역 검색 조건
      */
+    private BooleanExpression doNmCond(String doNm) {
+        if (!StringUtils.hasText(doNm)) {
+            return null;
+        }
+
+        return campDetail.cpdDoNm.eq(doNm);
+    }
+    private BooleanExpression sigunguNmCond(String sigunguNm) {
+        if (!StringUtils.hasText(sigunguNm)) {
+            return null;
+        }
+
+        return campDetail.cpdSigunguNm.eq(sigunguNm);
+    }
 
     /**
      * 테마 검색 조건

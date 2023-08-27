@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"campDetail", "campFacility", "campSite"})
 public class Camp {
 
     @Id

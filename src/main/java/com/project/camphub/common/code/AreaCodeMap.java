@@ -37,7 +37,7 @@ public class AreaCodeMap {
     private Map<String, Map<String, String>> relationMap; //도,시군구매핑
 
     @PostConstruct
-    private void areaCodeSet() {
+    public void areaCodeSet() {
         setDo();
         setSigungu();
     }
