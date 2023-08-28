@@ -2,8 +2,8 @@ package com.project.camphub.camp.repository;
 
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.entity.Camp;
-import com.project.camphub.common.code.AreaCodeMap;
-import com.project.camphub.common.code.LocationCodeMap;
+import com.project.camphub.common.code.AreaCode;
+import com.project.camphub.common.code.LocationCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class QueryDslCampRepositoryImplTest {
 
     @Autowired
-    AreaCodeMap areaCodeMap;
+    AreaCode areaCode;
     @Autowired
-    LocationCodeMap locationCodeMap;
+    LocationCode locationCode;
 
     @Autowired
     CampRepository campRepository;
@@ -59,7 +59,7 @@ class QueryDslCampRepositoryImplTest {
         searchCampListRequestDto.setPage(0);
         searchCampListRequestDto.setSize(10);
 
-        searchCampListRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampListRequestDto.getDoCd()));
+        searchCampListRequestDto.setDoNm(areaCode.getDoCodeMap().get(searchCampListRequestDto.getDoCd()));
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -79,8 +79,8 @@ class QueryDslCampRepositoryImplTest {
         searchCampListRequestDto.setPage(0);
         searchCampListRequestDto.setSize(10);
 
-        searchCampListRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampListRequestDto.getDoCd()));
-        searchCampListRequestDto.setSigunguNm(areaCodeMap.getRelationMap().get(searchCampListRequestDto.getDoCd()).get(searchCampListRequestDto.getSigunguCd()));
+        searchCampListRequestDto.setDoNm(areaCode.getDoCodeMap().get(searchCampListRequestDto.getDoCd()));
+        searchCampListRequestDto.setSigunguNm(areaCode.getRelationMap().get(searchCampListRequestDto.getDoCd()).get(searchCampListRequestDto.getSigunguCd()));
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -103,7 +103,7 @@ class QueryDslCampRepositoryImplTest {
         searchCampListRequestDto.setPage(0);
         searchCampListRequestDto.setSize(10);
 
-        searchCampListRequestDto.setLctClNm(locationCodeMap.getLocationMap().get(searchCampListRequestDto.getLctClCd()));
+        searchCampListRequestDto.setLctClNm(locationCode.getLocationCodeMap().get(searchCampListRequestDto.getLctClCd()));
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
