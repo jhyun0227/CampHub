@@ -1,6 +1,6 @@
 package com.project.camphub.camp.repository;
 
-import com.project.camphub.camp.dto.SearchCampRequestDto;
+import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.entity.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,16 +23,17 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Camp> findCampList(SearchCampRequestDto searchCampRequestDto, Pageable pageable) {
+    public Page<Camp> findCampList(SearchCampListRequestDto searchCampListRequestDto, Pageable pageable) {
         List<Camp> campList = jpaQueryFactory
                 .selectFrom(camp)
                 .join(camp.campDetail, campDetail).fetchJoin()
                 .join(camp.campFacility, campFacility).fetchJoin()
                 .join(camp.campSite, campSite).fetchJoin()
                 .where(
-                        facltNmCond(searchCampRequestDto.getFacltNm()),
-                        doNmCond(searchCampRequestDto.getDoNm()),
-                        sigunguNmCond(searchCampRequestDto.getSigunguNm())
+                        facltNmCond(searchCampListRequestDto.getFacltNm()),
+                        doNmCond(searchCampListRequestDto.getDoNm()),
+                        sigunguNmCond(searchCampListRequestDto.getSigunguNm()),
+                        lctClCond(searchCampListRequestDto.getLctClNm())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -71,6 +72,13 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     }
 
     /**
-     * 테마 검색 조건
+     * 입지구분 검색 조건
      */
+    private BooleanExpression lctClCond(String lctClNm) {
+        if (!StringUtils.hasText(lctClNm)) {
+            return null;
+        }
+
+        return camp.cpLctCl.contains(lctClNm);
+    }
 }

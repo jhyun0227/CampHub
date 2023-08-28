@@ -1,21 +1,19 @@
 package com.project.camphub.camp.repository;
 
-import com.project.camphub.camp.dto.SearchCampRequestDto;
+import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.common.code.AreaCodeMap;
+import com.project.camphub.common.code.EnvironmentMap;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @Transactional
@@ -24,6 +22,8 @@ class QueryDslCampRepositoryImplTest {
 
     @Autowired
     AreaCodeMap areaCodeMap;
+    @Autowired
+    EnvironmentMap environmentMap;
 
     @Autowired
     CampRepository campRepository;
@@ -33,17 +33,20 @@ class QueryDslCampRepositoryImplTest {
      */
     @Test
     void findCampListFacltNmCond() {
-        SearchCampRequestDto searchCampRequestDto = new SearchCampRequestDto();
-        searchCampRequestDto.setFacltNm("씨앗골");
-        searchCampRequestDto.setPage(0);
-        searchCampRequestDto.setSize(10);
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setFacltNm("씨앗골");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(10);
 
-        PageRequest pageRequest = PageRequest.of(searchCampRequestDto.getPage(), searchCampRequestDto.getSize());
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
-        List<Camp> camps = campRepository.findCampList(searchCampRequestDto, pageRequest).getContent();
-        Camp camp = camps.get(0);
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
 
-        assertThat(camp.getCpFacltNm()).isEqualTo("씨앗골캠핑장");
+        for (Camp camp : camps) {
+            log.info("camp.getCpFacltNm = {}", camp.getCpFacltNm());
+            assertThat(camp.getCpFacltNm()).contains("씨앗골");
+        }
     }
 
     /**
@@ -51,46 +54,65 @@ class QueryDslCampRepositoryImplTest {
      */
     @Test
     void findCampListDoNmCond() {
-        SearchCampRequestDto searchCampRequestDto = new SearchCampRequestDto();
-        searchCampRequestDto.setDoCd("11");
-        searchCampRequestDto.setPage(0);
-        searchCampRequestDto.setSize(10);
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setDoCd("11");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(10);
 
-        searchCampRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampRequestDto.getDoCd()));
+        searchCampListRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampListRequestDto.getDoCd()));
 
-        PageRequest pageRequest = PageRequest.of(searchCampRequestDto.getPage(), searchCampRequestDto.getSize());
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
-        List<Camp> camps = campRepository.findCampList(searchCampRequestDto, pageRequest).getContent();
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
         log.info("camps.size() = {}", camps.size());
 
-        Camp camp1 = camps.get(0);
-        Camp camp2 = camps.get(1);
-        Camp camp3 = camps.get(2);
-        assertThat(camp1.getCampDetail().getCpdDoNm()).isEqualTo("충청북도");
-        assertThat(camp2.getCampDetail().getCpdDoNm()).isEqualTo("충청북도");
-        assertThat(camp3.getCampDetail().getCpdDoNm()).isEqualTo("충청북도");
+        for (Camp camp : camps) {
+            log.info("camp.getCpdDoNm = {}", camp.getCampDetail().getCpdDoNm());
+            assertThat(camp.getCampDetail().getCpdDoNm()).isEqualTo("충청북도");
+        }
     }
     @Test
     void findCampListSigunguNmCond() {
-        SearchCampRequestDto searchCampRequestDto = new SearchCampRequestDto();
-        searchCampRequestDto.setDoCd("11");
-        searchCampRequestDto.setSigunguCd("1111");
-        searchCampRequestDto.setPage(0);
-        searchCampRequestDto.setSize(10);
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setDoCd("11");
+        searchCampListRequestDto.setSigunguCd("1111");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(10);
 
-        searchCampRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampRequestDto.getDoCd()));
-        searchCampRequestDto.setSigunguNm(areaCodeMap.getRelationMap().get(searchCampRequestDto.getDoCd()).get(searchCampRequestDto.getSigunguCd()));
+        searchCampListRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampListRequestDto.getDoCd()));
+        searchCampListRequestDto.setSigunguNm(areaCodeMap.getRelationMap().get(searchCampListRequestDto.getDoCd()).get(searchCampListRequestDto.getSigunguCd()));
 
-        PageRequest pageRequest = PageRequest.of(searchCampRequestDto.getPage(), searchCampRequestDto.getSize());
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
-        List<Camp> camps = campRepository.findCampList(searchCampRequestDto, pageRequest).getContent();
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
         log.info("camps.size() = {}", camps.size());
 
         for (Camp camp : camps) {
             log.info("camp.getCpdDoNm = {}, camp.getCpdSigungiNm = {}", camp.getCampDetail().getCpdDoNm(), camp.getCampDetail().getCpdSigunguNm());
+            assertThat(camp.getCampDetail().getCpdSigunguNm()).isEqualTo("청주시");
         }
+    }
 
-        Camp camp1 = camps.get(0);
-        assertThat(camp1.getCampDetail().getCpdSigunguNm()).isEqualTo("청주시");
+    /**
+     * 입지구분(cp_lct_cl) 조건
+     */
+    @Test
+    void findCampListLctClNmCond() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setLctClCd("be");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(10);
+
+        searchCampListRequestDto.setLctClNm(environmentMap.getEnvironmentMap().get(searchCampListRequestDto.getLctClCd()));
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCpLctCl = {}", camp.getCpLctCl());
+            assertThat(camp.getCpLctCl()).contains("해변");
+        }
     }
 }
