@@ -2,6 +2,7 @@ package com.project.camphub.camp.repository;
 
 import com.project.camphub.camp.dto.SearchCampRequestDto;
 import com.project.camphub.camp.entity.Camp;
+import com.project.camphub.common.code.AreaCodeMap;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @SpringBootTest
 class QueryDslCampRepositoryImplTest {
+
+    @Autowired
+    AreaCodeMap areaCodeMap;
 
     @Autowired
     CampRepository campRepository;
@@ -48,9 +52,11 @@ class QueryDslCampRepositoryImplTest {
     @Test
     void findCampListDoNmCond() {
         SearchCampRequestDto searchCampRequestDto = new SearchCampRequestDto();
-        searchCampRequestDto.setDoNm("충청북도");
+        searchCampRequestDto.setDoCd("11");
         searchCampRequestDto.setPage(0);
         searchCampRequestDto.setSize(10);
+
+        searchCampRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampRequestDto.getDoCd()));
 
         PageRequest pageRequest = PageRequest.of(searchCampRequestDto.getPage(), searchCampRequestDto.getSize());
 
@@ -67,17 +73,24 @@ class QueryDslCampRepositoryImplTest {
     @Test
     void findCampListSigunguNmCond() {
         SearchCampRequestDto searchCampRequestDto = new SearchCampRequestDto();
-        searchCampRequestDto.setSigunguNm("청주시");
+        searchCampRequestDto.setDoCd("11");
+        searchCampRequestDto.setSigunguCd("1111");
         searchCampRequestDto.setPage(0);
         searchCampRequestDto.setSize(10);
+
+        searchCampRequestDto.setDoNm(areaCodeMap.getDoMap().get(searchCampRequestDto.getDoCd()));
+        searchCampRequestDto.setSigunguNm(areaCodeMap.getRelationMap().get(searchCampRequestDto.getDoCd()).get(searchCampRequestDto.getSigunguCd()));
 
         PageRequest pageRequest = PageRequest.of(searchCampRequestDto.getPage(), searchCampRequestDto.getSize());
 
         List<Camp> camps = campRepository.findCampList(searchCampRequestDto, pageRequest).getContent();
         log.info("camps.size() = {}", camps.size());
 
+        for (Camp camp : camps) {
+            log.info("camp.getCpdDoNm = {}, camp.getCpdSigungiNm = {}", camp.getCampDetail().getCpdDoNm(), camp.getCampDetail().getCpdSigunguNm());
+        }
+
         Camp camp1 = camps.get(0);
-        log.info("camp1.getDetail.toString() = {}", camp1.getCampDetail().toString());
         assertThat(camp1.getCampDetail().getCpdSigunguNm()).isEqualTo("청주시");
     }
 }
