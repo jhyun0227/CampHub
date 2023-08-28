@@ -3,7 +3,7 @@ package com.project.camphub.camp.repository;
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.common.code.AreaCodeMap;
-import com.project.camphub.common.code.EnvironmentMap;
+import com.project.camphub.common.code.LocationCodeMap;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class QueryDslCampRepositoryImplTest {
     @Autowired
     AreaCodeMap areaCodeMap;
     @Autowired
-    EnvironmentMap environmentMap;
+    LocationCodeMap locationCodeMap;
 
     @Autowired
     CampRepository campRepository;
@@ -103,7 +103,7 @@ class QueryDslCampRepositoryImplTest {
         searchCampListRequestDto.setPage(0);
         searchCampListRequestDto.setSize(10);
 
-        searchCampListRequestDto.setLctClNm(environmentMap.getEnvironmentMap().get(searchCampListRequestDto.getLctClCd()));
+        searchCampListRequestDto.setLctClNm(locationCodeMap.getLocationMap().get(searchCampListRequestDto.getLctClCd()));
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
