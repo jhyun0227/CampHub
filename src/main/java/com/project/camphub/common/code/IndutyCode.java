@@ -20,6 +20,6 @@ public class IndutyCode {
         indutyCodeMap.put("gnrl", "일반야영장");
         indutyCodeMap.put("auto", "자동차야영장");
         indutyCodeMap.put("glamp", "글램핑");
-        indutyCodeMap.put("carav", "카라반반");
+        indutyCodeMap.put("carav", "카라반");
    }
 }

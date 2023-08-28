@@ -3,6 +3,8 @@ package com.project.camphub.camp.repository;
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.common.code.AreaCode;
+import com.project.camphub.common.code.FacltDivCode;
+import com.project.camphub.common.code.IndutyCode;
 import com.project.camphub.common.code.LocationCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,10 @@ class QueryDslCampRepositoryImplTest {
     AreaCode areaCode;
     @Autowired
     LocationCode locationCode;
+    @Autowired
+    FacltDivCode facltDivCode;
+    @Autowired
+    IndutyCode indutyCode;
 
     @Autowired
     CampRepository campRepository;
@@ -113,6 +119,52 @@ class QueryDslCampRepositoryImplTest {
         for (Camp camp : camps) {
             log.info("camp.getCpLctCl = {}", camp.getCpLctCl());
             assertThat(camp.getCpLctCl()).contains("해변");
+        }
+    }
+
+    /**
+     * 사업주체(cp_faclt_div_nm) 조건
+     */
+    @Test
+    void findCampListFacltDivNm() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setFacltDivCd("lg");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(10);
+
+        searchCampListRequestDto.setFacltDivNm(facltDivCode.getFacltDivCodeMap().get(searchCampListRequestDto.getFacltDivCd()));
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCpFacltDivNm = {}", camp.getCpFacltDivNm());
+            assertThat(camp.getCpFacltDivNm()).isEqualTo("지자체");
+        }
+    }
+
+    /**
+     * 업종코드(cp_induty) 조건
+     */
+    @Test
+    void findCampListInduty() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setIndutyCd("gnrl");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(10);
+
+        searchCampListRequestDto.setIndutyNm(indutyCode.getIndutyCodeMap().get(searchCampListRequestDto.getIndutyCd()));
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCpInduty = {}", camp.getCpInduty());
+            assertThat(camp.getCpInduty()).contains("일반야영장");
         }
     }
 }

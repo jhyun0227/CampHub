@@ -33,7 +33,9 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         facltNmCond(searchCampListRequestDto.getFacltNm()),
                         doNmCond(searchCampListRequestDto.getDoNm()),
                         sigunguNmCond(searchCampListRequestDto.getSigunguNm()),
-                        lctClCond(searchCampListRequestDto.getLctClNm())
+                        lctClCond(searchCampListRequestDto.getLctClNm()),
+                        facltDivNmCond(searchCampListRequestDto.getFacltDivNm()),
+                        indutyCond(searchCampListRequestDto.getIndutyNm())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -80,5 +82,27 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
         }
 
         return camp.cpLctCl.contains(lctClNm);
+    }
+
+    /**
+     * 사업주체 검색 조건
+     */
+    private BooleanExpression facltDivNmCond(String facltDivNm) {
+        if (!StringUtils.hasText(facltDivNm)) {
+            return null;
+        }
+
+        return camp.cpFacltDivNm.eq(facltDivNm);
+    }
+
+    /**
+     * 업종 검색조건
+     */
+    private BooleanExpression indutyCond(String induty) {
+        if (!StringUtils.hasText(induty)) {
+            return null;
+        }
+
+        return camp.cpInduty.contains(induty);
     }
 }

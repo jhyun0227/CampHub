@@ -14,7 +14,7 @@ public class LocationCode {
     private Map<String, String> locationCodeMap;
 
     @PostConstruct
-    public void LocationCodeSet() {
+    public void locationCodeSet() {
         locationCodeMap = new HashMap<>();
 
         locationCodeMap.put("be", "해변");
