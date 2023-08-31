@@ -57,15 +57,24 @@ class QueryDslCampRepositoryImplTest {
 
     /**
      * 도 이름(cpd_do_nm), 시군구 이름(cpd_sigungu_nm) 조건
+     * 도 이름 조건의 경우 복수 조회가 가능하다.
+     * 시군구 이름 조건의 경우 도1, 시군구1로 조회가 가능하다.
      */
     @Test
     void findCampListDoNmCond() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
-        searchCampListRequestDto.setDoCd("11");
+        List<String> doCdList = searchCampListRequestDto.getDoCdList();
+        doCdList.add("11");
+        doCdList.add("12");
+        log.info("doCdList = {}", doCdList);
         searchCampListRequestDto.setPage(0);
-        searchCampListRequestDto.setSize(10);
+        searchCampListRequestDto.setSize(100);
 
-        searchCampListRequestDto.setDoNm(areaCode.getDoCodeMap().get(searchCampListRequestDto.getDoCd()));
+        List<String> doNmList = searchCampListRequestDto.getDoNmList();
+        for (String doCd : doCdList) {
+            doNmList.add(areaCode.getDoCodeMap().get(doCd));
+        }
+        log.info("doNmList = {}", doNmList);
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -74,19 +83,26 @@ class QueryDslCampRepositoryImplTest {
 
         for (Camp camp : camps) {
             log.info("camp.getCpdDoNm = {}", camp.getCampDetail().getCpdDoNm());
-            assertThat(camp.getCampDetail().getCpdDoNm()).isEqualTo("충청북도");
+            assertThat(camp.getCampDetail().getCpdDoNm()).isIn("충청북도", "충청남도");
         }
     }
     @Test
     void findCampListSigunguNmCond() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
-        searchCampListRequestDto.setDoCd("11");
+        List<String> doCdList = searchCampListRequestDto.getDoCdList();
+        doCdList.add("11");
+        log.info("doCdList = {}", doCdList);
         searchCampListRequestDto.setSigunguCd("1111");
         searchCampListRequestDto.setPage(0);
-        searchCampListRequestDto.setSize(10);
+        searchCampListRequestDto.setSize(100);
 
-        searchCampListRequestDto.setDoNm(areaCode.getDoCodeMap().get(searchCampListRequestDto.getDoCd()));
-        searchCampListRequestDto.setSigunguNm(areaCode.getRelationMap().get(searchCampListRequestDto.getDoCd()).get(searchCampListRequestDto.getSigunguCd()));
+        List<String> doNmList = searchCampListRequestDto.getDoNmList();
+        for (String doCd : doCdList) {
+            doNmList.add(areaCode.getDoCodeMap().get(doCd));
+            searchCampListRequestDto.setSigunguNm(areaCode.getRelationMap().get(doCd).get(searchCampListRequestDto.getSigunguCd()));
+        }
+        log.info("doNmList = {}", doNmList);
+        log.info("sigunguNm = {}", searchCampListRequestDto.getSigunguNm());
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -105,11 +121,18 @@ class QueryDslCampRepositoryImplTest {
     @Test
     void findCampListLctClNmCond() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
-        searchCampListRequestDto.setLctClCd("be");
+        List<String> lctClCdList = searchCampListRequestDto.getLctClCdList();
+        lctClCdList.add("be");
+        lctClCdList.add("dt");
+        log.info("lctClCdList = {}", lctClCdList);
         searchCampListRequestDto.setPage(0);
-        searchCampListRequestDto.setSize(10);
+        searchCampListRequestDto.setSize(100);
 
-        searchCampListRequestDto.setLctClNm(locationCode.getLocationCodeMap().get(searchCampListRequestDto.getLctClCd()));
+        List<String> lctClNmList = searchCampListRequestDto.getLctClNmList();
+        for (String lctClCd : lctClCdList) {
+            lctClNmList.add(locationCode.getLocationCodeMap().get(lctClCd));
+        }
+        log.info("lctClNmList = {}", lctClNmList);
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -118,7 +141,7 @@ class QueryDslCampRepositoryImplTest {
 
         for (Camp camp : camps) {
             log.info("camp.getCpLctCl = {}", camp.getCpLctCl());
-            assertThat(camp.getCpLctCl()).contains("해변");
+            assertThat(camp.getCpLctCl()).matches(s -> s.contains("해변") || s.contains("도심"));
         }
     }
 
@@ -128,11 +151,19 @@ class QueryDslCampRepositoryImplTest {
     @Test
     void findCampListFacltDivNm() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
-        searchCampListRequestDto.setFacltDivCd("lg");
+        List<String> facltDivCdList = searchCampListRequestDto.getFacltDivCdList();
+        facltDivCdList.add("lg");
+        facltDivCdList.add("np");
+        facltDivCdList.add("nrf");
+        log.info("facltDivCdList = {}", facltDivCdList);
         searchCampListRequestDto.setPage(0);
-        searchCampListRequestDto.setSize(10);
+        searchCampListRequestDto.setSize(100);
 
-        searchCampListRequestDto.setFacltDivNm(facltDivCode.getFacltDivCodeMap().get(searchCampListRequestDto.getFacltDivCd()));
+        List<String> facltDivNmList = searchCampListRequestDto.getFacltDivNmList();
+        for (String facltDivCd : facltDivCdList) {
+            facltDivNmList.add(facltDivCode.getFacltDivCodeMap().get(facltDivCd));
+        }
+        log.info("facltDivNmList = {}", facltDivNmList);
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -141,7 +172,7 @@ class QueryDslCampRepositoryImplTest {
 
         for (Camp camp : camps) {
             log.info("camp.getCpFacltDivNm = {}", camp.getCpFacltDivNm());
-            assertThat(camp.getCpFacltDivNm()).isEqualTo("지자체");
+            assertThat(camp.getCpFacltDivNm()).isIn("지자체", "국립공원", "자연휴양림");
         }
     }
 
@@ -151,11 +182,18 @@ class QueryDslCampRepositoryImplTest {
     @Test
     void findCampListInduty() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
-        searchCampListRequestDto.setIndutyCd("gnrl");
+        List<String> indutyCdList = searchCampListRequestDto.getIndutyCdList();
+        indutyCdList.add("gnrl");
+        indutyCdList.add("auto");
+        log.info("indutyCdList = {}", indutyCdList);
         searchCampListRequestDto.setPage(0);
-        searchCampListRequestDto.setSize(10);
+        searchCampListRequestDto.setSize(100);
 
-        searchCampListRequestDto.setIndutyNm(indutyCode.getIndutyCodeMap().get(searchCampListRequestDto.getIndutyCd()));
+        List<String> indutyNmList = searchCampListRequestDto.getIndutyNmList();
+        for (String indutyCd : indutyCdList) {
+            indutyNmList.add(indutyCode.getIndutyCodeMap().get(indutyCd));
+        }
+        log.info("indutyNmList = {}", indutyNmList);
 
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
 
@@ -164,7 +202,7 @@ class QueryDslCampRepositoryImplTest {
 
         for (Camp camp : camps) {
             log.info("camp.getCpInduty = {}", camp.getCpInduty());
-            assertThat(camp.getCpInduty()).contains("일반야영장");
+            assertThat(camp.getCpInduty()).matches(s -> s.contains("일반야영장") || s.contains("자동차야영장"));
         }
     }
 }

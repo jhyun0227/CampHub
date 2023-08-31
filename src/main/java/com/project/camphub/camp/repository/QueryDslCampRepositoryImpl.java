@@ -31,11 +31,11 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                 .join(camp.campSite, campSite).fetchJoin()
                 .where(
                         facltNmCond(searchCampListRequestDto.getFacltNm()),
-                        doNmCond(searchCampListRequestDto.getDoNm()),
+                        doNmCond(searchCampListRequestDto.getDoNmList()),
                         sigunguNmCond(searchCampListRequestDto.getSigunguNm()),
-                        lctClCond(searchCampListRequestDto.getLctClNm()),
-                        facltDivNmCond(searchCampListRequestDto.getFacltDivNm()),
-                        indutyCond(searchCampListRequestDto.getIndutyNm())
+                        lctClCond(searchCampListRequestDto.getLctClNmList()),
+                        facltDivNmCond(searchCampListRequestDto.getFacltDivNmList()),
+                        indutyCond(searchCampListRequestDto.getIndutyNmList())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -58,12 +58,29 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     /**
      * 지역 검색 조건
      */
-    private BooleanExpression doNmCond(String doNm) {
-        if (!StringUtils.hasText(doNm)) {
+    private BooleanExpression doNmCond(List<String> doNmList) {
+        if (doNmList == null || doNmList.isEmpty()) {
             return null;
         }
 
-        return campDetail.cpdDoNm.eq(doNm);
+        BooleanExpression booleanExpression = null;
+
+        for (String doNm : doNmList) {
+
+            System.out.println("doNm = " + doNm);
+            BooleanExpression temp = campDetail.cpdDoNm.eq(doNm.trim());
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        System.out.println("booleanExpression.toString() = " + booleanExpression.toString());
+
+
+        return booleanExpression;
     }
     private BooleanExpression sigunguNmCond(String sigunguNm) {
         if (!StringUtils.hasText(sigunguNm)) {
@@ -76,33 +93,69 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     /**
      * 입지구분 검색 조건
      */
-    private BooleanExpression lctClCond(String lctClNm) {
-        if (!StringUtils.hasText(lctClNm)) {
+    private BooleanExpression lctClCond(List<String> lctClNmList) {
+        if (lctClNmList == null || lctClNmList.isEmpty()) {
             return null;
         }
 
-        return camp.cpLctCl.contains(lctClNm);
+        BooleanExpression booleanExpression = null;
+
+        for (String lctClNm : lctClNmList) {
+            BooleanExpression temp = camp.cpLctCl.contains(lctClNm.trim());
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        return booleanExpression;
     }
 
     /**
      * 사업주체 검색 조건
      */
-    private BooleanExpression facltDivNmCond(String facltDivNm) {
-        if (!StringUtils.hasText(facltDivNm)) {
+    private BooleanExpression facltDivNmCond(List<String> facltDivNmList) {
+        if (facltDivNmList == null || facltDivNmList.isEmpty()) {
             return null;
         }
 
-        return camp.cpFacltDivNm.eq(facltDivNm);
+        BooleanExpression booleanExpression = null;
+
+        for (String facltDivNm : facltDivNmList) {
+            BooleanExpression temp = camp.cpFacltDivNm.eq(facltDivNm.trim());
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        return booleanExpression;
     }
 
     /**
      * 업종 검색조건
      */
-    private BooleanExpression indutyCond(String induty) {
-        if (!StringUtils.hasText(induty)) {
+    private BooleanExpression indutyCond(List<String> indutyNmList) {
+        if (indutyNmList == null || indutyNmList.isEmpty()) {
             return null;
         }
 
-        return camp.cpInduty.contains(induty);
+        BooleanExpression booleanExpression = null;
+
+        for (String indutyNm : indutyNmList) {
+            BooleanExpression temp = camp.cpInduty.contains(indutyNm.trim());
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        return booleanExpression;
     }
 }
