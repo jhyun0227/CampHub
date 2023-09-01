@@ -30,6 +30,8 @@ class QueryDslCampRepositoryImplTest {
     IndutyCode indutyCode;
     @Autowired
     ThemaEnvironmentCode themaEnvironmentCode;
+    @Autowired
+    FacilityCode facilityCode;
 
     @Autowired
     CampRepository campRepository;
@@ -269,6 +271,42 @@ class QueryDslCampRepositoryImplTest {
             log.info("camp.getCpThemaEnvrnCl = {}", camp.getCpThemaEnvrnCl());
             assertThat(camp.getCpThemaEnvrnCl()).matches(s ->
                         s.contains("일출명소") || s.contains("일몰명소") || s.contains("수상레저") || s.contains("항공레저") || s.contains("스키")
+                    );
+        }
+    }
+
+    /**
+     * 부대시설(cpf_sbrs_cl) 조건
+     */
+    @Test
+    void findCampListFacilityNmCond() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        List<String> facilityCdList = searchCampListRequestDto.getFacilityCdList();
+        facilityCdList.add("el");
+        facilityCdList.add("wi");
+        facilityCdList.add("fw");
+        facilityCdList.add("hw");
+        facilityCdList.add("tp");
+        facilityCdList.add("sp");
+        log.info("facilityCdList = {}", facilityCdList);
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(100);
+
+        List<String> facilityNmList = searchCampListRequestDto.getFacilityNmList();
+        for (String facilityCd : facilityCdList) {
+            facilityNmList.add(facilityCode.getFacilityCodeMap().get(facilityCd));
+        }
+        log.info("facilityNmList = {}", facilityNmList);
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCampFacility().getCpfSbrsCl = {}", camp.getCampFacility().getCpfSbrsCl());
+            assertThat(camp.getCampFacility().getCpfSbrsCl()).matches(s ->
+                        s.contains("전기") || s.contains("무선인터넷") || s.contains("장작판매") || s.contains("온수") || s.contains("트렘폴린") || s.contains("물놀이장")
                     );
         }
     }

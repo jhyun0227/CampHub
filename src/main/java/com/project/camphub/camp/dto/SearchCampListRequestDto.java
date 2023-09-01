@@ -30,6 +30,9 @@ public class SearchCampListRequestDto {
     //테마환경
     private List<String> themaEnvironmentCdList = new ArrayList<>();
     private List<String> themaEnvironmentNmList = new ArrayList<>();
+    //부대시설
+    private List<String> facilityCdList = new ArrayList<>();
+    private List<String> facilityNmList = new ArrayList<>();
 
     private Integer page;
     private Integer size;

@@ -37,7 +37,8 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         facltDivNmCond(searchCampListRequestDto.getFacltDivNmList()),
                         indutyCond(searchCampListRequestDto.getIndutyNmList()),
                         siteBottomCond(searchCampListRequestDto.getSiteBottomCdList()),
-                        themaEnvironmentCond(searchCampListRequestDto.getThemaEnvironmentNmList())
+                        themaEnvironmentCond(searchCampListRequestDto.getThemaEnvironmentNmList()),
+                        facilityCond(searchCampListRequestDto.getFacilityNmList())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -225,4 +226,27 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
 
         return booleanExpression;
     }
-}
+
+    /**
+     * 부대시설 검색조건
+     */
+    private BooleanExpression facilityCond(List<String> facilityNmList) {
+        if (facilityNmList == null || facilityNmList.isEmpty()) {
+            return null;
+        }
+
+        BooleanExpression booleanExpression = null;
+
+        for (String facilityNm : facilityNmList) {
+            BooleanExpression temp = campFacility.cpfSbrsCl.contains(facilityNm.trim());
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        return booleanExpression;
+    }
+ }
