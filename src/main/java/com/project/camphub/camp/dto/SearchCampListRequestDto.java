@@ -25,6 +25,8 @@ public class SearchCampListRequestDto {
     //업종(주요시설)
     private List<String> indutyCdList = new ArrayList<>();
     private List<String> indutyNmList = new ArrayList<>();
+    //사이트바닥
+    private List<String> siteBottomCdList = new ArrayList<>();
 
     private Integer page;
     private Integer size;

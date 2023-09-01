@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -149,7 +150,7 @@ class QueryDslCampRepositoryImplTest {
      * 사업주체(cp_faclt_div_nm) 조건
      */
     @Test
-    void findCampListFacltDivNm() {
+    void findCampListFacltDivNmCond() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
         List<String> facltDivCdList = searchCampListRequestDto.getFacltDivCdList();
         facltDivCdList.add("lg");
@@ -180,7 +181,7 @@ class QueryDslCampRepositoryImplTest {
      * 업종코드(cp_induty) 조건
      */
     @Test
-    void findCampListInduty() {
+    void findCampListIndutyNmCond() {
         SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
         List<String> indutyCdList = searchCampListRequestDto.getIndutyCdList();
         indutyCdList.add("gnrl");
@@ -203,6 +204,38 @@ class QueryDslCampRepositoryImplTest {
         for (Camp camp : camps) {
             log.info("camp.getCpInduty = {}", camp.getCpInduty());
             assertThat(camp.getCpInduty()).matches(s -> s.contains("일반야영장") || s.contains("자동차야영장"));
+        }
+    }
+
+    /**
+     * 사이트바닥(cps_site_bottom_cl[n]) 조건
+     */
+    @Test
+    void findCampListSiteBottomCond() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        List<String> siteBottomCdList = searchCampListRequestDto.getSiteBottomCdList();
+        siteBottomCdList.add("gr");
+        siteBottomCdList.add("cs");
+        siteBottomCdList.add("te");
+        log.info("siteBottomCdList = {}", siteBottomCdList);
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(100);
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("-----------------------------------------------------");
+            log.info("camp.getCampSite().getCpsSiteBottomCl1() = {}", camp.getCampSite().getCpsSiteBottomCl1());
+            log.info("camp.getCampSite().getCpsSiteBottomCl2() = {}", camp.getCampSite().getCpsSiteBottomCl2());
+            log.info("camp.getCampSite().getCpsSiteBottomCl3() = {}", camp.getCampSite().getCpsSiteBottomCl3());
+            log.info("-----------------------------------------------------");
+            assertThat(camp.getCampSite())
+                    .matches(campSite ->
+                        !campSite.getCpsSiteBottomCl1().equals("0") || !campSite.getCpsSiteBottomCl2().equals("0") || !campSite.getCpsSiteBottomCl3().equals("0")
+                    );
         }
     }
 }

@@ -35,7 +35,8 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         sigunguNmCond(searchCampListRequestDto.getSigunguNm()),
                         lctClCond(searchCampListRequestDto.getLctClNmList()),
                         facltDivNmCond(searchCampListRequestDto.getFacltDivNmList()),
-                        indutyCond(searchCampListRequestDto.getIndutyNmList())
+                        indutyCond(searchCampListRequestDto.getIndutyNmList()),
+                        siteBottomCond(searchCampListRequestDto.getSiteBottomCdList())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -148,6 +149,48 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
 
         for (String indutyNm : indutyNmList) {
             BooleanExpression temp = camp.cpInduty.contains(indutyNm.trim());
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        return booleanExpression;
+    }
+
+    /**
+     * 사이트바닥 조건
+     * 사이트바닥의 검색 조건은 cps_bottom_site_cl[n] 값이 0이 아니면 해당시설이 있는 것으로 간주한다.
+     */
+    private BooleanExpression siteBottomCond(List<String> siteBottomCdList) {
+        if (siteBottomCdList == null || siteBottomCdList.isEmpty()) {
+            return null;
+        }
+
+        BooleanExpression booleanExpression = null;
+
+        for (String siteBottomCd : siteBottomCdList) {
+            BooleanExpression temp = null;
+
+            switch (siteBottomCd) {
+                case "gr":
+                    temp = campSite.cpsSiteBottomCl1.ne("0");
+                    break;
+                case "cs":
+                    temp = campSite.cpsSiteBottomCl2.ne("0");
+                    break;
+                case "te":
+                    temp = campSite.cpsSiteBottomCl3.ne("0");
+                    break;
+                case "pe":
+                    temp = campSite.cpsSiteBottomCl4.ne("0");
+                    break;
+                case "so":
+                    temp = campSite.cpsSiteBottomCl5.ne("0");
+                    break;
+            }
 
             if (booleanExpression == null) {
                 booleanExpression = temp;
