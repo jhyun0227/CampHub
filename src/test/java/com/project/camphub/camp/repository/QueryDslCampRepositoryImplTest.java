@@ -2,10 +2,7 @@ package com.project.camphub.camp.repository;
 
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.entity.Camp;
-import com.project.camphub.common.code.AreaCode;
-import com.project.camphub.common.code.FacltDivCode;
-import com.project.camphub.common.code.IndutyCode;
-import com.project.camphub.common.code.LocationCode;
+import com.project.camphub.common.code.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,8 @@ class QueryDslCampRepositoryImplTest {
     FacltDivCode facltDivCode;
     @Autowired
     IndutyCode indutyCode;
+    @Autowired
+    ThemaEnvironmentCode themaEnvironmentCode;
 
     @Autowired
     CampRepository campRepository;
@@ -235,6 +234,41 @@ class QueryDslCampRepositoryImplTest {
             assertThat(camp.getCampSite())
                     .matches(campSite ->
                         !campSite.getCpsSiteBottomCl1().equals("0") || !campSite.getCpsSiteBottomCl2().equals("0") || !campSite.getCpsSiteBottomCl3().equals("0")
+                    );
+        }
+    }
+
+    /**
+     * 테마환경(cp_thema_envrn_cl) 조건
+     */
+    @Test
+    void findCampListThemaEnvironmentNmCond() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        List<String> themaEnvironmentCdList = searchCampListRequestDto.getThemaEnvironmentCdList();
+        themaEnvironmentCdList.add("sr");
+        themaEnvironmentCdList.add("ss");
+        themaEnvironmentCdList.add("wl");
+        themaEnvironmentCdList.add("al");
+        themaEnvironmentCdList.add("sk");
+        log.info("themaEnvironmentCdList = {}", themaEnvironmentCdList);
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(100);
+
+        List<String> themaEnvironmentNmList = searchCampListRequestDto.getThemaEnvironmentNmList();
+        for (String themaEnvironmentCd : themaEnvironmentCdList) {
+            themaEnvironmentNmList.add(themaEnvironmentCode.getThemaEnvironmentCodeMap().get(themaEnvironmentCd));
+        }
+        log.info("themaEnvironmentNmList = {}", themaEnvironmentNmList);
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCpThemaEnvrnCl = {}", camp.getCpThemaEnvrnCl());
+            assertThat(camp.getCpThemaEnvrnCl()).matches(s ->
+                        s.contains("일출명소") || s.contains("일몰명소") || s.contains("수상레저") || s.contains("항공레저") || s.contains("스키")
                     );
         }
     }

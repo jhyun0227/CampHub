@@ -27,6 +27,9 @@ public class SearchCampListRequestDto {
     private List<String> indutyNmList = new ArrayList<>();
     //사이트바닥
     private List<String> siteBottomCdList = new ArrayList<>();
+    //테마환경
+    private List<String> themaEnvironmentCdList = new ArrayList<>();
+    private List<String> themaEnvironmentNmList = new ArrayList<>();
 
     private Integer page;
     private Integer size;

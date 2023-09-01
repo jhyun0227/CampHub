@@ -36,7 +36,8 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         lctClCond(searchCampListRequestDto.getLctClNmList()),
                         facltDivNmCond(searchCampListRequestDto.getFacltDivNmList()),
                         indutyCond(searchCampListRequestDto.getIndutyNmList()),
-                        siteBottomCond(searchCampListRequestDto.getSiteBottomCdList())
+                        siteBottomCond(searchCampListRequestDto.getSiteBottomCdList()),
+                        themaEnvironmentCond(searchCampListRequestDto.getThemaEnvironmentNmList())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -46,7 +47,7 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     }
 
     /**
-     * 야영장명 검색 조건
+     * 야영장명 검색조건
      */
     private BooleanExpression facltNmCond(String facltNm) {
         if (!StringUtils.hasText(facltNm)) {
@@ -57,7 +58,7 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     }
 
     /**
-     * 지역 검색 조건
+     * 지역 검색조건
      */
     private BooleanExpression doNmCond(List<String> doNmList) {
         if (doNmList == null || doNmList.isEmpty()) {
@@ -92,7 +93,7 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     }
 
     /**
-     * 입지구분 검색 조건
+     * 입지구분 검색조건
      */
     private BooleanExpression lctClCond(List<String> lctClNmList) {
         if (lctClNmList == null || lctClNmList.isEmpty()) {
@@ -115,7 +116,7 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     }
 
     /**
-     * 사업주체 검색 조건
+     * 사업주체 검색조건
      */
     private BooleanExpression facltDivNmCond(List<String> facltDivNmList) {
         if (facltDivNmList == null || facltDivNmList.isEmpty()) {
@@ -161,7 +162,7 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
     }
 
     /**
-     * 사이트바닥 조건
+     * 사이트바닥 검색조건
      * 사이트바닥의 검색 조건은 cps_bottom_site_cl[n] 값이 0이 아니면 해당시설이 있는 것으로 간주한다.
      */
     private BooleanExpression siteBottomCond(List<String> siteBottomCdList) {
@@ -191,6 +192,29 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                     temp = campSite.cpsSiteBottomCl5.ne("0");
                     break;
             }
+
+            if (booleanExpression == null) {
+                booleanExpression = temp;
+            } else {
+                booleanExpression = booleanExpression.or(temp);
+            }
+        }
+
+        return booleanExpression;
+    }
+
+    /**
+     * 테마환경 검색조건
+     */
+    private BooleanExpression themaEnvironmentCond(List<String> themaEnvironmentNmList) {
+        if (themaEnvironmentNmList == null || themaEnvironmentNmList.isEmpty()) {
+            return null;
+        }
+
+        BooleanExpression booleanExpression = null;
+
+        for (String themaEnvironmentNm : themaEnvironmentNmList) {
+            BooleanExpression temp = camp.cpThemaEnvrnCl.contains(themaEnvironmentNm.trim());
 
             if (booleanExpression == null) {
                 booleanExpression = temp;
