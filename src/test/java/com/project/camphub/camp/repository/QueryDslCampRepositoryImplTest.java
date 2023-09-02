@@ -310,4 +310,62 @@ class QueryDslCampRepositoryImplTest {
                     );
         }
     }
+
+    /**
+     * 기타정보 조건
+     * 애완동물출입(cpd_animal_cmg_cl), 개인카라반동반여부(cpd_carav_acmpny_at), 개인트레일러동반여부(cpd_trler_acmpny_at)
+     */
+    @Test
+    void findCampListAccpnyAnimYn() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setAccpnyAnimYn("Y");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(100);
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCampDetail().getCpdAnimalCmgCl = {}", camp.getCampDetail().getCpdAnimalCmgCl());
+            assertThat(camp.getCampDetail().getCpdAnimalCmgCl()).matches(
+                        s -> s.equals("가능") || s.equals("가능(소형견)")
+                    );
+        }
+    }
+    @Test
+    void findCampListIndivCaravYn() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setIndivCaravYn("Y");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(100);
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCampDetail().getCpdCaravAcmpnyAt = {}", camp.getCampDetail().getCpdCaravAcmpnyAt());
+            assertThat(camp.getCampDetail().getCpdCaravAcmpnyAt()).isEqualTo("Y");
+        }
+    }
+    @Test
+    void findCampListIndivTrlerYn() {
+        SearchCampListRequestDto searchCampListRequestDto = new SearchCampListRequestDto();
+        searchCampListRequestDto.setIndivTrlerYn("Y");
+        searchCampListRequestDto.setPage(0);
+        searchCampListRequestDto.setSize(100);
+
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+
+        List<Camp> camps = campRepository.findCampList(searchCampListRequestDto, pageRequest).getContent();
+        log.info("camps.size() = {}", camps.size());
+
+        for (Camp camp : camps) {
+            log.info("camp.getCampDetail().getCpdTrlerAcmpnyAt = {}", camp.getCampDetail().getCpdTrlerAcmpnyAt());
+            assertThat(camp.getCampDetail().getCpdTrlerAcmpnyAt()).isEqualTo("Y");
+        }
+    }
 }

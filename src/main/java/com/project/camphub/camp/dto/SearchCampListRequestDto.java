@@ -33,6 +33,10 @@ public class SearchCampListRequestDto {
     //부대시설
     private List<String> facilityCdList = new ArrayList<>();
     private List<String> facilityNmList = new ArrayList<>();
+    //기타정보
+    private String accpnyAnimYn; //애완동물 출입
+    private String indivCaravYn; //개인카라반
+    private String indivTrlerYn; //개인트레일러
 
     private Integer page;
     private Integer size;

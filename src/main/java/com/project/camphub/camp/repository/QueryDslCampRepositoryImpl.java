@@ -38,7 +38,10 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         indutyCond(searchCampListRequestDto.getIndutyNmList()),
                         siteBottomCond(searchCampListRequestDto.getSiteBottomCdList()),
                         themaEnvironmentCond(searchCampListRequestDto.getThemaEnvironmentNmList()),
-                        facilityCond(searchCampListRequestDto.getFacilityNmList())
+                        facilityCond(searchCampListRequestDto.getFacilityNmList()),
+                        accompanyAnimal(searchCampListRequestDto.getAccpnyAnimYn()),
+                        individualCarav(searchCampListRequestDto.getIndivCaravYn()),
+                        individualTrler(searchCampListRequestDto.getIndivTrlerYn())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -249,4 +252,29 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
 
         return booleanExpression;
     }
- }
+
+    //기타정보
+    private BooleanExpression accompanyAnimal(String accpnyAnimYn) {
+        if (!StringUtils.hasText(accpnyAnimYn)) {
+            return null;
+        } else if ("N".equals(accpnyAnimYn)) {
+            return null;
+        }
+
+        return campDetail.cpdAnimalCmgCl.in("가능", "가능(소형견)");
+    }
+    private BooleanExpression individualCarav(String indivCaravYn) {
+        if (!StringUtils.hasText(indivCaravYn)) {
+            return null;
+        }
+
+        return campDetail.cpdCaravAcmpnyAt.eq(indivCaravYn);
+    }
+    private BooleanExpression individualTrler(String indivTrlerYn) {
+        if (!StringUtils.hasText(indivTrlerYn)) {
+            return null;
+        }
+
+        return campDetail.cpdTrlerAcmpnyAt.eq(indivTrlerYn);
+    }
+}
