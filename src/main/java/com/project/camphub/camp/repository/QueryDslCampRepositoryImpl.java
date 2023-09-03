@@ -42,7 +42,9 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         facilityCond(searchCampListRequestDto.getFacilityNmList()),
                         accompanyAnimal(searchCampListRequestDto.getAccpnyAnimYn()),
                         individualCarav(searchCampListRequestDto.getIndivCaravYn()),
-                        individualTrler(searchCampListRequestDto.getIndivTrlerYn())
+                        individualTrler(searchCampListRequestDto.getIndivTrlerYn()),
+                        camp.cpManageSttus.eq("운영"),
+                        camp.cpSyncStatus.ne("D")
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -72,7 +74,9 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                         facilityCond(searchCampListRequestDto.getFacilityNmList()),
                         accompanyAnimal(searchCampListRequestDto.getAccpnyAnimYn()),
                         individualCarav(searchCampListRequestDto.getIndivCaravYn()),
-                        individualTrler(searchCampListRequestDto.getIndivTrlerYn())
+                        individualTrler(searchCampListRequestDto.getIndivTrlerYn()),
+                        camp.cpManageSttus.eq("운영"),
+                        camp.cpSyncStatus.ne("D")
                 )
                 .fetch();
 
