@@ -14,7 +14,7 @@ public class ControllerAdvice {
     @ExceptionHandler(ExternalApiException.class)
     public ResponseEntity<ExResponseDto> externalApiException(ExternalApiException e) {
 
-        log.info("### ExternalApiExceptiond 예외 발생, Throwable = {}", e.getCause());
+        log.info("### ExternalApiException 발생, Throwable = {}", e.getMessage(), e.getCause());
 
         ExternalApiError externalApiError = e.getExternalApiError();
         ExResponseDto exResponseDto =
