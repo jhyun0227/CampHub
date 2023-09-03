@@ -12,5 +12,7 @@ public class ResponseDto {
     private Object data;
     private String message;
 
-
+    public static ResponseDto ok(Object data) {
+        return new ResponseDto(HttpStatus.OK, data, "success");
+    }
 }

@@ -24,6 +24,7 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
 
     @Override
     public Page<Camp> findCampList(SearchCampListRequestDto searchCampListRequestDto, Pageable pageable) {
+        //List
         List<Camp> campList = jpaQueryFactory
                 .selectFrom(camp)
                 .join(camp.campDetail, campDetail).fetchJoin()
@@ -47,7 +48,35 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(campList, pageable, 0);
+        //Count
+        long campListCount = this.findCampListCount(searchCampListRequestDto);
+
+        return new PageImpl<>(campList, pageable, campListCount);
+    }
+
+    public long findCampListCount(SearchCampListRequestDto searchCampListRequestDto) {
+        List<Camp> campList = jpaQueryFactory
+                .selectFrom(camp)
+                .join(camp.campDetail, campDetail).fetchJoin()
+                .join(camp.campFacility, campFacility).fetchJoin()
+                .join(camp.campSite, campSite).fetchJoin()
+                .where(
+                        facltNmCond(searchCampListRequestDto.getFacltNm()),
+                        doNmCond(searchCampListRequestDto.getDoNmList()),
+                        sigunguNmCond(searchCampListRequestDto.getSigunguNm()),
+                        lctClCond(searchCampListRequestDto.getLctClNmList()),
+                        facltDivNmCond(searchCampListRequestDto.getFacltDivNmList()),
+                        indutyCond(searchCampListRequestDto.getIndutyNmList()),
+                        siteBottomCond(searchCampListRequestDto.getSiteBottomCdList()),
+                        themaEnvironmentCond(searchCampListRequestDto.getThemaEnvironmentNmList()),
+                        facilityCond(searchCampListRequestDto.getFacilityNmList()),
+                        accompanyAnimal(searchCampListRequestDto.getAccpnyAnimYn()),
+                        individualCarav(searchCampListRequestDto.getIndivCaravYn()),
+                        individualTrler(searchCampListRequestDto.getIndivTrlerYn())
+                )
+                .fetch();
+
+        return campList.size();
     }
 
     /**
@@ -72,8 +101,6 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
         BooleanExpression booleanExpression = null;
 
         for (String doNm : doNmList) {
-
-            System.out.println("doNm = " + doNm);
             BooleanExpression temp = campDetail.cpdDoNm.eq(doNm.trim());
 
             if (booleanExpression == null) {
@@ -82,9 +109,6 @@ public class QueryDslCampRepositoryImpl implements QueryDslCampRepository {
                 booleanExpression = booleanExpression.or(temp);
             }
         }
-
-        System.out.println("booleanExpression.toString() = " + booleanExpression.toString());
-
 
         return booleanExpression;
     }
