@@ -64,7 +64,6 @@ public class CampService {
     @Transactional(readOnly = true)
     public CampDto findCampInfo(String cpId) {
 
-        //추후 예외처리
         Camp findCamp = campRepository.findByCpId(cpId)
                 .orElseThrow(() -> new CampException(CampError.NOT_EXIST_CAMP));
 
