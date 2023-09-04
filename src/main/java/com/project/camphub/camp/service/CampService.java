@@ -6,6 +6,8 @@ import com.project.camphub.camp.dto.SearchCampListResponseDto;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.camp.repository.CampRepository;
 import com.project.camphub.common.code.*;
+import com.project.camphub.common.exception.camp.CampError;
+import com.project.camphub.common.exception.camp.CampException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -64,7 +66,7 @@ public class CampService {
 
         //추후 예외처리
         Camp findCamp = campRepository.findByCpId(cpId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new CampException(CampError.NOT_EXIST_CAMP));
 
         return CampDto.fromEntity(findCamp);
     }

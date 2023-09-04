@@ -7,8 +7,7 @@ public class CampException extends RuntimeException {
 
     private CampError campError;
 
-    public CampException(Throwable cause, CampError campError) {
-        super(cause);
+    public CampException(CampError campError) {
         this.campError = campError;
     }
 

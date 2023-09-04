@@ -16,7 +16,7 @@ public class ControllerAdvice {
     @ExceptionHandler(ExternalApiException.class)
     public ResponseEntity<ExResponseDto> externalApiException(ExternalApiException e) {
 
-        log.info("### ExternalApiException 발생, message = {}", e.getMessage(), e.getCause());
+        log.info("### ExternalApiException 발생, message = {}", e.getExternalApiError().getErrorMessage(), e.getCause());
 
         ExternalApiError externalApiError = e.getExternalApiError();
         ExResponseDto exResponseDto =
@@ -27,7 +27,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(CampException.class)
     public ResponseEntity<ExResponseDto> campException(CampException e) {
-        log.info("### CampException 발생, message = {}", e.getMessage(), e.getCause());
+        log.info("### CampException 발생, message = {}", e.getCampError().getErrorMessage());
 
         CampError campError = e.getCampError();
         ExResponseDto exResponseDto
