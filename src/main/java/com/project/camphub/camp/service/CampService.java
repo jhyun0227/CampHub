@@ -50,24 +50,20 @@ public class CampService {
         List<Camp> campList = campPage.getContent();
 
         List<SearchCampListResponseDto> searchCampListResponseDtos = campList.stream()
-                .map(camp -> new SearchCampListResponseDto(
-                        camp.getCpId(),
-                        camp.getCpFirstImageUrl(),
-                        camp.getCpTrsagntNo(),
-                        camp.getCampDetail().getCpdDoNm(),
-                        camp.getCampDetail().getCpdSigunguNm(),
-                        camp.getCpFacltNm(),
-                        camp.getCampDetail().getCpdIntro(),
-                        camp.getCampDetail().getCpdLineIntro(),
-                        camp.getCampDetail().getCpdAddr1(),
-                        camp.getCampDetail().getCpdAddr2(),
-                        camp.getCpTel(),
-                        camp.getCampFacility().getCpfSbrsCl()
-                ))
+                .map(SearchCampListResponseDto::fromEntity)
                 .collect(Collectors.toList());
 
         return new PageImpl<>(searchCampListResponseDtos, campPage.getPageable(), campPage.getTotalElements());
     }
+
+    /**
+     * cpId로 단건의 캠핑장을 조회하는 메서드
+     */
+    @Transactional(readOnly = true)
+    public Object findCampDetail(String cpId) {
+        return null;
+    }
+
 
     /**
      * SearchCampListRequestDto의 Cd 필드들을 Nm 필드로 바꾸는 메서드
