@@ -26,7 +26,7 @@ public class ExternalApiController {
      * OpenApi의 테이터와 DB의 데이터를 동기화하는 메서드
      */
     @PatchMapping("/openapi/campinfo/sync")
-    public ResponseDto dd() {
+    public ResponseDto campSyncInfo() {
         return openApiService.campSyncInfo();
     }
 }
