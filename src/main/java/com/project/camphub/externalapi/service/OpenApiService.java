@@ -390,7 +390,7 @@ public class OpenApiService {
         log.info("newCampItemsContentIds = {}", newCampItemsContentIds);
 
         //중복 저장되는 캠프가 있는지 조회
-        List<Camp> findCamps = campRepository.findCampFetchAll(newCampItemsContentIds);
+        List<Camp> findCamps = campRepository.findCampListFetch(newCampItemsContentIds);
 
         //조회되는 캠프가 없다면 전부 새로운 캠프이므로 List에 담는다.
         if (findCamps.isEmpty() || findCamps.size() == 0) {
@@ -431,7 +431,7 @@ public class OpenApiService {
         log.info("updateCampsContentIds = {}", updateCampsContentIds);
 
         //DB에 존재하는 데이터를 가져오고 cpContentId를 Key값으로 하는 Map을 생성한다.
-        List<Camp> findCamps = campRepository.findCampFetchAll(updateCampsContentIds);
+        List<Camp> findCamps = campRepository.findCampListFetch(updateCampsContentIds);
         Map<String, Camp> findCampsMap = findCamps.stream()
                 .collect(Collectors.toMap(Camp::getCpContentId, camp -> camp));
 
