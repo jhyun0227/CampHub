@@ -1,5 +1,6 @@
 package com.project.camphub.camp.controller;
 
+import com.project.camphub.camp.dto.CampDto;
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.dto.SearchCampListResponseDto;
 import com.project.camphub.camp.service.CampService;
@@ -17,6 +18,9 @@ public class CampController {
 
     private final CampService campService;
 
+    /**
+     * 캠프 리스트 조회
+     */
     @GetMapping("/list")
     public ResponseDto findCampList(@RequestBody SearchCampListRequestDto searchCampListRequestDto) {
         Page<SearchCampListResponseDto> campList = campService.findCampList(searchCampListRequestDto);
@@ -24,8 +28,13 @@ public class CampController {
         return ResponseDto.ok(campList);
     }
 
+    /**
+     * 캠프 단건 조회
+     */
     @GetMapping("/{cpId}")
-    public ResponseDto findCampDetail(@PathVariable String cpId) {
-        return null;
+    public ResponseDto findCampInfo(@PathVariable String cpId) {
+        CampDto campDto = campService.findCampInfo(cpId);
+
+        return ResponseDto.ok(campDto);
     }
 }

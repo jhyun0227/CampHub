@@ -23,6 +23,9 @@ public class SearchCampListResponseDto {
     private String cpTel;
     private String cpfSbrsCl;
 
+    /**
+     * Entity -> Dto
+     */
     public static SearchCampListResponseDto fromEntity(Camp camp) {
         return SearchCampListResponseDto.builder()
                 .cpId(camp.getCpId())

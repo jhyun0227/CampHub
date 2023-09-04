@@ -1,11 +1,11 @@
 package com.project.camphub.camp.service;
 
+import com.project.camphub.camp.dto.CampDto;
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.dto.SearchCampListResponseDto;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.camp.repository.CampRepository;
 import com.project.camphub.common.code.*;
-import com.project.camphub.common.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -60,8 +60,13 @@ public class CampService {
      * cpId로 단건의 캠핑장을 조회하는 메서드
      */
     @Transactional(readOnly = true)
-    public Object findCampDetail(String cpId) {
-        return null;
+    public CampDto findCampInfo(String cpId) {
+
+        //추후 예외처리
+        Camp findCamp = campRepository.findByCpId(cpId)
+                .orElseThrow(() -> new RuntimeException());
+
+        return CampDto.fromEntity(findCamp);
     }
 
 
