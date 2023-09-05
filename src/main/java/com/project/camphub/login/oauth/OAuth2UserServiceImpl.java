@@ -4,19 +4,23 @@ import com.project.camphub.member.Repository.MemberRepository;
 import com.project.camphub.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
@@ -37,12 +41,14 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
         log.info("userNameAttributeName = {}", userNameAttributeName);
 
 
-        OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, attributes);
 
         Member member = this.memberSaveOrUpdate(registrationId, oAuth2Attribute);
 
-
-        return null;
+        return new DefaultOAuth2User(Collections.singleton(
+                new SimpleGrantedAuthority(member.getMbRole().getKey())),
+                oAuth2Attribute.getAttributes(),
+                oAuth2Attribute.getUserNameAttributeName());
     }
 
     /**
@@ -53,11 +59,15 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
 
         //정보가 없으면 새로 저장
         if (findMember.isEmpty()) {
+            log.info("신규 회원, 데이터 저장");
+
             Member member = oAuth2Attribute.toEntity(registrationId);
             memberRepository.save(member);
 
             return member;
         }
+
+        log.info("기존 회원, 데이터 업데이트");
 
         Member member = findMember.get();
         member.updateOAuth2Attributes(oAuth2Attribute);

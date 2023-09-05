@@ -46,7 +46,7 @@ public class OAuth2Attribute {
                 .mbName(this.name)
                 .mbNickname(registrationId + "_" + UUID.randomUUID().toString().substring(0, 18))
                 .mbPicture(this.picture)
-                .mbRole(Role.ROLE_MEMBER)
+                .mbRole(Role.MEMBER)
                 .mbJoinDate(LocalDateTime.now())
                 .build();
     }
