@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final OAuth2UserServiceImpl oAuth2UserService;
+    private final OAuth2UserServiceImpl oAuth2UserServiceImpl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -33,9 +33,9 @@ public class SecurityConfig {
                  */
                 .and()
                 .oauth2Login()
-                .loginPage("/login") //Security 기본 로그인 기능 사용하지 않음
-                .userInfoEndpoint() // 클라이언트가 AccessToken을 이용해서 가져온 정보를 사용하는데 사용되는 서비스를 지정한다.
-                .userService(customOAuth2UserService);
+                    .loginPage("/login") //Security 기본 로그인 기능 사용하지 않음
+                        .userInfoEndpoint() // 클라이언트가 AccessToken을 이용해서 가져온 정보를 사용하는데 사용되는 서비스를 지정한다.
+                            .userService(oAuth2UserServiceImpl);
 
         return httpSecurity.build();
     }
