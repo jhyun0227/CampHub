@@ -16,7 +16,7 @@ import java.util.UUID;
 public class OAuth2Attribute {
 
     private Map<String, Object> attributes;
-    private String userNameAttributeName;
+    private String nameAttributeKey;
     private String email;
     private String name;
     private String picture;
@@ -32,7 +32,7 @@ public class OAuth2Attribute {
     public static OAuth2Attribute ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
                 .attributes(attributes)
-                .userNameAttributeName(userNameAttributeName)
+                .nameAttributeKey(userNameAttributeName)
                 .email((String) attributes.get("email"))
                 .name((String) attributes.get("name"))
                 .picture((String) attributes.get("picture"))

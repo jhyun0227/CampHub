@@ -48,7 +48,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
         return new DefaultOAuth2User(Collections.singleton(
                 new SimpleGrantedAuthority(member.getMbRole().getKey())),
                 oAuth2Attribute.getAttributes(),
-                oAuth2Attribute.getUserNameAttributeName());
+                oAuth2Attribute.getNameAttributeKey());
     }
 
     /**
