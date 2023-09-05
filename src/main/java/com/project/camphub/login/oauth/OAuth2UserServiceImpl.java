@@ -45,6 +45,11 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
 
         Member member = this.memberSaveOrUpdate(registrationId, oAuth2Attribute);
 
+        /**
+         * 해당 반환 객체는 SecurityContext에 저장된다.
+         * Session 방식을 이용할 경우, Security Context는 HTTP세션에 연결이 된다.
+         * Session 방식을 이용하지 않을 경우, 리다이렉션 되는 페이지의 인증과 인가를 넘기기 위한 역할 밖에 되지 않는다.
+         */
         return new DefaultOAuth2User(Collections.singleton(
                 new SimpleGrantedAuthority(member.getMbRole().getKey())),
                 oAuth2Attribute.getAttributes(),
