@@ -1,23 +1,67 @@
 package com.project.camphub.login.oauth;
 
+import com.project.camphub.member.Repository.MemberRepository;
+import com.project.camphub.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
+    private final MemberRepository memberRepository;
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-        log.info("userRequest = {}", userRequest);
+        //구글측에서 보내준 정보를 OAuth2User 객체로 변환
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+        OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
+        Map<String, Object> attributes = oAuth2User.getAttributes(); //서버로부터 전달받은 유저정보
+        log.info("oAuth2User.getAttributes() = {}", oAuth2User.getAttributes());
+        String registrationId = userRequest.getClientRegistration().getRegistrationId(); //요청서버명
+        log.info("registrationId = {}", registrationId);
+        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName(); //해당서버의 고유키의 컬럼명
+        log.info("userNameAttributeName = {}", userNameAttributeName);
+
+
+        OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+
+        Member member = this.memberSaveOrUpdate(registrationId, oAuth2Attribute);
+
 
         return null;
+    }
+
+    /**
+     * 서버로부터 전달받은 정보로, DB에 저장되어있지 않은 이메일이라면 저장, 저장되어 있던 이메일이라면 정보를 업데이트한다.
+     */
+    private Member memberSaveOrUpdate(String registrationId, OAuth2Attribute oAuth2Attribute) {
+        Optional<Member> findMember = memberRepository.findByMbEmail(oAuth2Attribute.getEmail());
+
+        //정보가 없으면 새로 저장
+        if (findMember.isEmpty()) {
+            Member member = oAuth2Attribute.toEntity(registrationId);
+            memberRepository.save(member);
+
+            return member;
+        }
+
+        Member member = findMember.get();
+        member.updateOAuth2Attributes(oAuth2Attribute);
+
+        return member;
     }
 }
