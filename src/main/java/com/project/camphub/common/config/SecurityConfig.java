@@ -24,7 +24,7 @@ public class SecurityConfig {
                  * 인증 및 인가 설정
                  */
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/css/**", "/images/**", "/js/**").permitAll()
+                .antMatchers("/", "/login", "/external/**", "/css/**", "/images/**", "/js/**").permitAll()
 //                  .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
 
