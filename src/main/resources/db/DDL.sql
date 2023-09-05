@@ -6,7 +6,9 @@ CREATE TABLE `member` (
       mb_picture varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버프로필사진',
       mb_role varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버권한',
       mb_join_date datetime COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버가입일자',
-      PRIMARY KEY (mb_id)
+      PRIMARY KEY (mb_id),
+      CONSTRAINT mb_email_UQ UNIQUE (`mb_email`),
+      CONSTRAINT mb_nickname_UQ UNIQUE (`mb_nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='멤버';
 
 
