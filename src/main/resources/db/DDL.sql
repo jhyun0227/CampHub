@@ -1,3 +1,15 @@
+CREATE TABLE `member` (
+      mb_id varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '멤버ID',
+      mb_email varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버이메일',
+      mb_name varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버이름',
+      mb_nickname varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버닉네임',
+      mb_picture varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버프로필사진',
+      mb_role varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버권한',
+      mb_join_date datetime COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버가입일자',
+      PRIMARY KEY (mb_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='멤버';
+
+
 CREATE TABLE `camp` (
     `cp_id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '캠프ID',
     `cp_content_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '콘텐츠ID',
