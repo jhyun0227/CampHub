@@ -39,3 +39,4 @@ out/
 ### properties ###
 application-datasource.properties
 application-api.properties
+application-oauth.properties

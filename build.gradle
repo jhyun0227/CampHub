@@ -30,8 +30,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	//Spring Security, Oauth2.0, Jwt
-//	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	// spring security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//oauth 2.0
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 	//security jwt 추후 추가
 
 	//QueryDsl
