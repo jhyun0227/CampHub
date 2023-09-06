@@ -19,6 +19,7 @@ public class Member {
     @Id
     private String mbId;
     private String mbEmail;
+    private String mbPassword;
     private String mbName;
     private String mbNickname;
     private String mbPicture;

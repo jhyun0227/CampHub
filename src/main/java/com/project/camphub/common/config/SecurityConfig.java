@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -27,6 +28,13 @@ public class SecurityConfig {
                 .antMatchers("/", "/login", "/external/**", "/css/**", "/images/**", "/js/**").permitAll()
 //                  .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
+
+                /**
+                 * Jwt 사용을 위한 세션 기능 동작X
+                 */
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 /**
                  * 소셜 로그인 설정

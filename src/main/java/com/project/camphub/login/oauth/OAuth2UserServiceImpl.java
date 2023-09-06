@@ -5,6 +5,7 @@ import com.project.camphub.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -25,6 +26,8 @@ import java.util.Optional;
 public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -66,7 +69,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
         if (findMember.isEmpty()) {
             log.info("신규 회원, 데이터 저장");
 
-            Member member = oAuth2Attribute.toEntity(registrationId);
+            Member member = oAuth2Attribute.toEntity(registrationId, bCryptPasswordEncoder);
             memberRepository.save(member);
 
             return member;

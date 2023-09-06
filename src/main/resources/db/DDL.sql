@@ -1,6 +1,7 @@
 CREATE TABLE `member` (
       mb_id varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '멤버ID',
       mb_email varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버이메일',
+      mb_password varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버비밀번호',
       mb_name varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버이름',
       mb_nickname varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버닉네임',
       mb_picture varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '멤버프로필사진',

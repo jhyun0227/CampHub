@@ -5,6 +5,7 @@ import com.project.camphub.member.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -39,11 +40,12 @@ public class OAuth2Attribute {
                 .build();
     }
 
-    public Member toEntity(String registrationId) {
+    public Member toEntity(String registrationId, BCryptPasswordEncoder bCryptPasswordEncoder) {
         return Member.builder()
                 .mbId(UUID.randomUUID().toString())
                 .mbEmail(this.email)
                 .mbName(this.name)
+                .mbPassword(bCryptPasswordEncoder.encode(registrationId + this.email))
                 .mbNickname(registrationId + "_" + UUID.randomUUID().toString().substring(0, 18))
                 .mbPicture(this.picture)
                 .mbRole(Role.MEMBER)
