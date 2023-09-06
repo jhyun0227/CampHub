@@ -63,8 +63,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         /**
          * 토큰을 쿠키에 저장
          * Path : 어떤 경로에서 쿠키를 보낼 것인지, "/"일 경우 모든 요청에 쿠키를 전달
-         * HttpOnly : 자바스크립트에서 쿠키값을 꺼낼수 없도록 한다.
-         * SameSite : 같은 사이트에서의 요청에서만 쿠키가 전송된다.
+         * HttpOnly : 자바스크립트에서 쿠키값을 꺼낼수 없도록 한다. XSS 방지
+         * SameSite : 같은 사이트에서의 요청에서만 쿠키가 전송된다. CSRF 방지
          */
         String accessTokenCookie = "ACCESS=" + tokenDto.getAccessToken() + "; Max-Age=" + accessTokenValiditySeconds + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", accessTokenCookie);
