@@ -51,7 +51,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     /**
      * response 헤더에 토큰을 적용
      * 같은 도메인에서 SSR과 CSR 방식을 둘 다 사용하기 위해 편의성을 위해 토큰을 Header에 저장하지 않고, Cookie에 저장
-     * 이렇게 해도 되나..?
+     * 이렇게 해도 되나..? XSS와 CSRF에 대해서 좀 더 찾아보자
      * 노션 정리5
      */
     private void responseToken(HttpServletResponse response, TokenDto tokenDto) {
