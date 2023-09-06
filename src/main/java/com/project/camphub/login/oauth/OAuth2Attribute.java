@@ -45,7 +45,7 @@ public class OAuth2Attribute {
                 .mbId(UUID.randomUUID().toString())
                 .mbEmail(this.email)
                 .mbName(this.name)
-                .mbPassword(bCryptPasswordEncoder.encode(registrationId + this.email))
+                .mbPassword(bCryptPasswordEncoder.encode(registrationId + "_" + this.email + "_" + this.name))
                 .mbNickname(registrationId + "_" + UUID.randomUUID().toString().substring(0, 18))
                 .mbPicture(this.picture)
                 .mbRole(Role.MEMBER)
