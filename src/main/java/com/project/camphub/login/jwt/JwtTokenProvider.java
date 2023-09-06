@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,9 @@ public class JwtTokenProvider implements InitializingBean {
     private final Long refreshTokenValidityInMilliseconds;
 
     public JwtTokenProvider(
-            @Value("jwt.encoding.secretkey") String secretKey,
-            @Value("jwt.access-token-validity-in-seconds") Long accessTokenValidityInMilliseconds,
-            @Value("jwt.refresh-token-validity-in-seconds") Long refreshTokenValidityInMilliseconds) {
+            @Value("${jwt.encoding.secretkey}") String secretKey,
+            @Value("${jwt.access-token-validity-in-seconds}") Long accessTokenValidityInMilliseconds,
+            @Value("${jwt.refresh-token-validity-in-seconds}") Long refreshTokenValidityInMilliseconds) {
         this.secretKey = secretKey;
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds * 1000;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
@@ -42,22 +43,38 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     /**
-     * AccessToken 생성
+     * TokenDto 생성
      */
-    public String createAccessToken(String mbId, String authority) {
+    public TokenDto generateToken(OAuth2User oAuth2User) {
+        //오늘날짜 구하기
         long now = System.currentTimeMillis();
-
         Date today = new Date(now);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String todayString = formatter.format(today);
 
+        //claims
+        String mbEmail = (String) oAuth2User.getAttribute("email");
+        log.info("mbEmail = {}", mbEmail);
+        String authority = oAuth2User.getAuthorities().iterator().next().getAuthority().substring(5);
+        log.info("authority = {}", authority);
+
+        String accessToken = "Bearer " + createAccessToken(mbEmail, authority, now, todayString);
+        String refreshToken = createRefreshToken(now, todayString);
+
+        return new TokenDto(accessToken, refreshToken);
+    }
+
+    /**
+     * AccessToken 생성
+     */
+    public String createAccessToken(String mbEmail, String authority, long now, String todayString) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS512")
                 .setExpiration(new Date(now + accessTokenValidityInMilliseconds))
                 .setSubject("accessToken")
                 .claim(SecurityProperties.URL, true)
-                .claim(SecurityProperties.MEMBER_LOGIN_ID, mbId)
+                .claim(SecurityProperties.MEMBER_EMAIL, mbEmail)
                 .claim(SecurityProperties.AUTHORITY_KEY, authority)
                 .claim("issueDate", todayString)
                 .signWith(signingKey, SignatureAlgorithm.HS512)
@@ -67,13 +84,7 @@ public class JwtTokenProvider implements InitializingBean {
     /**
      * RefreshToken 생성
      */
-    public String createRefreshToken() {
-        Long now = System.currentTimeMillis();
-
-        Date today = new Date(now);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String todayString = formatter.format(today);
-
+    public String createRefreshToken(long now, String todayString) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS512")
