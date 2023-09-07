@@ -1,5 +1,7 @@
 package com.project.camphub.common.config;
 
+import com.project.camphub.login.jwt.JwtAccessDeniedHandler;
+import com.project.camphub.login.jwt.JwtAuthenticationEntryPoint;
 import com.project.camphub.login.oauth.OAuth2SuccessHandler;
 import com.project.camphub.login.jwt.JwtAuthenticationFilter;
 import com.project.camphub.login.jwt.JwtTokenProvider;
@@ -21,8 +23,10 @@ public class SecurityConfig {
     private final OAuth2UserServiceImpl oAuth2UserServiceImpl;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    private final JwtTokenProvider jwtTokenProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter; //Token 검증 필터
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -35,8 +39,16 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
                 /**
+                 * 예외처리
+                 */
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
+                /**
                  * 인증 및 인가 설정
                  */
+                .and()
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/external/**", "/css/**", "/images/**", "/js/**").permitAll()
 //                  .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
