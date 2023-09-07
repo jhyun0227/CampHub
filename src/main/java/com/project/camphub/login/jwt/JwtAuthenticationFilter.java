@@ -4,6 +4,7 @@ import com.project.camphub.login.SecurityProperties;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -21,11 +22,14 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    
+
+    @Value("${jwt.refresh-token-validity-in-seconds}")
+    private String refreshTokenValiditySeconds;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String accessToken = this.getAccessToken(request);
+        String accessToken = this.getToken(request, SecurityProperties.ACCESS);
 
         //토큰이 유효한 경우 통과, 토큰이 만료한 경우에는 재발급 여부를 고려한다.
         if (StringUtils.hasText(accessToken)) {
@@ -40,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } else if (SecurityProperties.EXPIRED.equals(checkAccessResult)) { //기간이 만료된 토큰, Refresh 토큰의 만료여부를 확인한다.
 
                 //refresh토큰을 사용자가 가지게 할것인가, redis에 저장할것인가..? 우선 사용자가 보관하는 것으로 코드 작성
-                String refreshToken = this.getRefreshToken(request);
+                String refreshToken = this.getToken(request, SecurityProperties.REFRESH);
 
                 if (StringUtils.hasText(refreshToken)) { //RefreshToken이 존재하는 경우
 
@@ -79,29 +83,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * 쿠키로부터 AccessToken 토큰값을 가져오는 메서드
+     * 쿠키로부터 AccessToken, RefreshToken을 가져오는 메서드
+     * tokenType에 따라 다르 반환 결과가 다르다.
      */
-    private String getAccessToken(HttpServletRequest request) {
+    private String getToken(HttpServletRequest request, String tokenType) {
         Cookie[] cookies = request.getCookies();
 
-        for (Cookie cookie : cookies) {
-            if (SecurityProperties.ACCESS.equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * 쿠키로부터 RefreshToken 토큰값을 가져오는 메서드
-     */
-    private String getRefreshToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-
-        for (Cookie cookie : cookies) {
-            if (SecurityProperties.REFRESH.equals(cookie.getName())) {
-                return cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (tokenType.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
             }
         }
 
