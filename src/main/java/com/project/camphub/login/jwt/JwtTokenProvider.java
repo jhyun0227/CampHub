@@ -1,10 +1,12 @@
 package com.project.camphub.login.jwt;
 
 import com.project.camphub.login.SecurityProperties;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,10 +14,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -186,5 +188,31 @@ public class JwtTokenProvider implements InitializingBean {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    /**
+     * Response 객체에 Cookie를 셋팅하는 메서드
+     * 같은 도메인에서 SSR과 CSR 방식을 둘 다 사용하기 위해 편의성을 위해 토큰을 Header에 저장하지 않고, Cookie에 저장
+     * 노션 정리5
+     */
+    public void setCookieInResponse(HttpServletResponse response, TokenDto tokenDto) {
+        response.setContentType("text/html;charset=UTF-8");
+
+        /**
+         * Path : 어떤 경로에서 쿠키를 보낼 것인지, "/"일 경우 모든 요청에 쿠키를 전달
+         * HttpOnly : 자바스크립트에서 쿠키값을 꺼낼수 없도록 한다. XSS 방지
+         * SameSite : 같은 사이트에서의 요청에서만 쿠키가 전송된다. CSRF 방지
+         *
+         * AccessToken의 쿠키 만료시간은 RefreshToken과 같게한다. (7일)
+         * AccessToken의 쿠키의 만료시간을 30분으로 설정할 경우, 30분 이후의 요청에서는 AccessToken이 Request로 전달되지 않기 떄문에 재 로그인이 필요하다.
+         * 하지만 AccessToken의 쿠키시간을 RefreshToken과 같게한다면, 토큰 자체의 만료시간이 지나도 브라우저에 남아있게 되고 RefreshToken이 만료되어있지 않을 경우 자동 재발급이 가능하다.
+         * 그리고 RefreshToken이 만료될경우 어차피 재로그인을 해야하기 때문에,
+         * AccessToken의 자체 만료기간은 30분으로 두지만 쿠키의 만료기간은 7일로 설정한다.
+         */
+        String accessTokenCookie = SecurityProperties.ACCESS + "=" + tokenDto.getAccessToken() + "; Max-Age=" + (refreshTokenValidityInMilliseconds/1000) + "; HttpOnly; Path=/; SameSite=Strict";
+        response.addHeader("Set-Cookie", accessTokenCookie);
+
+        String refreshTokenCookie = SecurityProperties.REFRESH + "=" + tokenDto.getRefreshToken() + "; Max-Age=" + (refreshTokenValidityInMilliseconds/1000) + "; HttpOnly; Path=/; SameSite=Strict";
+        response.addHeader("Set-Cookie", refreshTokenCookie);
     }
 }
