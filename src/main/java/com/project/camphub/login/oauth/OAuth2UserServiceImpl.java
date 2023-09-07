@@ -37,11 +37,11 @@ public class OAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserReques
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         Map<String, Object> attributes = oAuth2User.getAttributes(); //서버로부터 전달받은 유저정보
-        log.info("oAuth2User.getAttributes() = {}", oAuth2User.getAttributes());
+        log.info("OAuth2UserServiceImpl.getAttributes() = {}", oAuth2User.getAttributes());
         String registrationId = userRequest.getClientRegistration().getRegistrationId(); //요청서버명
-        log.info("registrationId = {}", registrationId);
+        log.info("OAuth2UserServiceImpl.registrationId = {}", registrationId);
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName(); //해당서버의 고유키의 컬럼명
-        log.info("userNameAttributeName = {}", userNameAttributeName);
+        log.info("OAuth2UserServiceImpl.userNameAttributeName = {}", userNameAttributeName);
 
 
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, attributes);

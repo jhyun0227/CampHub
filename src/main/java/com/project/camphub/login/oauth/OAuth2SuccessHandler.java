@@ -25,13 +25,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //로그인 성공 후 SecurityContext에 저장된 정보를 가져오기
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        log.info("oAuth2User = {}", oAuth2User.toString());
+        log.info("OAuth2SuccessHandler.oAuth2User = {}", oAuth2User.toString());
 
         //토큰 발급
         String mbEmail = (String) oAuth2User.getAttribute("email");
         String authority = oAuth2User.getAuthorities().iterator().next().getAuthority().substring(5);
         TokenDto tokenDto = jwtTokenProvider.generateToken(mbEmail, authority);
-        log.info("tokenDto = {}", tokenDto);
+        log.info("OAuth2SuccessHandler.tokenDto = {}", tokenDto);
 
         //Cookie에 토큰 적용
         jwtTokenProvider.setCookieInResponse(response, tokenDto);
