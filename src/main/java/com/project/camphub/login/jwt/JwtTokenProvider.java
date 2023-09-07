@@ -4,6 +4,7 @@ import com.project.camphub.login.SecurityProperties;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,10 +107,11 @@ public class JwtTokenProvider implements InitializingBean {
 
     /**
      * JwtAuthentication에서 브라우저를 통해 전달받은 쿠키가 유효한지 체크하는 메서드
-     * 에러가 발생하지 않으면 유효한 토큰
-     * 기한의 만료 토큰일 경우에는 리프레시를 위해 true를 반환한다.
+     * 에러가 없을 경우, 유효한 토큰으로 간주하고 해당 문자열을 반환한다.
+     * 기한의 만료될 경우에 해당 문자열을 간주한다.
+     * 그 외의 모든 에러는 유효하지 않은 토큰으로 간주한다.
      */
-    public boolean checkAccessToken(String accessToken) {
+    public String checkAccessToken(String accessToken) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(signingKey)
@@ -122,13 +124,39 @@ public class JwtTokenProvider implements InitializingBean {
 
             log.info("checkAccessToken = {}", "기한이 만료된 토큰입니다.");
 
+            return SecurityProperties.EXPIRED;
+
         } catch (Exception e) {
             log.info("checkAccessToken = {}", "유효하지 않은 토큰 입니다. " + e.getMessage());
 
-            return false;
+            return SecurityProperties.INVALID;
         }
 
-        return true;
+        return SecurityProperties.VALID;
+    }
+
+    /**
+     * AccessToken이 만료되었을 경우, RefreshToken의 유효기간을 체크하는 메서드
+     * 에러가 발생하지 않을 경우, 유효한 토큰으로 간주
+     * AccessToken과 다르게 RefreshToken은 유효기간이 지나도 유효하지 않은 것으로 간주한다.
+     */
+    public String checkRefreshToken(String refreshToken) {
+        try {
+
+            Jwts.parserBuilder()
+                    .setSigningKey(signingKey)
+                    .build()
+                    .parseClaimsJws(refreshToken);
+
+            log.info("checkRefreshToken = {}", "유효한 토큰 입니다.");
+
+        } catch (Exception e) {
+            log.info("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.");
+
+            return SecurityProperties.INVALID;
+        }
+
+        return SecurityProperties.VALID;
     }
 
     /**

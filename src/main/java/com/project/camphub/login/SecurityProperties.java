@@ -7,4 +7,11 @@ public class SecurityProperties {
     public static final String URL = "http://localhost:8080";
     public static final String SERVER = "Server";
 
+    //JWT 관련
+    public static final String ACCESS = "ACCESS";
+    public static final String REFRESH = "REFRESH";
+    public static final String VALID = "Valid";
+    public static final String EXPIRED = "Expired";
+    public static final String INVALID = "Invalid";
+
 }

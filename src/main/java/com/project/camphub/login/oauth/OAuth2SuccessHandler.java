@@ -1,5 +1,6 @@
 package com.project.camphub.login.oauth;
 
+import com.project.camphub.login.SecurityProperties;
 import com.project.camphub.login.jwt.JwtTokenProvider;
 import com.project.camphub.login.jwt.TokenDto;
 import lombok.extern.slf4j.Slf4j;
@@ -70,10 +71,10 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
          * 그리고 RefreshToken이 만료될경우 어차피 재로그인을 해야하기 때문에,
          * AccessToken의 자체 만료기간은 30분으로 두지만 쿠키의 만료기간은 7일로 설정한다.
          */
-        String accessTokenCookie = "ACCESS=" + tokenDto.getAccessToken() + "; Max-Age=" + refreshTokenValiditySeconds + "; HttpOnly; Path=/; SameSite=Strict";
+        String accessTokenCookie = SecurityProperties.ACCESS + "=" + tokenDto.getAccessToken() + "; Max-Age=" + refreshTokenValiditySeconds + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", accessTokenCookie);
 
-        String refreshTokenCookie = "REFRESH=" + tokenDto.getRefreshToken() + "; Max-Age=" + refreshTokenValiditySeconds + "; HttpOnly; Path=/; SameSite=Strict";
+        String refreshTokenCookie = SecurityProperties.REFRESH + "=" + tokenDto.getRefreshToken() + "; Max-Age=" + refreshTokenValiditySeconds + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", refreshTokenCookie);
     }
 }
