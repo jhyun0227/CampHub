@@ -1,6 +1,8 @@
 package com.project.camphub.common.config;
 
-import com.project.camphub.login.OAuth2SuccessHandler;
+import com.project.camphub.login.oauth.OAuth2SuccessHandler;
+import com.project.camphub.login.jwt.JwtAuthenticationFilter;
+import com.project.camphub.login.jwt.JwtTokenProvider;
 import com.project.camphub.login.oauth.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity //Security 활성화 의미, Security 필터가 Spring filter체인에 등록
@@ -18,11 +21,17 @@ public class SecurityConfig {
     private final OAuth2UserServiceImpl oAuth2UserServiceImpl;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
                 .httpBasic().disable()
+                .formLogin().disable()
+
+                //formLogin.disable()을 하면 UsernmaePasswordAuthenticationFilter가 동작을 하지 않는다.
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
 
                 /**
                  * 인증 및 인가 설정
