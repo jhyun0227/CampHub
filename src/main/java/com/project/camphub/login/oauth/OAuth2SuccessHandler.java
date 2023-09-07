@@ -42,7 +42,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         log.info("oAuth2User = {}", oAuth2User.toString());
 
         //토큰 발급
-        TokenDto tokenDto = jwtTokenProvider.generateToken(oAuth2User);
+        String mbEmail = (String) oAuth2User.getAttribute("email");
+        String authority = oAuth2User.getAuthorities().iterator().next().getAuthority().substring(5);
+        TokenDto tokenDto = jwtTokenProvider.generateToken(mbEmail, authority);
         log.info("tokenDto = {}", tokenDto);
 
         //header에 token 적용
@@ -57,8 +59,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private void responseToken(HttpServletResponse response, TokenDto tokenDto) {
         response.setContentType("text/html;charset=UTF-8");
 
-//        response.addHeader("Authorization", tokenDto.getAccessToken());
-//        response.addHeader("Refresh", tokenDto.getRefreshToken());
+        //response.addHeader("Authorization", tokenDto.getAccessToken());
+        //response.addHeader("Refresh", tokenDto.getRefreshToken());
 
         /**
          * Path : 어떤 경로에서 쿠키를 보낼 것인지, "/"일 경우 모든 요청에 쿠키를 전달

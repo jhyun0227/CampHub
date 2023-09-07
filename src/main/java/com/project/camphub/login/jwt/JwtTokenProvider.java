@@ -53,18 +53,17 @@ public class JwtTokenProvider implements InitializingBean {
     /**
      * TokenDto 생성
      */
-    public TokenDto generateToken(OAuth2User oAuth2User) {
+    public TokenDto generateToken(String mbEmail, String authority) {
+
+        //Claims에 들어갈 파라미터
+        log.info("mbEmail = {}", mbEmail);
+        log.info("authority = {}", authority);
+
         //오늘날짜 구하기
         long now = System.currentTimeMillis();
         Date today = new Date(now);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String todayString = formatter.format(today);
-
-        //claims
-        String mbEmail = (String) oAuth2User.getAttribute("email");
-        log.info("mbEmail = {}", mbEmail);
-        String authority = oAuth2User.getAuthorities().iterator().next().getAuthority().substring(5);
-        log.info("authority = {}", authority);
 
         //쿠키 저장시 띄어쓰기가 에러를 불러일으키기 때문에 접두사는 빼는것으로 결정
         //String accessToken = "Bearer " + createAccessToken(mbEmail, authority, now, todayString);
@@ -177,7 +176,7 @@ public class JwtTokenProvider implements InitializingBean {
      * 토큰으로 부터 Claim을 추출하는 메서드
      * accessToken이 만료되어도 자동 refresh를 위해 Claims를 꺼낸다.
      */
-    private Claims getClaims(String accessToken) {
+    public Claims getClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(signingKey)
