@@ -13,4 +13,6 @@ public class SecurityProperties {
     public static final String EXPIRED = "Expired";
     public static final String INVALID = "Invalid";
 
+    public static final String REDIRECT = "REDIRECT";
+
 }

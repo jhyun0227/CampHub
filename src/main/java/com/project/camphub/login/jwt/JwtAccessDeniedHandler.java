@@ -16,6 +16,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        //권한이 없는 경우 실행을 취소한다.
+        //권한이 없는 페이지에 접근하는 경우, 메인으로 이동시킨다.
+        response.sendRedirect("/accessDenied");
     }
 }

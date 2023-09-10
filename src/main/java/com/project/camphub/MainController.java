@@ -13,4 +13,9 @@ public class MainController {
         return "login/loginForm";
     }
 
+    @GetMapping("/accessDenied")
+    public String accessDenied() {
+        return "accessDenied";
+    }
+
 }
