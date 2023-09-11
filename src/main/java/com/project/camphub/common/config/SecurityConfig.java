@@ -50,9 +50,9 @@ public class SecurityConfig {
                  */
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/login", "/external/**", "/css/**", "/images/**", "/js/**").permitAll()
+//                .antMatchers("/", "/login", "/external/**", "/css/**", "/images/**", "/js/**").permitAll()
 //                  .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
 
                 /**
                  * Jwt 사용을 위한 세션 기능 동작X

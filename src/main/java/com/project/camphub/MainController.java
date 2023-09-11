@@ -8,14 +8,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
+    @GetMapping("/")
+    public String init() {
+        return this.main();
+    }
+
+    @GetMapping("/main")
+    public String main() {
+        return "main";
+    }
+
     @GetMapping("/login")
-    public String loginPage() {
+    public String login() {
         return "login/loginForm";
     }
 
+
     @GetMapping("/accessDenied")
     public String accessDenied() {
-        return "accessDenied";
+        return "auth/accessDenied";
     }
 
 }
