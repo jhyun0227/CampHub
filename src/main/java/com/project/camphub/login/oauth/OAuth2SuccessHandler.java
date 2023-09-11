@@ -1,6 +1,5 @@
 package com.project.camphub.login.oauth;
 
-import com.project.camphub.login.SecurityProperties;
 import com.project.camphub.login.jwt.JwtTokenProvider;
 import com.project.camphub.login.jwt.TokenDto;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,6 +36,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         //Cookie에 토큰 적용
         jwtTokenProvider.setCookieInResponse(response, tokenDto);
 
+        /*
+        임시 주석처리 추후 다시 수정할 것
+
         Cookie[] cookies = request.getCookies();
         String redirect = "/main";
 
@@ -50,6 +51,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         }
 
         response.sendRedirect(redirect);
+         */
+
+        response.sendRedirect("/main");
     }
 
 }

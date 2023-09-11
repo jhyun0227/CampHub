@@ -29,6 +29,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
          * Referer가 없거나, Referer와 requertUri의 host가 다를 경우엔 메인으로 랜딩되도록 한다.
          */
 
+        /*
+        임시 주석처리 추후 변경할것
+
         String refererString = request.getHeader("Referer");
         log.info("refererString = {}", refererString);
         String requestUrlString = request.getRequestURL().toString();
@@ -65,5 +68,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             }
 
         }
+        */
+
+        response.sendRedirect("/login");
     }
 }

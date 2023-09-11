@@ -1,10 +1,10 @@
 package com.project.camphub.common.config;
 
+import com.project.camphub.login.auth.CustomAuthenticationFailureHandler;
 import com.project.camphub.login.jwt.JwtAccessDeniedHandler;
 import com.project.camphub.login.jwt.JwtAuthenticationEntryPoint;
-import com.project.camphub.login.oauth.OAuth2SuccessHandler;
 import com.project.camphub.login.jwt.JwtAuthenticationFilter;
-import com.project.camphub.login.jwt.JwtTokenProvider;
+import com.project.camphub.login.oauth.OAuth2SuccessHandler;
 import com.project.camphub.login.oauth.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +27,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -68,6 +70,7 @@ public class SecurityConfig {
                 .oauth2Login()
                     .loginPage("/login") //Security 기본 로그인 기능 사용하지 않음
                     .successHandler(oAuth2SuccessHandler)
+                    .failureHandler(customAuthenticationFailureHandler)
                     .userInfoEndpoint() // 클라이언트가 AccessToken을 이용해서 가져온 정보를 사용하는데 사용되는 서비스를 지정한다.
                         .userService(oAuth2UserServiceImpl);
 
