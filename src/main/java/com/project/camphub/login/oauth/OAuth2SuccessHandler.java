@@ -49,7 +49,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             }
         }
 
-        response.setContentType(redirect);
+        response.sendRedirect(redirect);
     }
 
 }
