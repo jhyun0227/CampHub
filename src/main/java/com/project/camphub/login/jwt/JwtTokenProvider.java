@@ -174,7 +174,7 @@ public class JwtTokenProvider implements InitializingBean {
 
             if (!StringUtils.hasText(redisRefreshToken) || !refreshToken.equals(redisRefreshToken)) {
 
-                //쿠키 RefreshToken과 Redis RefreshToken 값이 다르면 Redit RefreshToken을 삭제한다.
+                //쿠키 RefreshToken과 Redis RefreshToken 값이 다르면 Redis RefreshToken을 삭제한다.
                 if (!refreshToken.equals(redisRefreshToken)) {
                     redisRepository.deleteRefreshToken(mbEmail);
                 }
