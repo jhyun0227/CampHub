@@ -173,8 +173,11 @@ public class JwtTokenProvider implements InitializingBean {
             String redisRefreshToken = redisRepository.getRefreshToken(mbEmail);
 
             if (!StringUtils.hasText(redisRefreshToken) || !refreshToken.equals(redisRefreshToken)) {
-                //RefreshToken을 삭제한다.
-                redisRepository.deleteRefreshToken(mbEmail);
+
+                //쿠키 RefreshToken과 Redis RefreshToken 값이 다르면 Redit RefreshToken을 삭제한다.
+                if (!refreshToken.equals(redisRefreshToken)) {
+                    redisRepository.deleteRefreshToken(mbEmail);
+                }
 
                 log.info("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.");
                 return LoginProperties.INVALID;
