@@ -44,7 +44,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (SecurityProperties.REDIRECT.equals(cookie.getName())) {
+                if (LoginProperties.REDIRECT.equals(cookie.getName())) {
                     redirect = cookie.getValue();
                 }
             }

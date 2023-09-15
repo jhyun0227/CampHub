@@ -1,6 +1,7 @@
 package com.project.camphub.login.jwt;
 
-import com.project.camphub.login.SecurityProperties;
+import com.project.camphub.login.LoginProperties;
+import com.project.camphub.login.redis.RedisRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.security.Key;
@@ -29,20 +31,28 @@ public class JwtTokenProvider implements InitializingBean {
 
     private final String secretKey;
     private static Key signingKey;
+    private final Long accessTokenValidityInSeconds;
+    private final Long refreshTokenValidityInSeconds;
     private final Long accessTokenValidityInMilliseconds;
     private final Long refreshTokenValidityInMilliseconds;
 
     private final UserDetailsService userDetailsService;
 
+    private final RedisRepository redisRepository;
+
     public JwtTokenProvider(
             @Value("${jwt.encoding.secretkey}") String secretKey,
-            @Value("${jwt.access-token-validity-in-seconds}") Long accessTokenValidityInMilliseconds,
-            @Value("${jwt.refresh-token-validity-in-seconds}") Long refreshTokenValidityInMilliseconds,
-            UserDetailsService userDetailsService) {
+            @Value("${jwt.access-token-validity-in-seconds}") Long accessTokenValidityInSeconds,
+            @Value("${jwt.refresh-token-validity-in-seconds}") Long refreshTokenValidityInSeconds,
+            UserDetailsService userDetailsService,
+            RedisRepository redisRepository) {
         this.secretKey = secretKey;
-        this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds * 1000;
-        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
+        this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
+        this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
+        this.accessTokenValidityInMilliseconds = accessTokenValidityInSeconds * 1000;
+        this.refreshTokenValidityInMilliseconds = refreshTokenValidityInSeconds * 1000;
         this.userDetailsService = userDetailsService;
+        this.redisRepository = redisRepository;
     }
 
     //시크릿 키 설정
@@ -70,7 +80,7 @@ public class JwtTokenProvider implements InitializingBean {
         //쿠키 저장시 띄어쓰기가 에러를 불러일으키기 때문에 접두사는 빼는것으로 결정
         //String accessToken = "Bearer " + createAccessToken(mbEmail, authority, now, todayString);
         String accessToken = createAccessToken(mbEmail, authority, now, todayString);
-        String refreshToken = createRefreshToken(now, todayString);
+        String refreshToken = createRefreshToken(mbEmail, now, todayString);
 
         return new TokenDto(accessToken, refreshToken);
     }
@@ -84,9 +94,8 @@ public class JwtTokenProvider implements InitializingBean {
                 .setHeaderParam("alg", "HS512")
                 .setExpiration(new Date(now + accessTokenValidityInMilliseconds))
                 .setSubject("accessToken")
-                .claim(SecurityProperties.URL, true)
-                .claim(SecurityProperties.MEMBER_EMAIL, mbEmail)
-                .claim(SecurityProperties.AUTHORITY_KEY, authority)
+                .claim(LoginProperties.MEMBER_EMAIL, mbEmail)
+                .claim(LoginProperties.AUTHORITY_KEY, authority)
                 .claim("issueDate", todayString)
                 .signWith(signingKey, SignatureAlgorithm.HS512)
                 .compact();
@@ -94,16 +103,24 @@ public class JwtTokenProvider implements InitializingBean {
 
     /**
      * RefreshToken 생성
+     * redis에 refreshToken 값을 저장한다.
      */
-    public String createRefreshToken(long now, String todayString) {
-        return Jwts.builder()
+    public String createRefreshToken(String mbEmail, long now, String todayString) {
+        //refreshToken 생성
+        String refreshToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS512")
                 .setExpiration(new Date(now + refreshTokenValidityInMilliseconds))
                 .setSubject("refreshToken")
+                .claim(LoginProperties.MEMBER_EMAIL, mbEmail)
                 .claim("issueDate", todayString)
                 .signWith(signingKey, SignatureAlgorithm.HS512)
                 .compact();
+
+        //redis에 저장
+        redisRepository.saveRefreshToken(mbEmail, refreshToken, refreshTokenValidityInSeconds);
+
+        return refreshToken;
     }
 
     /**
@@ -125,39 +142,52 @@ public class JwtTokenProvider implements InitializingBean {
 
             log.info("checkAccessToken = {}", "기한이 만료된 토큰입니다.");
 
-            return SecurityProperties.EXPIRED;
+            return LoginProperties.EXPIRED;
 
         } catch (Exception e) {
             log.info("checkAccessToken = {}", "유효하지 않은 토큰 입니다. " + e.getMessage());
 
-            return SecurityProperties.INVALID;
+            return LoginProperties.INVALID;
         }
 
-        return SecurityProperties.VALID;
+        return LoginProperties.VALID;
     }
 
     /**
      * AccessToken이 만료되었을 경우, RefreshToken의 유효기간을 체크하는 메서드
-     * 에러가 발생하지 않을 경우, 유효한 토큰으로 간주
      * AccessToken과 다르게 RefreshToken은 유효기간이 지나도 유효하지 않은 것으로 간주한다.
+     *
+     * redis에 존재하는 RefreshToken도 검증한다.
      */
     public String checkRefreshToken(String refreshToken) {
         try {
-
-            Jwts.parserBuilder()
+            //우선 쿠키의 RefreshToken의 복호화를 통해서 유효성을 검증
+            Claims claims = Jwts.parserBuilder()
                     .setSigningKey(signingKey)
                     .build()
-                    .parseClaimsJws(refreshToken);
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            //에러가 발생하지 않을 경우 Redis 내부의 RefreshToken의 값이 있는지 확인하여 유효성을 검증한다.
+            String mbEmail = claims.get(LoginProperties.MEMBER_EMAIL).toString();
+            String redisRefreshToken = redisRepository.getRefreshToken(mbEmail);
+
+            if (!StringUtils.hasText(redisRefreshToken) || !refreshToken.equals(redisRefreshToken)) {
+                //RefreshToken을 삭제한다.
+                redisRepository.deleteRefreshToken(mbEmail);
+
+                log.info("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.");
+                return LoginProperties.INVALID;
+            }
 
             log.info("checkRefreshToken = {}", "유효한 토큰 입니다.");
+            return LoginProperties.VALID;
 
         } catch (Exception e) {
+
             log.info("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.");
-
-            return SecurityProperties.INVALID;
+            return LoginProperties.INVALID;
         }
-
-        return SecurityProperties.VALID;
     }
 
     /**
@@ -167,7 +197,7 @@ public class JwtTokenProvider implements InitializingBean {
     public Authentication getAuthentication(String accessToken) {
         //토큰에서 Claim을 추출
         Claims claims = this.getClaims(accessToken);
-        String mbEmail = claims.get(SecurityProperties.MEMBER_EMAIL).toString();
+        String mbEmail = claims.get(LoginProperties.MEMBER_EMAIL).toString();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(mbEmail);
 
@@ -209,10 +239,10 @@ public class JwtTokenProvider implements InitializingBean {
          * 그리고 RefreshToken이 만료될경우 어차피 재로그인을 해야하기 때문에,
          * AccessToken의 자체 만료기간은 30분으로 두지만 쿠키의 만료기간은 7일로 설정한다.
          */
-        String accessTokenCookie = SecurityProperties.ACCESS + "=" + tokenDto.getAccessToken() + "; Max-Age=" + (refreshTokenValidityInMilliseconds/1000) + "; HttpOnly; Path=/; SameSite=Strict";
+        String accessTokenCookie = LoginProperties.ACCESS + "=" + tokenDto.getAccessToken() + "; Max-Age=" + refreshTokenValidityInSeconds + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", accessTokenCookie);
 
-        String refreshTokenCookie = SecurityProperties.REFRESH + "=" + tokenDto.getRefreshToken() + "; Max-Age=" + (refreshTokenValidityInMilliseconds/1000) + "; HttpOnly; Path=/; SameSite=Strict";
+        String refreshTokenCookie = LoginProperties.REFRESH + "=" + tokenDto.getRefreshToken() + "; Max-Age=" + refreshTokenValidityInSeconds + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", refreshTokenCookie);
     }
 }

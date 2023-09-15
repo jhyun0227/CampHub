@@ -1,10 +1,9 @@
 package com.project.camphub.login.jwt;
 
-import com.project.camphub.login.SecurityProperties;
+import com.project.camphub.login.LoginProperties;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,19 +27,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        String accessToken = this.getToken(request, SecurityProperties.ACCESS);
+        String accessToken = this.getToken(request, LoginProperties.ACCESS);
 
         //토큰이 유효한 경우 통과, 토큰이 만료한 경우에는 재발급 여부를 고려한다.
         if (StringUtils.hasText(accessToken)) {
             String checkAccessResult = jwtTokenProvider.checkAccessToken(accessToken);
 
-            if (SecurityProperties.VALID.equals(checkAccessResult)) { //유효한 토큰
+            if (LoginProperties.VALID.equals(checkAccessResult)) { //유효한 토큰
 
                 Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("Valid AccessToken, Save Authentication in SecurityContextHolder");
 
-            } else if (SecurityProperties.EXPIRED.equals(checkAccessResult)) { //기간이 만료된 토큰, Refresh 토큰의 만료여부를 확인한다.
+            } else if (LoginProperties.EXPIRED.equals(checkAccessResult)) { //기간이 만료된 토큰, Refresh 토큰의 만료여부를 확인한다.
 
                 this.expiredAccessToken(request, response, accessToken);
 
@@ -59,16 +58,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /**
      * AccessToken 만료 메서드 리팩토링
+     * 쿠키 RefreshToken을 검사한다.
+     * 쿠키 RT가 유효할 경우, RedisRepository에서 한번 더 검증한다. (이 코드는 JwtTokenProvider에 구현)
      */
     private void expiredAccessToken(HttpServletRequest request, HttpServletResponse response, String accessToken) {
         //refresh토큰을 사용자가 가지게 할것인가, redis에 저장할것인가..? 우선 사용자가 보관하는 것으로 코드 작성
-        String refreshToken = this.getToken(request, SecurityProperties.REFRESH);
+        String refreshToken = this.getToken(request, LoginProperties.REFRESH);
 
         if (StringUtils.hasText(refreshToken)) { //RefreshToken이 존재하는 경우
 
             String checkRefreshResult = jwtTokenProvider.checkRefreshToken(refreshToken);
 
-            if (SecurityProperties.VALID.equals(checkRefreshResult)) { //RefreshToken이 유효한 경우 토큰을 재발급한다.
+            if (LoginProperties.VALID.equals(checkRefreshResult)) { //RefreshToken이 유효한 경우 토큰을 재발급한다.
 
                 TokenDto reissueTokenDto = this.reissueToken(accessToken); //기존 AccessToken으로 토큰 재발급
                 jwtTokenProvider.setCookieInResponse(response, reissueTokenDto);
@@ -112,9 +113,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private TokenDto reissueToken(String accessToken) {
         Claims claims = jwtTokenProvider.getClaims(accessToken);
 
-        String mbEmail = claims.get(SecurityProperties.MEMBER_EMAIL).toString();
+        String mbEmail = claims.get(LoginProperties.MEMBER_EMAIL).toString();
         log.info("reissueToken.mbEmail = {}", mbEmail);
-        String authority = claims.get(SecurityProperties.AUTHORITY_KEY).toString();
+        String authority = claims.get(LoginProperties.AUTHORITY_KEY).toString();
         log.info("reissueToken.authority = {}", authority);
 
         return jwtTokenProvider.generateToken(mbEmail, authority);

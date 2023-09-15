@@ -1,13 +1,9 @@
 package com.project.camphub.login.jwt;
 
-import com.project.camphub.login.SecurityProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +57,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 log.info("path = {}", path);
                 log.info("query = {}", query);
 
-                String redirect = SecurityProperties.REDIRECT + "=" + path + "; Max-Age=" + 60 * 5 + "; HttpOnly; Path=/; SameSite=Strict";
+                String redirect = LoginProperties.REDIRECT + "=" + path + "; Max-Age=" + 60 * 5 + "; HttpOnly; Path=/; SameSite=Strict";
                 response.addHeader("Set-Cookie", redirect);
 
                 response.sendRedirect("/login");
