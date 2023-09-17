@@ -23,7 +23,7 @@ public class RedisRepository {
     public String saveRefreshToken(String key, String value, Long timeout) {
         try {
 
-            redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MICROSECONDS);
+            redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MILLISECONDS);
             return LoginProperties.SUCCESS;
 
         } catch (Exception e) {
