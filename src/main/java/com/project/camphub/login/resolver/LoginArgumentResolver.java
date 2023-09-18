@@ -28,10 +28,20 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        log.info("member = {}", userDetails.getMember());
+        if (authentication == null) {
+            return null;
+        } else {
+            Object principal = authentication.getPrincipal();
 
-        return userDetails.getMember();
+            if (principal instanceof UserDetailsImpl) {
+                UserDetailsImpl userDetails = (UserDetailsImpl) principal;
+                log.info("member = {}", userDetails.getMember());
+
+                return userDetails.getMember();
+            }
+
+            return null;
+        }
     }
 }
