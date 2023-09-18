@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  camphub:
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - C:\Users\Junho\Desktop\docker\camphub:/var/lib/mysql
+      - C:\study\CampHub\src\main\resources\db\DDL.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: no
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: camphub
+      MYSQL_USER: camphub
+      MYSQL_PASSWORD: camphub
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  camphub-redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - C:\Users\Junho\Desktop\docker\camphub-redis:/data
+    restart: no
+    networks:
+      - camphub-redis-network
+    command: redis-server --appendonly yes
+
+networks:
+  camphub-redis-network:
+    driver: bridge
