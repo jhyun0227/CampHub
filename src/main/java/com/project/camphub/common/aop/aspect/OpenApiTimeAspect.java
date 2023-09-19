@@ -33,7 +33,7 @@ public class OpenApiTimeAspect {
         } catch (Exception e) {
 
             endTime = System.currentTimeMillis();
-            log.info("[OpenApiTimeAspect] OpenApi {} 종료(예외), 걸린시간 = {}", methodName, endTime-startTime);
+            log.error("[OpenApiTimeAspect] OpenApi {} 종료(예외), 걸린시간 = {}", methodName, endTime-startTime);
 
             throw e;
         }

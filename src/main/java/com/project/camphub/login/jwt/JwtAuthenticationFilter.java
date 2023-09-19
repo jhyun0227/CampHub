@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("Valid AccessToken, Save Authentication in SecurityContextHolder");
+                log.info("유효한 AccessToken");
 
             } else if (AuthProperties.EXPIRED.equals(checkAccessResult)) { //기간이 만료된 토큰, Refresh 토큰의 만료여부를 확인한다.
 
@@ -45,12 +45,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             } else { //AccessToken이 존재하지만 유효하지 않음
                 SecurityContextHolder.clearContext();
-                log.info("Invalid AccessToken");
+                log.error("유효하지 않은 AccessToken");
             }
 
         } else { //존재하지 않는 AccessToken
             SecurityContextHolder.clearContext();
-            log.info("Doesn't Exist AccessToken");
+            log.error("존재하지 않는 AccessToken");
         }
 
         filterChain.doFilter(request, response);
@@ -76,16 +76,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 Authentication authentication = jwtTokenProvider.getAuthentication(reissueTokenDto.getAccessToken());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("Reissue AccessToken, Save Authentication in SecurityContextHolder");
+                log.info("AccessToken, RefreshToken 재발급 성공");
 
             } else { //RefreshToken이 유효하지않거나 기한이 만료된 경우 로그인으로 유도
                 SecurityContextHolder.clearContext();
-                log.info("Invalid RefreshToken");
+                log.error("유효하지 않은 RefreshToken");
             }
 
         } else { //RefreshToken이 없는 경우
             SecurityContextHolder.clearContext();
-            log.info("Doesn't Exist RefreshToken");
+            log.error("존재하지 않는 RefreshToken");
         }
     }
 
