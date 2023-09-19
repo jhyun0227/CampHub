@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .antMatchers("/", "/login", "/external/**", "/css/**", "/images/**", "/js/**").permitAll()
 //                  .antMatchers("/admin/**").hasRole("ROLE_ADMIN")
+                .antMatchers("/member/logout").authenticated()
                 .anyRequest().permitAll()
 
                 /**

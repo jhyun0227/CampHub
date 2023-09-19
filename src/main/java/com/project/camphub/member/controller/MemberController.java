@@ -45,11 +45,6 @@ public class MemberController {
 
         log.info("/logout 진입");
 
-        if (member == null) {
-            log.info("로그인 되지 않음");
-            return "redirect:/main";
-        }
-
         //Redis에서 RefreshToken 삭제
         memberService.logout(member);
 
