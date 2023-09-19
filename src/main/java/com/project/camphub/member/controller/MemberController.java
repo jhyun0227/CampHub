@@ -6,6 +6,7 @@ import com.project.camphub.member.entity.Member;
 import com.project.camphub.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,9 @@ public class MemberController {
 
         //Redis에서 RefreshToken 삭제
         memberService.logout(member);
+
+        //SecurityContextHolder 초기화
+        SecurityContextHolder.clearContext();
 
         //쿠키 초기화
         response.setContentType("text/html;charset=UTF-8");
