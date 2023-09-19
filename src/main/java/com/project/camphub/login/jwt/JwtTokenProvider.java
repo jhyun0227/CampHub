@@ -138,6 +138,8 @@ public class JwtTokenProvider implements InitializingBean {
 
             log.info("checkAccessToken = {}", "유효한 토큰 입니다.");
 
+            return AuthProperties.VALID;
+
         } catch (ExpiredJwtException e) {
 
             log.info("checkAccessToken = {}", "기한이 만료된 토큰입니다.");
@@ -149,8 +151,6 @@ public class JwtTokenProvider implements InitializingBean {
 
             return AuthProperties.INVALID;
         }
-
-        return AuthProperties.VALID;
     }
 
     /**
