@@ -45,12 +45,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             } else { //AccessToken이 존재하지만 유효하지 않음
                 SecurityContextHolder.clearContext();
-                log.error("유효하지 않은 AccessToken");
+                log.info("유효하지 않은 AccessToken");
             }
 
         } else { //존재하지 않는 AccessToken
             SecurityContextHolder.clearContext();
-            log.error("존재하지 않는 AccessToken");
+            log.info("존재하지 않는 AccessToken");
         }
 
         filterChain.doFilter(request, response);
@@ -80,12 +80,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             } else { //RefreshToken이 유효하지않거나 기한이 만료된 경우 로그인으로 유도
                 SecurityContextHolder.clearContext();
-                log.error("유효하지 않은 RefreshToken");
+                log.info("유효하지 않은 RefreshToken");
             }
 
         } else { //RefreshToken이 없는 경우
             SecurityContextHolder.clearContext();
-            log.error("존재하지 않는 RefreshToken");
+            log.info("존재하지 않는 RefreshToken");
         }
     }
 

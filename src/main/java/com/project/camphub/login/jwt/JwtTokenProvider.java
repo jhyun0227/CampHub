@@ -143,12 +143,11 @@ public class JwtTokenProvider implements InitializingBean {
         } catch (ExpiredJwtException e) {
 
             log.info("checkAccessToken = {}", "기한이 만료된 토큰입니다.");
-
             return AuthProperties.EXPIRED;
 
         } catch (Exception e) {
-            log.error("checkAccessToken = {}", "유효하지 않은 토큰 입니다. " + e.getMessage());
 
+            log.info("checkAccessToken = {}", "유효하지 않은 토큰 입니다. " + e.getMessage());
             return AuthProperties.INVALID;
         }
     }
@@ -179,7 +178,7 @@ public class JwtTokenProvider implements InitializingBean {
                     redisRepository.deleteRefreshToken(mbEmail);
                 }
 
-                log.error("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.");
+                log.info("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.");
                 return AuthProperties.INVALID;
             }
 
@@ -188,7 +187,7 @@ public class JwtTokenProvider implements InitializingBean {
 
         } catch (Exception e) {
 
-            log.error("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.", e.getMessage());
+            log.info("checkRefreshToken = {}", "유효하지 않은 토큰 입니다.", e.getMessage());
             return AuthProperties.INVALID;
         }
     }
