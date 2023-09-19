@@ -1,6 +1,6 @@
 package com.project.camphub.member.controller;
 
-import com.project.camphub.login.LoginProperties;
+import com.project.camphub.login.AuthProperties;
 import com.project.camphub.login.resolver.Login;
 import com.project.camphub.member.entity.Member;
 import com.project.camphub.member.service.MemberService;
@@ -59,9 +59,9 @@ public class MemberController {
         //쿠키 초기화
         response.setContentType("text/html;charset=UTF-8");
 
-        String accessTokenCookie = LoginProperties.ACCESS + "=" + "" + "; Max-Age=" + 0 + "; HttpOnly; Path=/; SameSite=Strict";
+        String accessTokenCookie = AuthProperties.ACCESS + "=" + "" + "; Max-Age=" + 0 + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", accessTokenCookie);
-        String refreshTokenCookie = LoginProperties.REFRESH + "=" + "" + "; Max-Age=" + 0 + "; HttpOnly; Path=/; SameSite=Strict";
+        String refreshTokenCookie = AuthProperties.REFRESH + "=" + "" + "; Max-Age=" + 0 + "; HttpOnly; Path=/; SameSite=Strict";
         response.addHeader("Set-Cookie", refreshTokenCookie);
 
         return "redirect:/main";

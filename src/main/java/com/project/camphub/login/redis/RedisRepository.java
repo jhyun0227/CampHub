@@ -1,6 +1,5 @@
 package com.project.camphub.login.redis;
 
-import com.project.camphub.login.LoginProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -57,7 +57,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 log.info("path = {}", path);
                 log.info("query = {}", query);
 
-                String redirect = LoginProperties.REDIRECT + "=" + path + "; Max-Age=" + 60 * 5 + "; HttpOnly; Path=/; SameSite=Strict";
+                String redirect = AuthProperties.REDIRECT + "=" + path + "; Max-Age=" + 60 * 5 + "; HttpOnly; Path=/; SameSite=Strict";
                 response.addHeader("Set-Cookie", redirect);
 
                 response.sendRedirect("/login");
