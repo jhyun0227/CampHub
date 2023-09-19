@@ -118,7 +118,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .compact();
 
         //redis에 저장
-        redisRepository.saveRefreshToken(mbEmail, refreshToken, refreshTokenValidityInSeconds);
+        redisRepository.saveRefreshToken(mbEmail, refreshToken, refreshTokenValidityInMilliseconds);
 
         return refreshToken;
     }
