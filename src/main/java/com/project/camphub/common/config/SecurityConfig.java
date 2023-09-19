@@ -64,11 +64,17 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 /**
-                 * 소셜 로그인 설정
+                 * 로그아웃 설정
                  */
                 .and()
+                .logout()
+                    .disable()
+
+                /**
+                 * 소셜 로그인 설정
+                 */
                 .oauth2Login()
-                    .loginPage("/login") //Security 기본 로그인 기능 사용하지 않음
+                    .loginPage("/member/login") //Security 기본 로그인 기능 사용하지 않음
                     .successHandler(oAuth2SuccessHandler)
                     .failureHandler(customAuthenticationFailureHandler)
                     .userInfoEndpoint() // 클라이언트가 AccessToken을 이용해서 가져온 정보를 사용하는데 사용되는 서비스를 지정한다.

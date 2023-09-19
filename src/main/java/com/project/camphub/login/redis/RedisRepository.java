@@ -20,16 +20,14 @@ public class RedisRepository {
     /**
      * refreshToken을 만료시간을 정하여 저장하는 메서드
      */
-    public String saveRefreshToken(String key, String value, Long timeout) {
+    public void saveRefreshToken(String key, String value, Long timeout) {
         try {
 
             redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MILLISECONDS);
-            return LoginProperties.SUCCESS;
 
         } catch (Exception e) {
 
-            log.error("RedisRepository.saveRefreshToken 예외 발생");
-            return LoginProperties.FAIL;
+            log.error("RedisRepository.saveRefreshToken 예외 발생", e);
 
         }
     }
@@ -43,20 +41,9 @@ public class RedisRepository {
 
     /**
      * refreshToken을 redis에서 삭제하는 메서드
-     * refreshToken가 유효하지 않거나, 재발급 받거나, 사용자가 로그아웃할 경우 사용한다.
+     * refreshToken가 유효하지 않거나, 사용자가 로그아웃할 경우 사용한다.
      */
-    public String deleteRefreshToken(String key) {
-        try {
-
-            redisTemplate.delete(key);
-            return LoginProperties.SUCCESS;
-
-        } catch (Exception e) {
-
-            log.error("RedisRepository.deleteRefreshToken 예외 발생");
-            return LoginProperties.FAIL;
-
-        }
-
+    public void deleteRefreshToken(String key) {
+        redisTemplate.delete(key);
     }
 }
