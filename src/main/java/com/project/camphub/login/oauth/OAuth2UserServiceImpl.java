@@ -1,6 +1,6 @@
 package com.project.camphub.login.oauth;
 
-import com.project.camphub.member.Repository.MemberRepository;
+import com.project.camphub.member.repository.MemberRepository;
 import com.project.camphub.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

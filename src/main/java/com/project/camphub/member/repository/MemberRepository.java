@@ -1,4 +1,4 @@
-package com.project.camphub.member.Repository;
+package com.project.camphub.member.repository;
 
 import com.project.camphub.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

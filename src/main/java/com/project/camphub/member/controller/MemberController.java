@@ -1,16 +1,20 @@
-package com.project.camphub.login;
+package com.project.camphub.member.controller;
 
 import com.project.camphub.login.resolver.Login;
 import com.project.camphub.member.entity.Member;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 @Controller
-public class LoginController {
+@RequiredArgsConstructor
+public class MemberController {
 
     @GetMapping("/login")
     public String login(@Login Member member) {
@@ -25,15 +29,8 @@ public class LoginController {
         return "login/loginForm";
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @GetMapping("/accessDenied")
-    public String accessDenied() {
-        return "auth/accessDenied";
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @GetMapping("/usernameNotFound")
-    public String usernameNotFound() {
-        return "auth/usernameNotFound";
+    @DeleteMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        return null;
     }
 }

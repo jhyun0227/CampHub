@@ -1,6 +1,6 @@
 package com.project.camphub.login.auth;
 
-import com.project.camphub.member.Repository.MemberRepository;
+import com.project.camphub.member.repository.MemberRepository;
 import com.project.camphub.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
