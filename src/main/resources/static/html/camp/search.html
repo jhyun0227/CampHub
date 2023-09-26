@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampHub</title>
+      <!-- CSS -->
+      <link rel="stylesheet" href="../css/reset.css">
+      <link rel="stylesheet" href="../css/index.css">
+      <link rel="stylesheet" href="../css/search.css">
+      <!-- JS -->
+      <script src="../js/index.js" defer></script>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <!-- HEADER TOP -->
+        <div class="header-top">
+            <div class="inner-wrap">
+                <!-- logo -->
+                <div class="logo">
+                    <img src="../imgs/Camphub_white.png" alt="CampHub logo"/>
+                </div>
+                <!-- HEADER SEARCH -->
+                <div class="search-bar">
+                    <form action="">
+                        <fieldset>
+                            <label for="">검색</label>
+                            <input type="text" name="" id="" placeholder="Search"/>
+                        </fieldset>
+                        <input type="submit" value="검색"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- // HEADER TOP -->
+        <!-- HEADER NAV -->
+        <nav class="header-nav">
+            <div class="inner-wrap">
+                <ul>
+                    <li>
+                        <a href="#">캠핑장검색</a>
+                        <ul class="sub-nav">
+                            <li>
+                                <a href="#">지역 검색</a>
+                            </li>
+                            <li>
+                                <a href="#">테마 검색</a>
+                            </li>
+                            <li>
+                                <a href="#">이름 검색</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">캠핑플러스</a>
+                        <ul class="sub-nav">
+                            <li>
+                                <a href="#">캠핑 소식</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">고객센터</a>
+                        <ul class="sub-nav">
+                            <li>
+                                <a href="#">공지 사항</a>
+                            </li>
+                            <li>
+                                <a href="#">확인 문의</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- // HEADER NAV -->
+        <!-- // HEADER SEARCH -->
+    </header>
+    <!-- // HEADER -->
+    <!-- FLOAT BUTTON -->
+    <div class="float-btn">
+        <img src="../imgs/gfonts-arrowUp.png" alt="위로가기 버튼">
+    </div>
+    <!-- // FLOAT BUTTON -->
+    <!-- SEARCH : SEARCH -->
+    <section class="search">
+        <!-- SEARCH TOP -->
+        <div class="search-top">
+            <nav class="search-nav">
+                <div class="inner-wrap">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li>
+                            <div class="custom-select sort1">
+                                <button class="label">캠핑장검색</button>
+                                <ul class="optionList">
+                                    <li class="optionItem"><a href="#">캠핑장검색</a></li>
+                                    <li class="optionItem"><a href="#">캠핑플러스</a></li>
+                                    <li class="optionItem"><a href="#">고객센터</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="custom-select sort2">
+                                <button class="label">지역검색</button>
+                                <ul class="optionList">
+                                    <li class="optionItem"><a href="#">지역검색</a></li>
+                                    <li class="optionItem"><a href="#">테마검색</a></li>
+                                    <li class="optionItem"><a href="#">이름검색</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="search-box">
+                <div class="inner-wrap">
+                    <div class="search-box-img">
+                        <img src="../imgs/search-illust.svg" alt="일러스트">
+                    </div>
+                    <form>
+                        <!-- 지역 검색 -->
+                        <fieldset>
+                            <legend>지역</legend>
+                            <label for="">시도</label>
+                            <select name="" id="">
+                                <option value="">전체</option>
+                                <option value="0">서울시</option>
+                                <option value="1">부산시</option>
+                                <option value="2">경기도</option>
+                            </select>
+                            <label for="">구군</label>
+                            <select name="" id="">
+                                <option value="">전체</option>
+                                <option value="0">강남구</option>
+                                <option value="1">강동구</option>
+                                <option value="2">강북구</option>
+                            </select>
+                        </fieldset>
+                        <!-- // 지역 검색 -->
+                        <!-- 테마 검색 -->
+                        <fieldset>
+                            <legend>테마</legend>
+                            <label for=""></label>
+                            <select name="" id="">
+                                <option value="">전체</option>
+                                <option value="0">해변</option>
+                                <option value="1">섬</option>
+                                <option value="2">산</option>
+                            </select>
+                        </fieldset>
+                        <!-- // 테마 검색 -->
+                        <!-- 키워드 검색 -->
+                        <fieldset>
+                            <legend>키워드 검색</legend>
+                            <label for="">검색입력창</label>
+                            <input type="text" name="" id="" placeholder="검색어를 입력하세요." />
+                            <button type="button">상세조건</button>
+                            <input type="submit" value="검색" />
+                        </fieldset>
+                        <!-- // 키워드 검색 -->
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- // SEARCH TOP -->
+        <!-- SEARCH LIST -->
+        <div class="search-list">
+            <div class="inner-wrap">
+                <div class="list-top">
+                    <div class="count">
+                        <span>총 <b>2688</b>개 캠핑장이 검색되었습니다.</span>
+                    </div>
+                    <div class="sharing">
+                        <ul>
+                            <li>
+                                <button class="share-btn">공유</button>
+                            </li>
+                            <li>
+                                <button class="copy-btn">링크복사</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-content">
+                    <div class="custom-select list-sorting">
+                        <button class="label">등록일순</button>
+                        <ul class="optionList">
+                            <li class="optionItem"><a href="#">등록일순</a></li>
+                            <li class="optionItem"><a href="#">조회순</a></li>
+                            <li class="optionItem"><a href="#">업데이트순</a></li>
+                            <li class="optionItem"><a href="#">추천순</a></li>
+                        </ul>
+                    </div>
+                    <div class="list-table">
+                        <ul>
+                            <!-- 캠핑 리스트 아이템 -->
+                            <li>
+                                <div class="table-item">
+                                    <div class="item-left">
+                                        <figure>
+                                            <img src="../imgs/thumb_720_21690vU4o8aUYhnirhXxeCt7.jpg" alt="">
+                                        </figure>
+                                    </div>
+                                    <div class="item-right">
+                                        <div class="item-count">
+                                            <ul>
+                                                <li class="review">리뷰수 <span>0</span></li>
+                                                <li class="view">조회수 <span>104</span></li>
+                                                <li class="recommend">추천수 <span>1</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="item-content">
+                                            <div class="content-title"><a href=""><span>[전라북도 완주군]</span>좋은하루캠핑장</a></div>
+                                            <div class="content-txt"></div>
+                                            <div class="content-subTxt"></div>
+                                            <div class="content-etc">
+                                                <div class="content-address">
+                                                    <span>전북 완주군 운주면 금고당로 367-80</span>
+                                                </div>
+                                                <div class="content-tel">
+                                                    <span>0507-1344-2474</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item-amenities">
+                                            <ul>
+                                                <li>
+                                                    <div class="ico-elec">
+                                                        <span>전기</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-wifi">
+                                                        <span>와이파이</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-wood">
+                                                        <span>장작판매</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-hotwater">
+                                                        <span>온수</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-pool">
+                                                        <span>물놀이장</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-play">
+                                                        <span>놀이시설</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-walk">
+                                                        <span>산책로</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-ground">
+                                                        <span>운동장</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-sports">
+                                                        <span>운동시설</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-mart">
+                                                        <span>마트/<br/>편의점</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- // 캠핑 리스트 아이템 -->
+                            <!-- 캠핑 리스트 아이템 -->
+                            <li>
+                                <div class="table-item">
+                                    <div class="item-left">
+                                        <figure>
+                                            <img src="../imgs/thumb_720_21690vU4o8aUYhnirhXxeCt7.jpg" alt="">
+                                        </figure>
+                                    </div>
+                                    <div class="item-right">
+                                        <div class="item-count">
+                                            <ul>
+                                                <li class="review">리뷰수 <span>0</span></li>
+                                                <li class="view">조회수 <span>104</span></li>
+                                                <li class="recommend">추천수 <span>1</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="item-content">
+                                            <div class="content-title"><a href=""><span>[강원도 홍천군]</span>홍천불멍멍글램핑캠핑장</a></div>
+                                            <div class="content-txt"></div>
+                                            <div class="content-subTxt"></div>
+                                            <div class="content-etc">
+                                                <div class="content-address">
+                                                    <span>강원특별자치도 홍천군 화촌면 군들길 20</span>
+                                                </div>
+                                                <div class="content-tel">
+                                                    <span>0507-1373-7738</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item-amenities">
+                                            <ul>
+                                                <li>
+                                                    <div class="ico-elec">
+                                                        <span>전기</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-wifi">
+                                                        <span>와이파이</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-wood">
+                                                        <span>장작판매</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-hotwater">
+                                                        <span>온수</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-pool">
+                                                        <span>물놀이장</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- // 캠핑 리스트 아이템 -->
+                            <!-- 캠핑 리스트 아이템 -->
+                            <li>
+                                <div class="table-item">
+                                    <div class="item-left">
+                                        <figure>
+                                            <img src="../imgs/thumb_720_21690vU4o8aUYhnirhXxeCt7.jpg" alt="">
+                                        </figure>
+                                    </div>
+                                    <div class="item-right">
+                                        <div class="item-count">
+                                            <ul>
+                                                <li class="review">리뷰수 <span>0</span></li>
+                                                <li class="view">조회수 <span>104</span></li>
+                                                <li class="recommend">추천수 <span>1</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="item-content">
+                                            <div class="content-title"><a href=""><span>[경기도 가평군]</span>가평뷰캠핑장</a></div>
+                                            <div class="content-txt">가평뷰캠핑장은 사이트 바로앞 맑고 넓은 화악천 계곡 뷰</div>
+                                            <div class="content-subTxt">가평뷰캠핑장은 사이트 바로앞 맑고 넓은 화악천 계곡 뷰와 최신식 관리동으로 개별샤워실을 운영하고 있습니다. 많은 추억을 만들 수 있는 아주 멋진 공간입니다! 많이들 찾아주시면 감사하겠습니다.</div>
+                                            <div class="content-etc">
+                                                <div class="content-address">
+                                                    <span>경기 가평군 북면 화악산로 270</span>
+                                                </div>
+                                                <div class="content-tel">
+                                                    <span>0507-1373-7738</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item-amenities">
+                                            <ul>
+                                                <li>
+                                                    <div class="ico-elec">
+                                                        <span>전기</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-wifi">
+                                                        <span>와이파이</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-wood">
+                                                        <span>장작판매</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-hotwater">
+                                                        <span>온수</span>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="ico-pool">
+                                                        <span>물놀이장</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- // 캠핑 리스트 아이템 -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="list-bottom">
+                    <div class="paging">
+                        <ul>
+                            <li class="first">
+                                <a href="#">first</a>
+                            </li>
+                            <li class="prev">
+                                <a href="#">prev</a>
+                            </li>
+                            <li class="num active">
+                                <a href="#">1</a>
+                            </li>
+                            <li class="num"><a href="#">2</a></li>
+                            <li class="num"><a href="#">3</a></li>
+                            <li class="num"><a href="#">4</a></li>
+                            <li class="num"><a href="#">5</a></li>
+                            <li class="next"><a href="#">next</a></li>
+                            <li class="last"><a href="#">last</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // SEARCH LIST -->
+    </section>
+    <!-- // SEARCH : SEARCH -->
+    <!-- FOOTER -->
+    <footer>
+        <div class="inner-wrap">
+            <div class="footer-left">
+                <div class="logo">
+                    <img src="../imgs/Camphub_white.png" alt="footer logo">
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="top">
+                    <ul class="sns">
+                        <li><a href="#" class="instagram">instagram</a></li>
+                        <li><a href="#" class="facebook">facebook</a></li>
+                        <li><a href="#" class="kakao">kakao</a></li>
+                    </ul>
+                </div>
+                <div class="bottom">
+                    Copyright &copy; 2023. YunJunho. All rights reserved.
+                    <span style="display: none;"><a href="https://kr.freepik.com/free-vector/hand-draw-orange-brush-stroke-design_10556778.htm#page=2&query=%EB%B6%93%20%ED%84%B0%EC%B9%98&position=35&from_view=search&track=ais">작가 Harryarts</a> 출처 Freepik</span>
+                    <span style="display: none;"><a href="https://kr.freepik.com/icon/%EC%9D%B8%EC%8A%A4-%ED%83%80-%EA%B7%B8%EB%9E%A8_1384015">Freepik 제작 아이콘</a></span>
+                    <span style="display: none;"><a href="https://kr.freepik.com/icon/%25EC%25B9%25B4%25EC%25B9%25B4%25EC%2598%25A4-%25ED%2586%25A1_3669990#fromView=resource_detail&position=3">Fathema Khanom 제작 아이콘</a></span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- // FOOTER -->
+</body>
+</html>

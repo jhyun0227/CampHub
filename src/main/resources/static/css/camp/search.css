@@ -1,0 +1,1460 @@
+@charset "utf-8";
+/* PC 사이즈 */
+@media all and (min-width: 1024px) {
+    .search .search-top {
+        margin-bottom: 80px;
+    }
+    /* 상단 네비 */
+    .search .search-top .search-nav {
+        border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
+        margin-bottom: 50px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child {
+        border-left: 1px solid #eee;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child a {
+        color: transparent;
+        text-indent: -9999px;
+        background: url("../imgs/gfonts-home.png") no-repeat center / 35%;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li {
+        width: 200px;
+        height: 100%;
+        font-size: 18px;
+        text-align: center;
+        border-right: 1px solid #eee;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child {
+        width: 100px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li>a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 20px 10px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li>* {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li> .custom-select>:not(button) {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 16px;
+        font-weight: 600;
+    }
+    /* 상세검색 박스 */
+    .search-box {
+        width: 100%;
+    }
+    .search-box .inner-wrap {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .search-box .search-box-img {
+        max-width: 400px;
+        height: 100%;
+    }
+    .search-box .search-box-img img {
+        border-radius: 20px;
+        object-fit: cover;
+    }
+    .search-box form {
+        width: calc(100% - 400px);
+        max-width: 100%;
+        border-radius: 20px;
+        border: 1px solid #4a5f2f;
+        padding: 30px;
+    }
+    .search-box form  fieldset {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .search-box form  fieldset:last-child {
+        margin-bottom: 0;
+    }
+    .search-box form  fieldset legend {
+        margin-bottom: 10px;
+        color: #7e7e7e;
+        font-size: 14px;
+    }
+    .search-box form  fieldset label {
+        display: none;
+    }
+    .search-box form  fieldset select {
+        width: 200px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .search-box form  fieldset select>* {
+        cursor: pointer;
+    }
+    .search-box form  fieldset input[type="text"] {
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 420px;
+    }
+    .search-box form  fieldset button {
+        width: 120px;
+        border-radius: 20px;
+        background: #FFF;
+        border: 1px solid #ff9900;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color .5s;
+        font-weight: 600;
+    }
+    .search-box form  fieldset button:hover {
+        background: #ff9900;
+        color: #fff;
+    }
+    .search-box form  fieldset input[type="submit"] {
+        width: 120px;
+        border-radius: 20px;
+        background: #FFF;
+        border: 1px solid #4a5f2f;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color .5s;
+        font-weight: 600;
+    }
+    .search-box form  fieldset input[type="submit"]:hover {
+        background: #4a5f2f;
+        color: #FFF;
+    }
+    /* 검색 리스트 테이블 - 탑 */
+    .search-list .list-top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    .search-list .list-top .count b {
+        color: #4a5f2f;
+        font-weight: bold;
+    }
+    .search-list .list-top .sharing ul {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .search-list .list-top .sharing ul li{
+        border-radius: 50%;
+        background-color: #eee;
+        color: transparent;
+    }
+    .search-list .list-top .sharing ul li button {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+    }
+    .search-list .list-top .sharing ul li .share-btn {
+        background: url("../imgs/gfonts-share.png") no-repeat 50% center;
+    }
+    .search-list .list-top .sharing ul li .copy-btn {
+        background: url("../imgs/gfonts-link.png") no-repeat 50% center;
+    }
+     /* 검색 리스트 테이블 - 리스트 */
+     .search-list .list-content {
+        margin-bottom: 30px;
+     }
+     .search-list .list-content .list-sorting {
+        width: 150px;
+        margin-bottom: 10px;
+        position: relative;
+     }
+     .search-list .list-content .list-sorting::after {
+        position: relative;
+        bottom: -23px;
+        right: 10px;
+        transform: rotateX(180deg);
+     }
+     .search-list .list-content .list-sorting.active::after {
+        bottom: -15px;
+        transform: rotateX(0deg);
+     }
+     .search-list .list-content .list-sorting button {
+        padding: 10px;
+        justify-content: flex-start;
+     }
+     .search-list .list-content .list-sorting .optionList {
+        top: 40px;
+     }
+     .search-list .list-content .list-sorting .optionList li {
+        text-align: center;
+     }
+     .search-list .list-content .list-table>ul>li{
+        border-top: 1px solid #4a5f2f;
+     }
+     /* 리스트 아이템 */
+     .search-list .list-content .list-table .table-item {
+        display: flex;
+        padding: 50px 0px;
+        gap: 50px;
+     }
+     /* 리스트 아이템 좌측 */
+     .search-list .list-content .list-table .item-left {
+        width: 300px;
+     }
+     .search-list .list-content .list-table .item-left figure {
+        width: 100%;
+        height: 300px;
+        border-radius: 50%;
+        box-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+     }
+     .search-list .list-content .list-table .item-left figure img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+     }
+     /* 리스트 아이템 우측 */
+     .search-list .list-content .list-table .item-right {
+        width: calc(100% - 350px);
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+     }
+     /* 조회수 등 카운트 */
+     .search-list .list-content .list-table .item-right .item-count ul {
+        display: flex;
+        gap: 10px;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul li {
+        padding-right: 10px;
+        border-right: 1px solid #eee;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul li:last-child {
+        border-right: none;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .review {
+        color: #4a5f2f;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .view {
+        color: #ff9900;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .recommend {
+        color: #3D2719;
+     }
+     /* 내용 */
+     .search-list .list-content .list-table .item-right .item-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eee;
+     }
+     .search-list .list-content .list-table .item-right .item-content>div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title {
+        font-size: 25px;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title a {
+        display: block;
+        width: 100%;
+        font-weight: 600;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title:hover a {
+        text-decoration: underline;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-txt {
+        font-size: 18px;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-subTxt {
+        color: #7e7e7e;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-etc {
+        display: flex;
+        gap: 20px;
+        color: #4e4e4e;
+     
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc :is(.content-address span, .content-tel span) {
+        position: relative;
+        padding-left: 25px;
+        font-size: 18px;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc .content-address span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: url("../imgs/gfonts-pinDrop.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc .content-tel span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: url("../imgs/gfonts-call.png") no-repeat center / contain;
+    }
+    /* 제공 서비스 리스트 */
+    .search-list .list-content .list-table .item-right .item-amenities {
+        padding-top: 10px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li div {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #eee;
+        background-blend-mode: color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: transparent;
+        transition: color .5s;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li div span {
+        width: 100%;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li:hover div {
+        color: #333;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li:hover div span {
+        background: none;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-elec span {
+        background: url("../imgs/gfonts-bolt.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wifi span {
+        background: url("../imgs/gfonts-wifi.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wood span {
+        background: url("../imgs/gfonts-firePlace.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-hotwater span {
+        background: url("../imgs/gfonts-hotWater.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-pool span {
+        background: url("../imgs/gfonts-pool.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-play span {
+        background: url("../imgs/gfonts-play.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-walk span {
+        background: url("../imgs/gfonts-walk.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-ground span {
+        background: url("../imgs/gfonts-ground.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-sports span {
+        background: url("../imgs/gfonts-sports.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-mart span {
+        background: url("../imgs/gfonts-mart.png") no-repeat center / contain;
+    }
+
+    /* 리스트 하단 페이징 */
+    .search-list .list-bottom {
+        padding: 30px 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-list .list-bottom .paging ul {
+        display: flex;
+        gap: 10px;
+    }
+    .search-list .list-bottom .paging ul li {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #eee;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        transition: background-color .5s;
+    }
+    .search-list .list-bottom .paging ul li a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+    }
+    .search-list .list-bottom .paging ul li:hover {
+        background-color: #ff9900;
+    }
+    .search-list .list-bottom .paging ul li.active {
+        background-color: #3D2719;
+        color: #FFF;
+    }
+    .search-list .list-bottom .paging ul li.active:hover {
+        background-color: #ff9900;
+        color: #333;
+    }
+    .search-list .list-bottom .paging ul .first a {
+        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .prev a {
+        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .next a {
+        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .last a {
+        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+}
+/* /// PC 사이즈 */
+
+/* 태블릿 사이즈 */
+@media all and (max-width: 1023px) {
+    .search {
+        zoom: 0.8;
+    }
+    .search .search-top {
+        margin-bottom: 80px;
+    }
+    /* 상단 네비 */
+    .search .search-top .search-nav {
+        border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
+        margin-bottom: 50px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child {
+        border-left: 1px solid #eee;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child a {
+        color: transparent;
+        text-indent: -9999px;
+        background: url("../imgs/gfonts-home.png") no-repeat center / 35%;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li {
+        width: 200px;
+        height: 100%;
+        font-size: 18px;
+        text-align: center;
+        border-right: 1px solid #eee;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child {
+        width: 100px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li>a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 20px 10px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li>* {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li> .custom-select>:not(button) {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 16px;
+        font-weight: 600;
+    }
+    /* 상세검색 박스 */
+    .search-box {
+        width: 100%;
+    }
+    .search-box .inner-wrap {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+    .search-box .search-box-img {
+        max-width: 400px;
+        height: 100%;
+    }
+    .search-box .search-box-img img {
+        border-radius: 20px;
+        object-fit: cover;
+    }
+    .search-box form {
+        width: calc(100% - 400px);
+        max-width: 100%;
+        border-radius: 20px;
+        border: 1px solid #4a5f2f;
+        padding: 30px;
+    }
+    .search-box form  fieldset {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .search-box form  fieldset:last-child {
+        margin-bottom: 0;
+    }
+    .search-box form  fieldset legend {
+        margin-bottom: 10px;
+        color: #7e7e7e;
+        font-size: 14px;
+    }
+    .search-box form  fieldset label {
+        display: none;
+    }
+    .search-box form  fieldset select {
+        width: 200px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .search-box form  fieldset select>* {
+        cursor: pointer;
+    }
+    .search-box form  fieldset input[type="text"] {
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 420px;
+    }
+    .search-box form  fieldset button {
+        width: 120px;
+        border-radius: 20px;
+        background: #FFF;
+        border: 1px solid #ff9900;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color .5s;
+        font-weight: 600;
+    }
+    .search-box form  fieldset button:hover {
+        background: #ff9900;
+        color: #fff;
+    }
+    .search-box form  fieldset input[type="submit"] {
+        width: 120px;
+        border-radius: 20px;
+        background: #FFF;
+        border: 1px solid #4a5f2f;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color .5s;
+        font-weight: 600;
+    }
+    .search-box form  fieldset input[type="submit"]:hover {
+        background: #4a5f2f;
+        color: #FFF;
+    }
+    /* 검색 리스트 테이블 - 탑 */
+    .search-list .list-top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+    .search-list .list-top .count b {
+        color: #4a5f2f;
+        font-weight: bold;
+    }
+    .search-list .list-top .sharing ul {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .search-list .list-top .sharing ul li{
+        border-radius: 50%;
+        background-color: #eee;
+        color: transparent;
+    }
+    .search-list .list-top .sharing ul li button {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+    }
+    .search-list .list-top .sharing ul li .share-btn {
+        background: url("../imgs/gfonts-share.png") no-repeat 50% center;
+    }
+    .search-list .list-top .sharing ul li .copy-btn {
+        background: url("../imgs/gfonts-link.png") no-repeat 50% center;
+    }
+     /* 검색 리스트 테이블 - 리스트 */
+     .search-list .list-content {
+        margin-bottom: 30px;
+     }
+     .search-list .list-content .list-sorting {
+        width: 150px;
+        margin-bottom: 10px;
+        position: relative;
+     }
+     .search-list .list-content .list-sorting::after {
+        position: relative;
+        bottom: -23px;
+        right: 10px;
+        transform: rotateX(180deg);
+     }
+     .search-list .list-content .list-sorting.active::after {
+        bottom: -15px;
+        transform: rotateX(0deg);
+     }
+     .search-list .list-content .list-sorting button {
+        padding: 10px;
+        justify-content: flex-start;
+     }
+     .search-list .list-content .list-sorting .optionList {
+        top: 40px;
+     }
+     .search-list .list-content .list-sorting .optionList li {
+        text-align: center;
+     }
+     .search-list .list-content .list-table>ul>li{
+        border-top: 1px solid #4a5f2f;
+     }
+     /* 리스트 아이템 */
+     .search-list .list-content .list-table .table-item {
+        display: flex;
+        padding: 50px 0px;
+        gap: 50px;
+     }
+     /* 리스트 아이템 좌측 */
+     .search-list .list-content .list-table .item-left {
+        width: 300px;
+     }
+     .search-list .list-content .list-table .item-left figure {
+        width: 100%;
+        height: 300px;
+        border-radius: 50%;
+        box-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+     }
+     .search-list .list-content .list-table .item-left figure img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+     }
+     /* 리스트 아이템 우측 */
+     .search-list .list-content .list-table .item-right {
+        width: calc(100% - 350px);
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+     }
+     /* 조회수 등 카운트 */
+     .search-list .list-content .list-table .item-right .item-count ul {
+        display: flex;
+        gap: 10px;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul li {
+        padding-right: 10px;
+        border-right: 1px solid #eee;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul li:last-child {
+        border-right: none;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .review {
+        color: #4a5f2f;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .view {
+        color: #ff9900;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .recommend {
+        color: #3D2719;
+     }
+     /* 내용 */
+     .search-list .list-content .list-table .item-right .item-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eee;
+     }
+     .search-list .list-content .list-table .item-right .item-content>div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title {
+        font-size: 25px;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title a {
+        display: block;
+        width: 100%;
+        font-weight: 600;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title:hover a {
+        text-decoration: underline;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-txt {
+        font-size: 18px;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-subTxt {
+        color: #7e7e7e;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-etc {
+        display: flex;
+        gap: 20px;
+        color: #4e4e4e;
+     
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc :is(.content-address span, .content-tel span) {
+        position: relative;
+        padding-left: 25px;
+        font-size: 18px;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc .content-address span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: url("../imgs/gfonts-pinDrop.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc .content-tel span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: url("../imgs/gfonts-call.png") no-repeat center / contain;
+    }
+    /* 제공 서비스 리스트 */
+    .search-list .list-content .list-table .item-right .item-amenities {
+        padding-top: 10px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li div {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #eee;
+        background-blend-mode: color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: transparent;
+        transition: color .5s;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li div span {
+        width: 100%;
+        height: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li:hover div {
+        color: #333;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li:hover div span {
+        background: none;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-elec span {
+        background: url("../imgs/gfonts-bolt.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wifi span {
+        background: url("../imgs/gfonts-wifi.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wood span {
+        background: url("../imgs/gfonts-firePlace.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-hotwater span {
+        background: url("../imgs/gfonts-hotWater.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-pool span {
+        background: url("../imgs/gfonts-pool.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-play span {
+        background: url("../imgs/gfonts-play.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-walk span {
+        background: url("../imgs/gfonts-walk.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-ground span {
+        background: url("../imgs/gfonts-ground.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-sports span {
+        background: url("../imgs/gfonts-sports.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-mart span {
+        background: url("../imgs/gfonts-mart.png") no-repeat center / contain;
+    }
+
+    /* 리스트 하단 페이징 */
+    .search-list .list-bottom {
+        padding: 30px 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-list .list-bottom .paging ul {
+        display: flex;
+        gap: 10px;
+    }
+    .search-list .list-bottom .paging ul li {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #eee;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        transition: background-color .5s;
+    }
+    .search-list .list-bottom .paging ul li a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 600;
+    }
+    .search-list .list-bottom .paging ul li:hover {
+        background-color: #ff9900;
+    }
+    .search-list .list-bottom .paging ul li.active {
+        background-color: #3D2719;
+        color: #FFF;
+    }
+    .search-list .list-bottom .paging ul li.active:hover {
+        background-color: #ff9900;
+        color: #333;
+    }
+    .search-list .list-bottom .paging ul .first a {
+        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .prev a {
+        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .next a {
+        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .last a {
+        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+}
+/* /// 태블릿 사이즈 */
+
+/* 모바일 사이즈 */
+@media all and (max-width: 767px) {
+    .search {
+        zoom: 0;
+    }
+    .search .search-top {
+        width: 100%;
+        margin-bottom: 80px;
+    }
+    /* 상단 네비 */
+    .search .search-top .search-nav {
+        width: 100%;
+        border-bottom: 1px solid #eee;
+        border-top: 1px solid #eee;
+        margin-bottom: 50px;
+    }
+    .search .search-top .search-nav .inner-wrap>ul {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child {
+        width: 15%;
+        border-left: 1px solid #eee;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li:first-child a {
+        color: transparent;
+        text-indent: -9999px;
+        background: url("../imgs/gfonts-home.png") no-repeat center / 40%;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li {
+        width: 42.5%;
+        height: 100%;
+        font-size: 18px;
+        text-align: center;
+        border-right: 1px solid #eee;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li>a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        padding: 5vw;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li>* {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .search .search-top .search-nav .inner-wrap>ul>li> .custom-select>:not(button) {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 16px;
+        font-weight: 600;
+    }
+    /* 상세검색 박스 */
+    .search-box {
+        width: 100%;
+        padding: 0px 3vw;
+        box-sizing: border-box;
+    }
+    .search-box .inner-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .search-box .search-box-img {
+        max-width: 100%;
+        height: 100%;
+    }
+    .search-box .search-box-img img {
+        border-radius: 20px;
+        object-fit: cover;
+    }
+    .search-box form {
+        width: 100%;
+        border-radius: 20px;
+        border: 1px solid #4a5f2f;
+        padding: 30px;
+    }
+    .search-box form  fieldset {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .search-box form  fieldset:last-child {
+        flex-direction: column;
+    }
+    .search-box form  fieldset:last-child {
+        margin-bottom: 0;
+    }
+    .search-box form  fieldset legend {
+        margin-bottom: 10px;
+        color: #7e7e7e;
+        font-size: 14px;
+    }
+    .search-box form  fieldset label {
+        display: none;
+    }
+    .search-box form  fieldset select {
+        width: 200px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        cursor: pointer;
+    }
+    .search-box form  fieldset select>* {
+        cursor: pointer;
+    }
+    .search-box form  fieldset input[type="text"] {
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: 100%
+    }
+    .search-box form  fieldset button {
+        width: 100%;
+        border-radius: 20px;
+        background: #ff9900;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color .5s;
+        font-weight: 600;
+        color: #fff;
+    }
+    .search-box form  fieldset input[type="submit"] {
+        width: 100%;
+        border-radius: 20px;
+        background: #4a5f2f;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color .5s;
+        font-weight: 600;
+        color: #fff;
+    }
+    /* 검색 리스트 테이블 - 탑 */
+    .search-list .list-top{
+        display: flex;
+        flex-direction: column;
+        font-size: 18px;
+        margin-bottom: 20px;
+        gap: 4vw;
+        padding: 0 2vw;
+    }
+    .search-list .list-top .count {
+        width: 100%;
+        text-align: left;
+        padding-left: 0;
+    }
+    .search-list .list-top .count b {
+        color: #4a5f2f;
+        font-weight: bold;
+    }
+    .search-list .list-top .sharing {
+        width: 100%;
+    }
+    .search-list .list-top .sharing ul {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 3vw;
+    }
+    .search-list .list-top .sharing ul li{
+        border-radius: 50%;
+        background-color: #eee;
+        color: transparent;
+    }
+    .search-list .list-top .sharing ul li button {
+        border-radius: 50%;
+        width: 10vw;
+        height: 10vw;
+        cursor: pointer;
+    }
+    .search-list .list-top .sharing ul li .share-btn {
+        background: url("../imgs/gfonts-share.png") no-repeat 50% center;
+    }
+    .search-list .list-top .sharing ul li .copy-btn {
+        background: url("../imgs/gfonts-link.png") no-repeat 50% center;
+    }
+     /* 검색 리스트 테이블 - 리스트 */
+     .search-list .list-content {
+        margin-bottom: 0px;
+     }
+     .search-list .list-content .list-sorting {
+        width: 150px;
+        margin-bottom: 10px;
+        position: relative;
+        margin-left: 2vw;
+     }
+     .search-list .list-content .list-sorting::after {
+        position: relative;
+        bottom: -9px;
+        right: 10px;
+        transform: rotateX(180deg);
+     }
+     .search-list .list-content .list-sorting.active::after {
+        bottom: -14px;
+        transform: rotateX(0deg);
+     }
+     .search-list .list-content .list-sorting button {
+        padding: 10px;
+        justify-content: flex-start;
+     }
+     .search-list .list-content .list-sorting .optionList {
+        top: 40px;
+     }
+     .search-list .list-content .list-sorting .optionList li {
+        text-align: center;
+     }
+     .search-list .list-content .list-table {
+        padding: 0 2vw;
+     }
+     .search-list .list-content .list-table>ul>li{
+        border-top: 1px solid #4a5f2f;
+     }
+     .search-list .list-content .list-table>ul>li:last-child {
+        border-bottom: 1px solid #4a5f2f;
+     }
+     /* 리스트 아이템 */
+     .search-list .list-content .list-table .table-item {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        align-items: center;
+        padding: 10vw 0px;
+        gap: 5vw;
+     }
+     /* 리스트 아이템 좌측 */
+     .search-list .list-content .list-table .item-left {
+        width: 100%;
+     }
+     .search-list .list-content .list-table .item-left figure {
+        width: 90%;
+        height: 200px;
+        border-radius: 20px;
+        box-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+        margin: 0 auto;
+     }
+     .search-list .list-content .list-table .item-left figure img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+     }
+     /* 리스트 아이템 우측 */
+     .search-list .list-content .list-table .item-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5vw;
+        flex-direction: column;
+     }
+     .search-list .list-content .list-table .item-right>div {
+        width: 100%;
+     }
+     /* 조회수 등 카운트 */
+     .search-list .list-content .list-table .item-right .item-count ul {
+        display: flex;
+        justify-content: center;
+        gap: 2vw;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul li {
+        padding-right: 2vw;
+        border-right: 1px solid #eee;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul li:last-child {
+        border-right: none;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .review {
+        color: #4a5f2f;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .view {
+        color: #ff9900;
+     }
+     .search-list .list-content .list-table .item-right .item-count ul .recommend {
+        color: #3D2719;
+     }
+     /* 내용 */
+     .search-list .list-content .list-table .item-right .item-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 7vw;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #eee;
+     }
+     .search-list .list-content .list-table .item-right .item-content>div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+        white-space: unset;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title {
+        font-size: 25px;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title a {
+        display: block;
+        width: 100%;
+        font-weight: 600;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-title:hover a {
+        text-decoration: underline;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-txt {
+        font-size: 18px;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-subTxt {
+        color: #7e7e7e;
+     }
+     .search-list .list-content .list-table .item-right .item-content .content-etc {
+        display: flex;
+        flex-direction: column;
+        gap: 5vw;
+        color: #4e4e4e;
+     
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc :is(.content-address span, .content-tel span) {
+        position: relative;
+        padding-left: 6vw;
+        font-size: 18px;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc .content-address span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: url("../imgs/gfonts-pinDrop.png") no-repeat center / cover;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc .content-tel span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background: url("../imgs/gfonts-call.png") no-repeat center / cover;
+    }
+    /* 제공 서비스 리스트 */
+    .search-list .list-content .list-table .item-right .item-amenities {
+        padding: 5vw 0vw;
+        margin: 0 auto;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5vw;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li div {
+        width: 12vw;
+        height: 12vw;
+        border-radius: 50%;
+        background-color: #eee;
+        background-blend-mode: color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: transparent;
+        transition: color .5s;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li div span {
+        width: 100%;
+        height: 6vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        font-size: 14px;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li:hover div {
+        color: #333;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li:hover div span {
+        background: none;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-elec span {
+        background: url("../imgs/gfonts-bolt.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wifi span {
+        background: url("../imgs/gfonts-wifi.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wood span {
+        background: url("../imgs/gfonts-firePlace.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-hotwater span {
+        background: url("../imgs/gfonts-hotWater.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-pool span {
+        background: url("../imgs/gfonts-pool.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-play span {
+        background: url("../imgs/gfonts-play.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-walk span {
+        background: url("../imgs/gfonts-walk.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-ground span {
+        background: url("../imgs/gfonts-ground.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-sports span {
+        background: url("../imgs/gfonts-sports.png") no-repeat center / contain;
+    }
+    .search-list .list-content .list-table .item-right .item-amenities ul li .ico-mart span {
+        background: url("../imgs/gfonts-mart.png") no-repeat center / contain;
+    }
+
+    /* 리스트 하단 페이징 */
+    .search-list .list-bottom {
+        padding: 5vw 2vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-list .list-bottom .paging ul {
+        display: flex;
+        gap: 10px;
+    }
+    .search-list .list-bottom .paging ul li {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #eee;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        transition: background-color .5s;
+    }
+    .search-list .list-bottom .paging ul li a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .search-list .list-bottom .paging ul li:hover {
+        background-color: #eee;
+    }
+    .search-list .list-bottom .paging ul li.active {
+        background-color: #3D2719;
+        color: #FFF;
+    }
+    .search-list .list-bottom .paging ul li.active:hover {
+        background-color: #eee;
+        color: #333;
+    }
+    .search-list .list-bottom .paging ul .first a {
+        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .prev a {
+        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .next a {
+        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .last a {
+        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+}
+/* /// 모바일 사이즈 */
+
+/* 플립 */
+@media all and (max-width: 281px) { 
+    .search .search-top .search-nav .inner-wrap>ul>li>* {
+        /* font-family: 'NanumSquareNeo'; */
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .search-list .list-content .list-table .item-right .item-content .content-etc :is(.content-address span, .content-tel span) {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        word-wrap: break-word;
+        white-space: unset;
+        padding-left: 10vw;
+    }
+    /* 리스트 하단 페이징 */
+    .search-list .list-bottom {
+        padding: 5vw 2vw;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-list .list-bottom .paging ul {
+        display: flex;
+        gap: 10px;
+    }
+    .search-list .list-bottom .paging ul li {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #eee;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        transition: background-color .5s;
+    }
+    .search-list .list-bottom .paging ul li a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .search-list .list-bottom .paging ul li:hover {
+        background-color: #eee;
+    }
+    .search-list .list-bottom .paging ul li.active {
+        background-color: #3D2719;
+        color: #FFF;
+    }
+    .search-list .list-bottom .paging ul li.active:hover {
+        background-color: #eee;
+        color: #333;
+    }
+    .search-list .list-bottom .paging ul .first a {
+        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .prev a {
+        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .next a {
+        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+    .search-list .list-bottom .paging ul .last a {
+        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        color: transparent;
+        text-indent: -9999px;
+    }
+}
