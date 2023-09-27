@@ -209,7 +209,7 @@ body {
         top: 5px;
         text-indent: -9999px;
         color: transparent;
-        background: url("../imgs/gfonts-search.png") no-repeat center / cover;
+        background: url("../../images/common/icon/gfonts-search.png") no-repeat center / cover;
         cursor: pointer;
     }
     /* HEADER 메뉴 네비게이션 */
@@ -244,12 +244,12 @@ body {
         font-weight: 600;
         /* background-color: transparent;
         background-blend-mode: overlay;
-        background: url("../imgs/painting_yellow.png") no-repeat 30% /0% 60%; */
+        background: url("../../images/common/icon/painting_yellow.png") no-repeat 30% /0% 60%; */
         transition: all 0.5s;
     }
      /* header .header-nav>.inner-wrap>ul>li:hover>a {
        color: #333; 
-        background: url("../imgs/painting_yellow.png") no-repeat center/50% 60%; 
+        background: url("../../images/common/icon/painting_yellow.png") no-repeat center/50% 60%;
     }*/
     header .header-nav>.inner-wrap>ul>li>a::after {
         content: "";
@@ -353,13 +353,13 @@ body {
         align-items: center;
     }
     footer .footer-right .top .sns li .instagram {
-        background: url("../imgs/instagram_1384015.png") no-repeat center / cover;
+        background: url("../../images/common/icon/instagram_1384015.png") no-repeat center / cover;
     }
     footer .footer-right .top .sns li .facebook {
-        background: url("../imgs/facebook_1384005.png") no-repeat center / cover;
+        background: url("../../images/common/icon/facebook_1384005.png") no-repeat center / cover;
     }
     footer .footer-right .top .sns li .kakao {
-        background: url("../imgs/kakao-talk_3669990.png") no-repeat center / cover;
+        background: url("../../images/common/icon/kakao-talk_3669990.png") no-repeat center / cover;
     }
     /* /// FOOTER */
 }
@@ -431,7 +431,7 @@ body {
         top: 5px;
         text-indent: -9999px;
         color: transparent;
-        background: url("../imgs/gfonts-search.png") no-repeat center / cover;
+        background: url("../../images/common/icon/gfonts-search.png") no-repeat center / cover;
         cursor: pointer;
     }
     /* HEADER 메뉴 네비게이션 */
@@ -466,12 +466,12 @@ body {
         font-weight: 600;
         /* background-color: transparent;
         background-blend-mode: overlay;
-        background: url("../imgs/painting_yellow.png") no-repeat 30% /0% 60%; */
+        background: url("../../images/common/icon/painting_yellow.png") no-repeat 30% /0% 60%; */
         transition: all 0.5s;
     }
     /* header .header-nav>.inner-wrap>ul>li:hover>a {
     color: #333; 
-        background: url("../imgs/painting_yellow.png") no-repeat center/50% 60%; 
+        background: url("../../images/common/icon/painting_yellow.png") no-repeat center/50% 60%;
     }*/
     header .header-nav>.inner-wrap>ul>li>a::after {
         content: "";
@@ -576,13 +576,13 @@ body {
         align-items: center;
     }
     footer .footer-right .top .sns li .instagram {
-        background: url("../imgs/instagram_1384015.png") no-repeat center / cover;
+        background: url("../../images/common/icon/instagram_1384015.png") no-repeat center / cover;
     }
     footer .footer-right .top .sns li .facebook {
-        background: url("../imgs/facebook_1384005.png") no-repeat center / cover;
+        background: url("../../images/common/icon/facebook_1384005.png") no-repeat center / cover;
     }
     footer .footer-right .top .sns li .kakao {
-        background: url("../imgs/kakao-talk_3669990.png") no-repeat center / cover;
+        background: url("../../images/common/icon/kakao-talk_3669990.png") no-repeat center / cover;
     }
     /* /// FOOTER */
 }
@@ -757,7 +757,7 @@ body {
         top: 6px;
         text-indent: -9999px;
         color: transparent;
-        background: url(../imgs/gfonts-search.png) no-repeat center / cover;
+        background: url(../../images/common/icon/gfonts-search.png) no-repeat center / cover;
         cursor: pointer;
     }
     /* HEADER 메뉴 네비게이션 */
@@ -908,13 +908,13 @@ body {
         align-items: center;
     }
     footer .footer-right .top .sns li .instagram {
-        background: url("../imgs/instagram_1384015.png") no-repeat center / cover;
+        background: url("../../images/common/icon/instagram_1384015.png") no-repeat center / cover;
     }
     footer .footer-right .top .sns li .facebook {
-        background: url("../imgs/facebook_1384005.png") no-repeat center / cover;
+        background: url("../../images/common/icon/facebook_1384005.png") no-repeat center / cover;
     }
     footer .footer-right .top .sns li .kakao {
-        background: url("../imgs/kakao-talk_3669990.png") no-repeat center / cover;
+        background: url("../../images/common/icon/kakao-talk_3669990.png") no-repeat center / cover;
     }
     /* /// FOOTER */
 }
