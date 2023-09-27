@@ -5,6 +5,7 @@ import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.dto.SearchCampListResponseDto;
 import com.project.camphub.camp.entity.Camp;
 import com.project.camphub.camp.repository.CampRepository;
+import com.project.camphub.common.Constants;
 import com.project.camphub.common.code.*;
 import com.project.camphub.common.exception.camp.CampError;
 import com.project.camphub.common.exception.camp.CampException;
@@ -42,10 +43,10 @@ public class CampService {
     public Page<SearchCampListResponseDto> findCampList(SearchCampListRequestDto searchCampListRequestDto) {
 
         //Cd -> Nm 변환
-        this.cdtoNm(searchCampListRequestDto);
+        this.cdToNm(searchCampListRequestDto);
         log.info("searchCampListRequestDto = {}", searchCampListRequestDto);
 
-        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), searchCampListRequestDto.getSize());
+        PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), Constants.SIZE_OF_PAGE);
 
         //Entity -> Dto
         Page<Camp> campPage = campRepository.findCampList(searchCampListRequestDto, pageRequest);
@@ -74,7 +75,7 @@ public class CampService {
     /**
      * SearchCampListRequestDto의 Cd 필드들을 Nm 필드로 바꾸는 메서드
      */
-    private void cdtoNm(SearchCampListRequestDto searchCampListRequestDto){
+    private void cdToNm(SearchCampListRequestDto searchCampListRequestDto){
         //도 코드
         List<String> doCdList = searchCampListRequestDto.getDoCdList();
         if (doCdList != null || !doCdList.isEmpty()) {

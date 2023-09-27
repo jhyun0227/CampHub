@@ -38,6 +38,5 @@ public class SearchCampListRequestDto {
     private String indivCaravYn; //개인카라반
     private String indivTrlerYn; //개인트레일러
 
-    private Integer page;
-    private Integer size;
+    private Integer page = 1;
 }

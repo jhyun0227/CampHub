@@ -8,10 +8,12 @@ import com.project.camphub.common.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/camp")
 public class CampController {
@@ -19,9 +21,20 @@ public class CampController {
     private final CampService campService;
 
     /**
-     * 캠프 리스트 조회
+     * 캠프 리스트 Form
      */
     @GetMapping("/list")
+    public String listForm(@ModelAttribute SearchCampListRequestDto searchCampListRequestDto, Model model) {
+        model.addAttribute("result", campService.findCampList(searchCampListRequestDto));
+
+        return "camp/list";
+    }
+
+    /**
+     * 캠프 리스트 조회
+     */
+    @GetMapping("/listdd")
+    @ResponseBody
     public ResponseDto findCampList(@RequestBody SearchCampListRequestDto searchCampListRequestDto) {
         Page<SearchCampListResponseDto> campList = campService.findCampList(searchCampListRequestDto);
 
@@ -32,6 +45,7 @@ public class CampController {
      * 캠프 단건 조회
      */
     @GetMapping("/{cpId}")
+    @ResponseBody
     public ResponseDto findCampInfo(@PathVariable String cpId) {
         CampDto campDto = campService.findCampInfo(cpId);
 
