@@ -21,7 +21,7 @@
     .search .search-top .search-nav .inner-wrap>ul>li:first-child a {
         color: transparent;
         text-indent: -9999px;
-        background: url("../imgs/gfonts-home.png") no-repeat center / 35%;
+        background: url("../../images/common/icon/gfonts-home.png") no-repeat center / 35%;
     }
     .search .search-top .search-nav .inner-wrap>ul>li {
         width: 200px;
@@ -167,10 +167,10 @@
         cursor: pointer;
     }
     .search-list .list-top .sharing ul li .share-btn {
-        background: url("../imgs/gfonts-share.png") no-repeat 50% center;
+        background: url("../../images/common/icon/gfonts-share.png") no-repeat 50% center;
     }
     .search-list .list-top .sharing ul li .copy-btn {
-        background: url("../imgs/gfonts-link.png") no-repeat 50% center;
+        background: url("../../images/common/icon/gfonts-link.png") no-repeat 50% center;
     }
      /* 검색 리스트 테이블 - 리스트 */
      .search-list .list-content {
@@ -303,7 +303,7 @@
         width: 20px;
         height: 20px;
         display: inline-block;
-        background: url("../imgs/gfonts-pinDrop.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-pinDrop.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-content .content-etc .content-tel span::after {
         content: "";
@@ -313,7 +313,7 @@
         width: 20px;
         height: 20px;
         display: inline-block;
-        background: url("../imgs/gfonts-call.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-call.png") no-repeat center / contain;
     }
     /* 제공 서비스 리스트 */
     .search-list .list-content .list-table .item-right .item-amenities {
@@ -353,34 +353,34 @@
         background: none;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-elec span {
-        background: url("../imgs/gfonts-bolt.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-bolt.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wifi span {
-        background: url("../imgs/gfonts-wifi.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-wifi.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wood span {
-        background: url("../imgs/gfonts-firePlace.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-firePlace.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-hotwater span {
-        background: url("../imgs/gfonts-hotWater.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-hotWater.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-pool span {
-        background: url("../imgs/gfonts-pool.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-pool.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-play span {
-        background: url("../imgs/gfonts-play.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-play.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-walk span {
-        background: url("../imgs/gfonts-walk.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-walk.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-ground span {
-        background: url("../imgs/gfonts-ground.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-ground.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-sports span {
-        background: url("../imgs/gfonts-sports.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-sports.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-mart span {
-        background: url("../imgs/gfonts-mart.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-mart.png") no-repeat center / contain;
     }
 
     /* 리스트 하단 페이징 */
@@ -423,22 +423,22 @@
         color: #333;
     }
     .search-list .list-bottom .paging ul .first a {
-        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .prev a {
-        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .next a {
-        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .last a {
-        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
@@ -470,7 +470,7 @@
     .search .search-top .search-nav .inner-wrap>ul>li:first-child a {
         color: transparent;
         text-indent: -9999px;
-        background: url("../imgs/gfonts-home.png") no-repeat center / 35%;
+        background: url("../../images/common/icon/gfonts-home.png") no-repeat center / 35%;
     }
     .search .search-top .search-nav .inner-wrap>ul>li {
         width: 200px;
@@ -616,10 +616,10 @@
         cursor: pointer;
     }
     .search-list .list-top .sharing ul li .share-btn {
-        background: url("../imgs/gfonts-share.png") no-repeat 50% center;
+        background: url("../../images/common/icon/gfonts-share.png") no-repeat 50% center;
     }
     .search-list .list-top .sharing ul li .copy-btn {
-        background: url("../imgs/gfonts-link.png") no-repeat 50% center;
+        background: url("../../images/common/icon/gfonts-link.png") no-repeat 50% center;
     }
      /* 검색 리스트 테이블 - 리스트 */
      .search-list .list-content {
@@ -752,7 +752,7 @@
         width: 20px;
         height: 20px;
         display: inline-block;
-        background: url("../imgs/gfonts-pinDrop.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-pinDrop.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-content .content-etc .content-tel span::after {
         content: "";
@@ -762,7 +762,7 @@
         width: 20px;
         height: 20px;
         display: inline-block;
-        background: url("../imgs/gfonts-call.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-call.png") no-repeat center / contain;
     }
     /* 제공 서비스 리스트 */
     .search-list .list-content .list-table .item-right .item-amenities {
@@ -802,34 +802,34 @@
         background: none;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-elec span {
-        background: url("../imgs/gfonts-bolt.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-bolt.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wifi span {
-        background: url("../imgs/gfonts-wifi.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-wifi.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wood span {
-        background: url("../imgs/gfonts-firePlace.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-firePlace.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-hotwater span {
-        background: url("../imgs/gfonts-hotWater.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-hotWater.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-pool span {
-        background: url("../imgs/gfonts-pool.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-pool.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-play span {
-        background: url("../imgs/gfonts-play.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-play.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-walk span {
-        background: url("../imgs/gfonts-walk.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-walk.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-ground span {
-        background: url("../imgs/gfonts-ground.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-ground.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-sports span {
-        background: url("../imgs/gfonts-sports.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-sports.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-mart span {
-        background: url("../imgs/gfonts-mart.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-mart.png") no-repeat center / contain;
     }
 
     /* 리스트 하단 페이징 */
@@ -872,22 +872,22 @@
         color: #333;
     }
     .search-list .list-bottom .paging ul .first a {
-        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .prev a {
-        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .next a {
-        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .last a {
-        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
@@ -923,7 +923,7 @@
     .search .search-top .search-nav .inner-wrap>ul>li:first-child a {
         color: transparent;
         text-indent: -9999px;
-        background: url("../imgs/gfonts-home.png") no-repeat center / 40%;
+        background: url("../../images/common/icon/gfonts-home.png") no-repeat center / 40%;
     }
     .search .search-top .search-nav .inner-wrap>ul>li {
         width: 42.5%;
@@ -1073,10 +1073,10 @@
         cursor: pointer;
     }
     .search-list .list-top .sharing ul li .share-btn {
-        background: url("../imgs/gfonts-share.png") no-repeat 50% center;
+        background: url("../../images/common/icon/gfonts-share.png") no-repeat 50% center;
     }
     .search-list .list-top .sharing ul li .copy-btn {
-        background: url("../imgs/gfonts-link.png") no-repeat 50% center;
+        background: url("../../images/common/icon/gfonts-link.png") no-repeat 50% center;
     }
      /* 검색 리스트 테이블 - 리스트 */
      .search-list .list-content {
@@ -1233,7 +1233,7 @@
         width: 20px;
         height: 20px;
         display: inline-block;
-        background: url("../imgs/gfonts-pinDrop.png") no-repeat center / cover;
+        background: url("../../images/common/icon/gfonts-pinDrop.png") no-repeat center / cover;
     }
     .search-list .list-content .list-table .item-right .item-content .content-etc .content-tel span::after {
         content: "";
@@ -1243,7 +1243,7 @@
         width: 20px;
         height: 20px;
         display: inline-block;
-        background: url("../imgs/gfonts-call.png") no-repeat center / cover;
+        background: url("../../images/common/icon/gfonts-call.png") no-repeat center / cover;
     }
     /* 제공 서비스 리스트 */
     .search-list .list-content .list-table .item-right .item-amenities {
@@ -1286,34 +1286,34 @@
         background: none;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-elec span {
-        background: url("../imgs/gfonts-bolt.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-bolt.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wifi span {
-        background: url("../imgs/gfonts-wifi.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-wifi.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-wood span {
-        background: url("../imgs/gfonts-firePlace.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-firePlace.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-hotwater span {
-        background: url("../imgs/gfonts-hotWater.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-hotWater.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-pool span {
-        background: url("../imgs/gfonts-pool.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-pool.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-play span {
-        background: url("../imgs/gfonts-play.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-play.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-walk span {
-        background: url("../imgs/gfonts-walk.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-walk.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-ground span {
-        background: url("../imgs/gfonts-ground.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-ground.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-sports span {
-        background: url("../imgs/gfonts-sports.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-sports.png") no-repeat center / contain;
     }
     .search-list .list-content .list-table .item-right .item-amenities ul li .ico-mart span {
-        background: url("../imgs/gfonts-mart.png") no-repeat center / contain;
+        background: url("../../images/common/icon/gfonts-mart.png") no-repeat center / contain;
     }
 
     /* 리스트 하단 페이징 */
@@ -1357,22 +1357,22 @@
         color: #333;
     }
     .search-list .list-bottom .paging ul .first a {
-        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .prev a {
-        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .next a {
-        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .last a {
-        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
@@ -1438,22 +1438,22 @@
         color: #333;
     }
     .search-list .list-bottom .paging ul .first a {
-        background: url("../imgs/gfonts-arrow-left-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .prev a {
-        background: url("../imgs/gfonts-arrow-left.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-left.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .next a {
-        background: url("../imgs/gfonts-arrow-right.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
     .search-list .list-bottom .paging ul .last a {
-        background: url("../imgs/gfonts-arrow-right-double.png") no-repeat center / 50%;
+        background: url("../../images/common/icon/gfonts-arrow-right-double.png") no-repeat center / 50%;
         color: transparent;
         text-indent: -9999px;
     }
