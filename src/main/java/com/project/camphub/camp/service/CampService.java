@@ -46,6 +46,11 @@ public class CampService {
         this.cdToNm(searchCampListRequestDto);
         log.info("searchCampListRequestDto = {}", searchCampListRequestDto);
 
+        //페이지 입장 시, 0(1)페이지 부터
+        if (searchCampListRequestDto.getPage() == null) {
+            searchCampListRequestDto.setPage(0);
+        }
+
         PageRequest pageRequest = PageRequest.of(searchCampListRequestDto.getPage(), Constants.SIZE_OF_PAGE);
 
         //Entity -> Dto

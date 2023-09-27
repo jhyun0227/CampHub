@@ -5,6 +5,8 @@ import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.dto.SearchCampListResponseDto;
 import com.project.camphub.camp.service.CampService;
 import com.project.camphub.common.dto.ResponseDto;
+import com.project.camphub.login.resolver.Login;
+import com.project.camphub.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +26,8 @@ public class CampController {
      * 캠프 리스트 Form
      */
     @GetMapping("/list")
-    public String listForm(@ModelAttribute SearchCampListRequestDto searchCampListRequestDto, Model model) {
+    public String listForm(@Login Member member, @ModelAttribute SearchCampListRequestDto searchCampListRequestDto, Model model) {
+        model.addAttribute("member", member);
         model.addAttribute("result", campService.findCampList(searchCampListRequestDto));
 
         return "camp/list";
