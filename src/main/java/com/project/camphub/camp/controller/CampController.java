@@ -4,6 +4,8 @@ import com.project.camphub.camp.dto.CampDto;
 import com.project.camphub.camp.dto.SearchCampListRequestDto;
 import com.project.camphub.camp.dto.SearchCampListResponseDto;
 import com.project.camphub.camp.service.CampService;
+import com.project.camphub.common.code.AreaCode;
+import com.project.camphub.common.code.LocationCode;
 import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.login.resolver.Login;
 import com.project.camphub.member.entity.Member;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.TreeMap;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -22,13 +26,23 @@ public class CampController {
 
     private final CampService campService;
 
+    private final AreaCode areaCode;
+    private final LocationCode locationCode;
+
     /**
      * 캠프 리스트 Form
      */
     @GetMapping("/list")
     public String listForm(@Login Member member, @ModelAttribute SearchCampListRequestDto searchCampListRequestDto, Model model) {
+        //도 정보
+        model.addAttribute("doMap", new TreeMap<>(areaCode.getDoCodeMap()));
+        //지역 환경 정보
+        model.addAttribute("locationMap", locationCode.getLocationCodeMap());
+        //회원
         model.addAttribute("member", member);
+        //캠핑장정보
         model.addAttribute("result", campService.findCampList(searchCampListRequestDto));
+
 
         return "camp/list";
     }

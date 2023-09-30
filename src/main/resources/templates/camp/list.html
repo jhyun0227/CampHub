@@ -124,11 +124,9 @@
                         <fieldset>
                             <legend>지역</legend>
                             <label for="">시도</label>
-                            <select name="" id="">
+                            <select name="" id="do">
                                 <option value="">전체</option>
-                                <option value="0">서울시</option>
-                                <option value="1">부산시</option>
-                                <option value="2">경기도</option>
+                                <option th:each="do : ${doMap}" th:value="${do.key}" th:text="${do.value}"></option>
                             </select>
                             <label for="">구군</label>
                             <select name="" id="">
