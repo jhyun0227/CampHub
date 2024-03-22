@@ -32,11 +32,14 @@ public class OpenApiResponse {
     @Data
     public static class Body {
         private Items items;
+        private int numOfRows;
+        private int pageNo;
+        private int totalCount;
     }
 
     @Data
     public static class Items {
-        List<Item> item;
+        private List<Item> item;
     }
 
     @Data
