@@ -38,6 +38,7 @@ out/
 
 ### properties ###
 /src/main/resources/application-openapi.properties
+/src/main/resources/application-datasource.properties
 
 ### docker ###
 Dockerfile
