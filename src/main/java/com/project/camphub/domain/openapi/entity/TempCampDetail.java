@@ -1,5 +1,6 @@
 package com.project.camphub.domain.openapi.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
@@ -14,10 +15,14 @@ public class TempCampDetail {
 
     @Id
     private String contentId;
+    @Column(length = 5000)
     private String intro;
     private String lineIntro;
+    @Column(length = 2000)
     private String featureNm;
+    @Column(length = 2000)
     private String tooltip;
+    @Column(length = 2000)
     private String direction;
     private String doNm;
     private String sigunguNm;

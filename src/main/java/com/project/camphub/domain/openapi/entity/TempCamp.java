@@ -1,5 +1,6 @@
 package com.project.camphub.domain.openapi.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
@@ -16,8 +17,10 @@ public class TempCamp {
     private String contentId;
     private String facltNm;
     private String tel;
+    @Column(length = 500)
     private String homepage;
     private String resveCl;
+    @Column(length = 2000)
     private String resveUrl;
     private String operPdCl;
     private String operDeCl;
@@ -27,6 +30,7 @@ public class TempCamp {
     private String lctCl;
     private String themaEnvrnCl;
     private String tourEraCl;
+    @Column(length = 500)
     private String firstImageUrl;
     private String manageSttus;
     private String mangeDivNm;
