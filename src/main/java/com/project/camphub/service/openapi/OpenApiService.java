@@ -14,6 +14,7 @@ import com.project.camphub.repository.openapi.TempCampSiteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OpenApiService {
 
@@ -67,22 +69,17 @@ public class OpenApiService {
             tempCamp.setFacltNm(item.getFacltNm());
             tempCamp.setTel(item.getTel());
             tempCamp.setHomepage(item.getHomepage());
-            tempCamp.setResveCl(item.getResveCl());
             tempCamp.setResveUrl(item.getResveUrl());
-            tempCamp.setOperPdCl(item.getOperPdCl());
-            tempCamp.setOperDeCl(item.getOperDeCl());
-            tempCamp.setHvofBgnde(item.getHvofBgnde());
-            tempCamp.setHvofEnddle(item.getHvofEnddle());
-            tempCamp.setInduty(item.getInduty());
-            tempCamp.setLctCl(item.getLctCl());
-            tempCamp.setThemaEnvrnCl(item.getThemaEnvrnCl());
-            tempCamp.setTourEraCl(item.getTourEraCl());
+            tempCamp.setResveCl(item.getResveCl());
             tempCamp.setFirstImageUrl(item.getFirstImageUrl());
-            tempCamp.setManageSttus(item.getManageSttus());
-            tempCamp.setMangeDivNm(item.getMangeDivNm());
-            tempCamp.setMgcDiv(item.getMgcDiv());
-            tempCamp.setFacltDivNm(item.getFacltDivNm());
-            tempCamp.setInsrncAt(item.getInsrncAt());
+            tempCamp.setDoNm(item.getDoNm());
+            tempCamp.setSigunguNm(item.getSigunguNm());
+            tempCamp.setZipcode(item.getZipcode());
+            tempCamp.setAddr1(item.getAddr1());
+            tempCamp.setAddr2(item.getAddr2());
+            tempCamp.setMapX(item.getMapX());
+            tempCamp.setMapY(item.getMapY());
+            tempCamp.setDirection(item.getDirection());
             tempCamp.setTrsagntNo(item.getTrsagntNo());
             tempCamp.setBizrno(item.getBizrno());
             tempCamp.setPrmisnDe(item.getPrmisnDe());
@@ -96,14 +93,19 @@ public class OpenApiService {
             tempCampDetail.setLineIntro(item.getLineIntro());
             tempCampDetail.setFeatureNm(item.getFeatureNm());
             tempCampDetail.setTooltip(item.getTooltip());
-            tempCampDetail.setDirection(item.getDirection());
-            tempCampDetail.setDoNm(item.getDoNm());
-            tempCampDetail.setSigunguNm(item.getSigunguNm());
-            tempCampDetail.setZipcode(item.getZipcode());
-            tempCampDetail.setAddr1(item.getAddr1());
-            tempCampDetail.setAddr2(item.getAddr2());
-            tempCampDetail.setMapX(item.getMapX());
-            tempCampDetail.setMapY(item.getMapY());
+            tempCampDetail.setInduty(item.getInduty());
+            tempCampDetail.setLctCl(item.getLctCl());
+            tempCampDetail.setThemaEnvrnCl(item.getThemaEnvrnCl());
+            tempCampDetail.setTourEraCl(item.getTourEraCl());
+            tempCampDetail.setOperPdCl(item.getOperPdCl());
+            tempCampDetail.setOperDeCl(item.getOperDeCl());
+            tempCampDetail.setManageSttus(item.getManageSttus());
+            tempCampDetail.setMangeDivNm(item.getMangeDivNm());
+            tempCampDetail.setMgcDiv(item.getMgcDiv());
+            tempCampDetail.setFacltDivNm(item.getFacltDivNm());
+            tempCampDetail.setManageNmpr(item.getManageNmpr());
+            tempCampDetail.setHvofBgnde(item.getHvofBgnde());
+            tempCampDetail.setHvofEnddle(item.getHvofEnddle());
             tempCampDetail.setClturEventAt(item.getClturEventAt());
             tempCampDetail.setClturEvent(item.getClturEvent());
             tempCampDetail.setExprnProgrmAt(item.getExprnProgrmAt());
@@ -112,10 +114,10 @@ public class OpenApiService {
             tempCampDetail.setAnimalCmgCl(item.getAnimalCmgCl());
             tempCampDetail.setCaravAcmpnyAt(item.getCaravAcmpnyAt());
             tempCampDetail.setTrlerAcmpnyAt(item.getTrlerAcmpnyAt());
+            tempCampDetail.setInsrncAt(item.getInsrncAt());
 
             TempCampFacility tempCampFacility = new TempCampFacility();
             tempCampFacility.setContentId(item.getContentId());
-            tempCampFacility.setManageNmpr(item.getManageNmpr());
             tempCampFacility.setAllar(item.getAllar());
             tempCampFacility.setSbrsCl(item.getSbrsCl());
             tempCampFacility.setSbrsEtc(item.getSbrsEtc());
