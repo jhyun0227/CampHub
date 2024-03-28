@@ -22,15 +22,19 @@ public class TempCampDetail {
     private String featureNm;
     @Column(length = 2000)
     private String tooltip;
-    @Column(length = 2000)
-    private String direction;
-    private String doNm;
-    private String sigunguNm;
-    private String zipcode;
-    private String addr1;
-    private String addr2;
-    private String mapX;
-    private String mapY;
+    private String induty;
+    private String lctCl;
+    private String themaEnvrnCl;
+    private String tourEraCl;
+    private String operPdCl;
+    private String operDeCl;
+    private String manageSttus;
+    private String mangeDivNm;
+    private String mgcDiv;
+    private String facltDivNm;
+    private String manageNmpr;
+    private String hvofBgnde;
+    private String hvofEnddle;
     private String clturEventAt;
     private String clturEvent;
     private String exprnProgrmAt;
@@ -39,5 +43,5 @@ public class TempCampDetail {
     private String animalCmgCl;
     private String caravAcmpnyAt;
     private String trlerAcmpnyAt;
-
+    private String insrncAt;
 }

@@ -14,7 +14,6 @@ public class TempCampFacility {
 
     @Id
     private String contentId;
-    private String manageNmpr;
     private String allar;
     private String sbrsCl;
     private String sbrsEtc;

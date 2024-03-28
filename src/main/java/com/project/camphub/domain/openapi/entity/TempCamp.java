@@ -19,24 +19,20 @@ public class TempCamp {
     private String tel;
     @Column(length = 500)
     private String homepage;
-    private String resveCl;
     @Column(length = 2000)
     private String resveUrl;
-    private String operPdCl;
-    private String operDeCl;
-    private String hvofBgnde;
-    private String hvofEnddle;
-    private String induty;
-    private String lctCl;
-    private String themaEnvrnCl;
-    private String tourEraCl;
+    private String resveCl;
     @Column(length = 500)
     private String firstImageUrl;
-    private String manageSttus;
-    private String mangeDivNm;
-    private String mgcDiv;
-    private String facltDivNm;
-    private String insrncAt;
+    private String doNm;
+    private String sigunguNm;
+    private String zipcode;
+    private String addr1;
+    private String addr2;
+    private String mapX;
+    private String mapY;
+    @Column(length = 2000)
+    private String direction;
     private String trsagntNo;
     private String bizrno;
     private String prmisnDe;
