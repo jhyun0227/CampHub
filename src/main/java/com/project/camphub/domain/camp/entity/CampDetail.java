@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class CampDetail {
 
     @Id
+    @Column(length = 10)
     private String cpId;
 
     @MapsId(value = "cpId")
@@ -26,7 +27,7 @@ public class CampDetail {
     @Column(length = 5000)
     private String cpdIntro;
 
-    @Column(length = 2000)
+    @Column(length = 500)
     private String cpdLineIntro;
 
     @Column(length = 2000)
@@ -54,19 +55,18 @@ public class CampDetail {
     @Column(length = 10)
     private FacilityDivType cpdFcltDivType;
 
-    @Column(length = 10)
-    private String cpdResStaff;
+    private Integer cpdResStaff;
 
     private LocalDateTime cpdOffStartDt;
     private LocalDateTime cpdOffEndDt;
 
     @Column(length = 1)
     private String cpdCultEvYn;
-    @Column(length = 300)
+    @Column(length = 200)
     private String cpdCultEvNm;
     @Column(length = 1)
     private String cpdExprPrgmYn;
-    @Column(length = 300)
+    @Column(length = 200)
     private String cpdExprPrgmNm;
 
     @Enumerated(EnumType.STRING)
@@ -79,5 +79,4 @@ public class CampDetail {
     private String cpdPrvtTrlYn;
     @Column(length = 1)
     private String cpdInsuredYn;
-
 }

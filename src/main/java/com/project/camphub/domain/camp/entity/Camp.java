@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,37 +17,37 @@ import java.time.LocalDateTime;
 public class Camp {
 
     @Id
-    @Column(length = 30)
+    @Column(length = 10)
     private String cpId;
-    @Column(length = 50)
+    @Column(length = 100)
     private String cpName;
-    @Column(length = 20)
+    @Column(length = 30)
     private String cpTel;
     @Column(length = 2000)
     private String cpHomepageUrl;
     @Column(length = 2000)
     private String cpResvUrl;
-    @Column(length = 1000)
+    @Column(length = 500)
     private String cpThumbUrl;
-    @Column(length = 10)
+    @Column(length = 2)
     private String cpProvCd;
-    @Column(length = 10)
+    @Column(length = 2)
     private String cpDistCd;
-    @Column(length = 50)
+    @Column(length = 20)
     private String cpZipcode;
-    @Column(length = 200)
+    @Column(length = 100)
     private String cpAddr;
-    @Column(length = 200)
+    @Column(length = 100)
     private String cpAddrDetail;
 
     private Double cpLon;
     private Double cpLat;
 
-    @Column(length = 2000)
+    @Column(length = 1000)
     private String cpDirections;
-    @Column(length = 100)
+    @Column(length = 50)
     private String cpTourBizNo;
-    @Column(length = 100)
+    @Column(length = 50)
     private String cpBizNo;
 
     private LocalDateTime cpPermitDt;
@@ -56,6 +55,5 @@ public class Camp {
     private LocalDateTime cpModDt;
 
     @Column(length = 1)
-    private Character cpIsActive;
-
+    private String cpIsActive;
 }

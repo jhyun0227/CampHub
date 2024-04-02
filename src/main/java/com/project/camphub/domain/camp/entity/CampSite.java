@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class CampSite {
 
     @Id
+    @Column(length = 10)
     private String cpId;
 
     @MapsId(value = "cpId")
@@ -20,34 +21,19 @@ public class CampSite {
     @JoinColumn(name = "cp_id")
     private Camp camp;
 
-    @Column(length = 10)
-    private String cpsSiteDist;
-    @Column(length = 10)
-    private String cpsSiteSize1Cnt;
-    @Column(length = 10)
-    private String cpsSiteSize2Cnt;
-    @Column(length = 10)
-    private String cpsSiteSize3Cnt;
-    @Column(length = 10)
-    private String cpsSiteSize1Width;
-    @Column(length = 10)
-    private String cpsSiteSize1Length;
-    @Column(length = 10)
-    private String cpsSiteSize2Width;
-    @Column(length = 10)
-    private String cpsSiteSize2Length;
-    @Column(length = 10)
-    private String cpsSiteSize3Width;
-    @Column(length = 10)
-    private String cpsSiteSize3Length;
-    @Column(length = 10)
-    private String cpsBttmGrassCnt;
-    @Column(length = 10)
-    private String cpsBttmStnCnt;
-    @Column(length = 10)
-    private String cpsBttmTechCnt;
-    @Column(length = 10)
-    private String cpsBttmGravelCnt;
-    @Column(length = 10)
-    private String cpsBttmDirtCnt;
+    private Integer cpsSiteDist;
+    private Integer cpsSiteSize1Cnt;
+    private Integer cpsSiteSize2Cnt;
+    private Integer cpsSiteSize3Cnt;
+    private Integer cpsSiteSize1Width;
+    private Integer cpsSiteSize1Length;
+    private Integer cpsSiteSize2Width;
+    private Integer cpsSiteSize2Length;
+    private Integer cpsSiteSize3Width;
+    private Integer cpsSiteSize3Length;
+    private Integer cpsBttmGrassCnt;
+    private Integer cpsBttmStnCnt;
+    private Integer cpsBttmTechCnt;
+    private Integer cpsBttmGravelCnt;
+    private Integer cpsBttmDirtCnt;
 }

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class CampFacility {
 
     @Id
+    @Column(length = 10)
     private String cpId;
 
     @MapsId(value = "cpId")
@@ -20,39 +21,28 @@ public class CampFacility {
     @JoinColumn(name = "cp_id")
     private Camp camp;
 
-    @Column(length = 100)
-    private String cpfTotalArea;
-    @Column(length = 500)
+    private Integer cpfTotalArea;
+
+    @Column(length = 300)
     private String cpfAmntyEtc;
-    @Column(length = 500)
+    @Column(length = 300)
     private String cpfNrbyFcltEtc;
-    @Column(length = 10)
-    private String cpfGnrlSiteCnt;
-    @Column(length = 10)
-    private String cpfCarSiteCnt;
-    @Column(length = 10)
-    private String cpfGlampSiteCnt;
-    @Column(length = 10)
-    private String cpfCrvSiteCnt;
-    @Column(length = 10)
-    private String cpfPrvtCrvSiteCnt;
+
+    private Integer cpfGnrlSiteCnt;
+    private Integer cpfCarSiteCnt;
+    private Integer cpfGlampSiteCnt;
+    private Integer cpfCrvSiteCnt;
+    private Integer cpfPrvtCrvSiteCnt;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
     private String cpfBrazierType;
 
-    @Column(length = 10)
-    private String cpfSinkCnt;
-    @Column(length = 10)
-    private String cpfToiletCnt;
-    @Column(length = 10)
-    private String cpfSwrmCnt;
-    @Column(length = 10)
-    private String cpfFireExtCnt;
-    @Column(length = 10)
-    private String cpfFireWaterCnt;
-    @Column(length = 10)
-    private String cpfFireSandCnt;
-    @Column(length = 10)
-    private String cpfFireSensorCnt;
+    private Integer cpfSinkCnt;
+    private Integer cpfToiletCnt;
+    private Integer cpfSwrmCnt;
+    private Integer cpfFireExtCnt;
+    private Integer cpfFireWaterCnt;
+    private Integer cpfFireSandCnt;
+    private Integer cpfFireSensorCnt;
 }
