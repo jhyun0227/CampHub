@@ -1,5 +1,6 @@
 package com.project.camphub.domain.camp.entity;
 
+import com.project.camphub.domain.camp.enumeration.BrazierType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class CampFacility {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private String cpfBrazierType;
+    private BrazierType cpfBrazierType;
 
     private Integer cpfSinkCnt;
     private Integer cpfToiletCnt;
