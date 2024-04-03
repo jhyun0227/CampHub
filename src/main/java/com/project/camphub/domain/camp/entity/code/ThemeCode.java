@@ -1,5 +1,6 @@
 package com.project.camphub.domain.camp.entity.code;
 
+import com.project.camphub.domain.camp.entity.associations.CampTheme;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,5 +21,5 @@ public class ThemeCode {
     private String themeCdNm;
 
     @OneToMany(mappedBy = "themeCode")
-    private List<ThemeCode> themeCodeList = new ArrayList<>();
+    private List<CampTheme> campThemeList = new ArrayList<>();
 }

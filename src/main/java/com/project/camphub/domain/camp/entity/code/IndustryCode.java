@@ -20,6 +20,6 @@ public class IndustryCode {
     private Long indstCdId;
     private String indstCdNm;
 
-    @OneToMany(mappedBy = "industyCode")
+    @OneToMany(mappedBy = "industryCode")
     private List<CampIndustry> campIndustryList = new ArrayList<>();
 }
