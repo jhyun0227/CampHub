@@ -1,21 +1,25 @@
 package com.project.camphub.domain.camp.entity.code;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.camphub.domain.camp.entity.associations.CampNearbyFacility;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class NearbFacilityCode {
+public class NearbyFacilityCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long nrbyFcltCdId;
     private String nrbyFcltCdNm;
+
+    @OneToMany(mappedBy = "nearbyFacilityCode")
+    private List<CampNearbyFacility> campNearbyFacilityList = new ArrayList<>();
 }

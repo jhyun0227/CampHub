@@ -1,10 +1,11 @@
 package com.project.camphub.domain.camp.entity.code;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.camphub.domain.camp.entity.associations.CampReservation;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,4 +16,7 @@ public class ReservationCode {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resvCdId;
     private String resvCdNm;
+
+    @OneToMany(mappedBy = "reservationCode")
+    private List<CampReservation> campReservationList = new ArrayList<>();
 }

@@ -1,13 +1,14 @@
 package com.project.camphub.domain.camp.entity.code;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.camphub.domain.camp.entity.associations.CampIndustry;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,4 +19,7 @@ public class IndustryCode {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long indstCdId;
     private String indstCdNm;
+
+    @OneToMany(mappedBy = "industyCode")
+    private List<CampIndustry> campIndustryList = new ArrayList<>();
 }

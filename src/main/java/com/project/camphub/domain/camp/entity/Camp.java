@@ -1,9 +1,12 @@
 package com.project.camphub.domain.camp.entity;
 
+import com.project.camphub.domain.camp.entity.associations.*;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -62,5 +65,28 @@ public class Camp {
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
     private CampSite campSite;
 
-    //캠프 <-> 코드 관련
+    //캠프, 코드 연관관계
+    @OneToMany(mappedBy = "camp")
+    private List<CampAmenity> campAmenityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampEquipmentRental> campEquipmentRentalList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampIndustry> campIndustryList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampCaravanInnerAmenity> campCaravanInnerAmenityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampLocation> campLocationList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampNearbyFacility> campNearbyFacilityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampReservation> campReservationList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampOperationSeason> campOperationSeasonList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampTravelSeason> campTravelSeasonList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp")
+    private List<CampTheme> campThemeList = new ArrayList<>();
+
 }

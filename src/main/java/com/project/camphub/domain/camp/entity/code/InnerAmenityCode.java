@@ -1,13 +1,15 @@
 package com.project.camphub.domain.camp.entity.code;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.camphub.domain.camp.entity.associations.CampCaravanInnerAmenity;
+import com.project.camphub.domain.camp.entity.associations.CampGlampingInnerAmenity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,4 +20,10 @@ public class InnerAmenityCode {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long innerAmntyCdId;
     private String innerAmntyCdNm;
+
+    @OneToMany(mappedBy = "innerAmenityCode")
+    private List<CampCaravanInnerAmenity> campCaravanInnerAmenityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "innerAmenityCode")
+    private List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = new ArrayList<>();
 }
