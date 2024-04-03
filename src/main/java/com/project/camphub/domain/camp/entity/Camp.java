@@ -1,6 +1,8 @@
 package com.project.camphub.domain.camp.entity;
 
 import com.project.camphub.domain.camp.entity.associations.*;
+import com.project.camphub.domain.common.entity.area.DistrictCode;
+import com.project.camphub.domain.common.entity.area.ProvinceCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,10 +31,14 @@ public class Camp {
     private String cpResvUrl;
     @Column(length = 500)
     private String cpThumbUrl;
-    @Column(length = 2)
-    private String cpProvCd;
-    @Column(length = 2)
-    private String cpDistCd;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cp_prov_cd_id")
+    private ProvinceCode provinceCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cp_dist_cd_id")
+    private DistrictCode districtCode;
+
     @Column(length = 20)
     private String cpZipcode;
     @Column(length = 100)
