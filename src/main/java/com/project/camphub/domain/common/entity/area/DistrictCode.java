@@ -16,10 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class DistrictCode {
 
-    @Id
-    @Column(length = 2)
-    private String distCdId;
-    @Column(length = 2)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long distCdId;
+    @Column(length = 10)
     private String distCdNm;
 
     @ManyToOne(fetch = FetchType.LAZY)

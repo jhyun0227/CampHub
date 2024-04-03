@@ -16,9 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ProvinceCode {
 
-    @Id
-    @Column(length = 2)
-    private String provCdId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long provCdId;
     @Column(length = 10)
     private String provCdNm;
 
