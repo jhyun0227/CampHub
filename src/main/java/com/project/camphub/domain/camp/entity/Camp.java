@@ -1,12 +1,7 @@
 package com.project.camphub.domain.camp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +9,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
+@ToString
 public class Camp {
 
     @Id
@@ -56,4 +53,14 @@ public class Camp {
 
     @Column(length = 1)
     private String cpIsActive;
+
+    //캠프 상세, 시설, 사이트
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
+    private CampDetail campDetail;
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
+    private CampFacility campFacility;
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
+    private CampSite campSite;
+
+    //캠프 <-> 코드 관련
 }

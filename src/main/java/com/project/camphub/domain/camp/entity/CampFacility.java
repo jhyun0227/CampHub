@@ -2,15 +2,14 @@ package com.project.camphub.domain.camp.entity;
 
 import com.project.camphub.domain.camp.enumeration.BrazierType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
+@ToString
 public class CampFacility {
 
     @Id
