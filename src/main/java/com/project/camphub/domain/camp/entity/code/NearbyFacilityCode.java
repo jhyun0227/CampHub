@@ -18,6 +18,7 @@ public class NearbyFacilityCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long nrbyFcltCdId;
+    @Column(length = 30)
     private String nrbyFcltCdNm;
 
     @OneToMany(mappedBy = "nearbyFacilityCode")

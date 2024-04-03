@@ -18,6 +18,7 @@ public class ThemeCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long themeCdId;
+    @Column(length = 30)
     private String themeCdNm;
 
     @OneToMany(mappedBy = "themeCode")

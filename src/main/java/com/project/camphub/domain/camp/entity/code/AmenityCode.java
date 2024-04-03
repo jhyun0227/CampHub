@@ -18,6 +18,7 @@ public class AmenityCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long amntyCdId;
+    @Column(length = 30)
     private String amntyCdNm;
 
     @OneToMany(mappedBy = "amenityCode")

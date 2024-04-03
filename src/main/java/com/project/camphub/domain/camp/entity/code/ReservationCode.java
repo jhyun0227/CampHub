@@ -15,6 +15,7 @@ public class ReservationCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resvCdId;
+    @Column(length = 30)
     private String resvCdNm;
 
     @OneToMany(mappedBy = "reservationCode")

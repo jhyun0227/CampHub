@@ -18,6 +18,7 @@ public class LocationCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long loctCdId;
+    @Column(length = 30)
     private String loctCdNm;
 
     @OneToMany(mappedBy = "locationCode")

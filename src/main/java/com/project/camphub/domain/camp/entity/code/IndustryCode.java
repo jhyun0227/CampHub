@@ -18,6 +18,7 @@ public class IndustryCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long indstCdId;
+    @Column(length = 30)
     private String indstCdNm;
 
     @OneToMany(mappedBy = "industryCode")

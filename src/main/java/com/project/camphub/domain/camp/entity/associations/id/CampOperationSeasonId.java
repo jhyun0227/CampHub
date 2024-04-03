@@ -1,5 +1,6 @@
 package com.project.camphub.domain.camp.entity.associations.id;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CampOperationSeasonId implements Serializable {
 
+    @Column(length = 10)
     private String cpId;
     private Long seasonCdId;
 }

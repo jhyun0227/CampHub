@@ -19,6 +19,7 @@ public class InnerAmenityCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long innerAmntyCdId;
+    @Column(length = 30)
     private String innerAmntyCdNm;
 
     @OneToMany(mappedBy = "innerAmenityCode")

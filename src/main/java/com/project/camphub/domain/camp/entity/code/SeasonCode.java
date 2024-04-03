@@ -19,6 +19,7 @@ public class SeasonCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seasonCdId;
+    @Column(length = 30)
     private String seasonCdNm;
 
     @OneToMany(mappedBy = "seasonCode")
