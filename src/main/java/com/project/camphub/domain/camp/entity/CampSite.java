@@ -21,15 +21,26 @@ public class CampSite {
     private Camp camp;
 
     private Integer cpsSiteDist;
+
+    @Column(name = "cps_site_size1_cnt")
     private Integer cpsSiteSize1Cnt;
-    private Integer cpsSiteSize2Cnt;
-    private Integer cpsSiteSize3Cnt;
+    @Column(name = "cps_site_size1_width")
     private Integer cpsSiteSize1Width;
+    @Column(name = "cps_site_size1_length")
     private Integer cpsSiteSize1Length;
+    @Column(name = "cps_site_size2_cnt")
+    private Integer cpsSiteSize2Cnt;
+    @Column(name = "cps_site_size2_width")
     private Integer cpsSiteSize2Width;
+    @Column(name = "cps_site_size2_length")
     private Integer cpsSiteSize2Length;
+    @Column(name = "cps_site_size3_cnt")
+    private Integer cpsSiteSize3Cnt;
+    @Column(name = "cps_site_size3_width")
     private Integer cpsSiteSize3Width;
+    @Column(name = "cps_site_size3_length")
     private Integer cpsSiteSize3Length;
+
     private Integer cpsBttmGrassCnt;
     private Integer cpsBttmStnCnt;
     private Integer cpsBttmTechCnt;

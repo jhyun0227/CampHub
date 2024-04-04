@@ -55,7 +55,7 @@ public class CampDetail {
     @Column(length = 10)
     private FacilityDivType cpdFcltDivType;
 
-    private Integer cpdResStaff;
+    private Integer cpdResStaffCnt;
 
     private LocalDateTime cpdOffStartDt;
     private LocalDateTime cpdOffEndDt;
