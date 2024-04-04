@@ -332,7 +332,6 @@ INSERT INTO equipment_code(equip_cd_nm) VALUE ('식기');
 INSERT INTO equipment_code(equip_cd_nm) VALUE ('화로대');
 INSERT INTO equipment_code(equip_cd_nm) VALUE ('난방기구');
 
-INSERT INTO amenity_code(amnty_cd_nm) VALUE ('운동시설');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('전기');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('무선인터넷');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('장작판매');
@@ -342,7 +341,9 @@ INSERT INTO amenity_code(amnty_cd_nm) VALUE ('물놀이장');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('놀이터');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('산책로');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('운동장');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('운동시설');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('마트.편의점');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('덤프스테이션');
 
 INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('산책로');
 INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('수영장');
