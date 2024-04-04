@@ -21,6 +21,4 @@ public class ThemeCode {
     @Column(length = 30)
     private String themeCdNm;
 
-    @OneToMany(mappedBy = "themeCode")
-    private List<CampTheme> campThemeList = new ArrayList<>();
 }

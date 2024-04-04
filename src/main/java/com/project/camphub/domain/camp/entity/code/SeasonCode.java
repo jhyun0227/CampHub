@@ -22,9 +22,4 @@ public class SeasonCode {
     @Column(length = 30)
     private String seasonCdNm;
 
-    @OneToMany(mappedBy = "seasonCode")
-    private List<CampOperationSeason> campOperationSeasonList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "seasonCode")
-    private List<CampTravelSeason> campTravelSeasonList = new ArrayList<>();
 }

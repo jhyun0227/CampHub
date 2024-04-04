@@ -18,6 +18,4 @@ public class ReservationCode {
     @Column(length = 30)
     private String resvCdNm;
 
-    @OneToMany(mappedBy = "reservationCode")
-    private List<CampReservation> campReservationList = new ArrayList<>();
 }

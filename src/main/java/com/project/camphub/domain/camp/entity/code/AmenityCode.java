@@ -21,6 +21,4 @@ public class AmenityCode {
     @Column(length = 30)
     private String amntyCdNm;
 
-    @OneToMany(mappedBy = "amenityCode")
-    private List<CampAmenity> campAmenityList = new ArrayList<>();
 }

@@ -21,6 +21,4 @@ public class NearbyFacilityCode {
     @Column(length = 30)
     private String nrbyFcltCdNm;
 
-    @OneToMany(mappedBy = "nearbyFacilityCode")
-    private List<CampNearbyFacility> campNearbyFacilityList = new ArrayList<>();
 }

@@ -22,9 +22,4 @@ public class InnerAmenityCode {
     @Column(length = 30)
     private String innerAmntyCdNm;
 
-    @OneToMany(mappedBy = "innerAmenityCode")
-    private List<CampCaravanInnerAmenity> campCaravanInnerAmenityList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "innerAmenityCode")
-    private List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = new ArrayList<>();
 }
