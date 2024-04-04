@@ -285,3 +285,83 @@ INSERT INTO district_code(dist_cd_nm, prov_cd_id) VALUE ('합천군', 16);
 ### 제주도 시군구
 INSERT INTO district_code(dist_cd_nm, prov_cd_id) VALUE ('서귀포시', 17);
 INSERT INTO district_code(dist_cd_nm, prov_cd_id) VALUE ('제주시', 17);
+
+
+### 코드
+INSERT INTO reservation_code(resv_cd_nm) VALUE ('전화');
+INSERT INTO reservation_code(resv_cd_nm) VALUE ('현장');
+INSERT INTO reservation_code(resv_cd_nm) VALUE ('온라인예약대기');
+INSERT INTO reservation_code(resv_cd_nm) VALUE ('온라인실시간예약');
+
+INSERT INTO industry_code(indst_cd_nm) VALUE ('일반야영장');
+INSERT INTO industry_code(indst_cd_nm) VALUE ('자동차야영장');
+INSERT INTO industry_code(indst_cd_nm) VALUE ('글램핑');
+INSERT INTO industry_code(indst_cd_nm) VALUE ('카라반');
+
+INSERT INTO location_code(loct_cd_nm) VALUE ('해변');
+INSERT INTO location_code(loct_cd_nm) VALUE ('섬');
+INSERT INTO location_code(loct_cd_nm) VALUE ('산');
+INSERT INTO location_code(loct_cd_nm) VALUE ('숲');
+INSERT INTO location_code(loct_cd_nm) VALUE ('계곡');
+INSERT INTO location_code(loct_cd_nm) VALUE ('강');
+INSERT INTO location_code(loct_cd_nm) VALUE ('호수');
+INSERT INTO location_code(loct_cd_nm) VALUE ('도심');
+
+INSERT INTO theme_code(theme_cd_nm) VALUE ('일출명소');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('일몰명소');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('수상레저');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('항공레저');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('스키');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('낚시');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('액티비티');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('봄꽃여행');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('여름물놀이');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('가을단풍명소');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('겨울눈꽃명소');
+INSERT INTO theme_code(theme_cd_nm) VALUE ('걷기길');
+
+INSERT INTO season_code(season_cd_nm) VALUE ('봄');
+INSERT INTO season_code(season_cd_nm) VALUE ('여름');
+INSERT INTO season_code(season_cd_nm) VALUE ('가을');
+INSERT INTO season_code(season_cd_nm) VALUE ('겨울');
+
+INSERT INTO equipment_code(equip_cd_nm) VALUE ('텐트');
+INSERT INTO equipment_code(equip_cd_nm) VALUE ('침낭');
+INSERT INTO equipment_code(equip_cd_nm) VALUE ('릴선');
+INSERT INTO equipment_code(equip_cd_nm) VALUE ('식기');
+INSERT INTO equipment_code(equip_cd_nm) VALUE ('화로대');
+INSERT INTO equipment_code(equip_cd_nm) VALUE ('난방기구');
+
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('운동시설');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('전기');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('무선인터넷');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('장작판매');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('온수');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('트램폴린');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('물놀이장');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('놀이터');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('산책로');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('운동장');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('마트.편의점');
+
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('산책로');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('수영장');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('해수욕');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('계곡 물놀이');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('강/물놀이');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('수상레저');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('낚시');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('어린이놀이시설');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('청소년체험시설');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('농어촌체험시설');
+INSERT INTO nearby_facility_code(nrby_fclt_cd_nm) VALUE ('운동장');
+
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('TV');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('침대');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('유무선인터넷');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('에어컨');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('냉장고');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('난방기구');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('취사도구');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('내부화장실');
+INSERT INTO inner_amenity_code(inner_amnty_cd_nm) VALUE ('내부샤워실');
