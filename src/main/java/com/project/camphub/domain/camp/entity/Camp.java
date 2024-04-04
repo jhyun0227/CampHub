@@ -3,6 +3,7 @@ package com.project.camphub.domain.camp.entity;
 import com.project.camphub.domain.camp.entity.associations.*;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
+import com.project.camphub.domain.common.enumaration.YnType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -60,8 +61,9 @@ public class Camp {
     private LocalDateTime cpCreateDt;
     private LocalDateTime cpModDt;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
-    private String cpIsActive;
+    private YnType cpIsActive;
 
     //캠프 상세, 시설, 사이트
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)

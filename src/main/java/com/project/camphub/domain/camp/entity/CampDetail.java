@@ -1,6 +1,7 @@
 package com.project.camphub.domain.camp.entity;
 
 import com.project.camphub.domain.camp.enumeration.*;
+import com.project.camphub.domain.common.enumaration.YnType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,12 +60,14 @@ public class CampDetail {
     private LocalDateTime cpdOffStartDt;
     private LocalDateTime cpdOffEndDt;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
-    private String cpdCultEvYn;
+    private YnType cpdCultEvYn;
     @Column(length = 200)
     private String cpdCultEvNm;
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
-    private String cpdExprPrgmYn;
+    private YnType cpdExprPrgmYn;
     @Column(length = 200)
     private String cpdExprPrgmNm;
 
@@ -72,10 +75,13 @@ public class CampDetail {
     @Column(length = 10)
     private AnimalEntryType cpdAnimEntType;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
-    private String cpdPrvtCrvYn;
+    private YnType cpdPrvtCrvYn;
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
-    private String cpdPrvtTrlYn;
+    private YnType cpdPrvtTrlYn;
+    @Enumerated(EnumType.STRING)
     @Column(length = 1)
-    private String cpdInsuredYn;
+    private YnType cpdInsuredYn;
 }
