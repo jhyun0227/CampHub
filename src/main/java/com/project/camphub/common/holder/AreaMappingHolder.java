@@ -33,7 +33,7 @@ public class AreaMappingHolder {
         log.info("AreaMappingHolder.init() 실행");
 
         List<ProvinceCode> provCdList = provinceCodeRepository.findAll();
-        List<DistrictCode> distCdList = districtCodeRepository.findAll();
+        List<DistrictCode> distCdList = districtCodeRepository.findAllWithProvinceCode();
 
         setProvCdMap(provCdList);
         setDistCdMap(distCdList);
@@ -55,7 +55,10 @@ public class AreaMappingHolder {
     private void setDistCdMap(List<DistrictCode> distCdList) {
         distCdList.forEach(distCd -> {
             distCdMap.put(distCd.getDistCdId(), distCd);
-            nameToDistCdMap.put(distCd.getDistCdNm(), distCd);
+
+            //시군구의 경우 중복 명이 있기에 복합키를 만든다.
+            String uniqueKey = distCd.getProvinceCode().getProvCdNm() + ":" + distCd.getDistCdNm();
+            nameToDistCdMap.put(uniqueKey, distCd);
         });
     }
 }
