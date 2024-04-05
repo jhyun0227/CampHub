@@ -1,15 +1,23 @@
 package com.project.camphub.domain.camp.entity;
 
+import com.project.camphub.common.holder.AreaMappingHolder;
+import com.project.camphub.common.utils.CoordinateUtils;
+import com.project.camphub.common.utils.DateUtils;
 import com.project.camphub.domain.camp.entity.associations.*;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
 import com.project.camphub.domain.common.enumaration.YnType;
+import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.project.camphub.common.utils.CoordinateUtils.*;
+import static com.project.camphub.common.utils.DateUtils.*;
 
 @Entity
 @Getter
@@ -72,5 +80,39 @@ public class Camp {
     private CampFacility campFacility;
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
     private CampSite campSite;
+
+    public static Camp apiToEntity(OpenApiResponse.Item item, AreaMappingHolder areaMappingHolder) {
+        return Camp.builder()
+                .cpId(item.getContentId())
+                .cpName(item.getFacltNm())
+                .cpTel(item.getTel())
+                .cpHomepageUrl(item.getHomepage())
+                .cpResvUrl(item.getResveUrl())
+                .cpThumbUrl(item.getFirstImageUrl())
+                .provinceCode(areaMappingHolder.getNameToProvCdMap().get(item.getDoNm()))
+                .districtCode(areaMappingHolder.getNameToDistCdMap().get(item.getSigunguNm()))
+                .cpZipcode(item.getZipcode())
+                .cpAddr(item.getAddr1())
+                .cpAddrDetail(item.getAddr2())
+                .cpLon(parseLonOrLatToDouble(item.getMapX()))
+                .cpLat(parseLonOrLatToDouble(item.getMapY()))
+                .cpDirections(item.getDirection())
+                .cpTourBizNo(item.getTrsagntNo())
+                .cpBizNo(item.getBizrno())
+                .cpPermitDt(parseStringToLocalDateTime(item.getPrmisnDe()))
+                .cpCreateDt(parseStringToLocalDateTime(item.getCreatedtime()))
+                .cpModDt(parseStringToLocalDateTime(item.getModifiedtime()))
+                .cpIsActive(checkIsActive(item.getSyncStatus()))
+                .build();
+    }
+
+    private static YnType checkIsActive(String syncStatus) {
+        if ("D".equals(syncStatus)) {
+            return YnType.N;
+        }
+
+        return YnType.Y;
+    }
+
 
 }
