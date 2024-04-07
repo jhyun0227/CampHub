@@ -1,6 +1,6 @@
 package com.project.camphub.service.openapi;
 
-import com.project.camphub.common.registry.AreaMapRegistry;
+import com.project.camphub.domain.common.registry.AreaMapRegistry;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
 import com.project.camphub.domain.camp.entity.Camp;

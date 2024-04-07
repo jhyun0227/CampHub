@@ -1,4 +1,4 @@
-package com.project.camphub.common.registry;
+package com.project.camphub.domain.common.registry;
 
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
