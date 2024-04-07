@@ -1,6 +1,6 @@
 package com.project.camphub.service.openapi;
 
-import com.project.camphub.common.holder.AreaMappingHolder;
+import com.project.camphub.common.registry.AreaMapRegistry;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
 import com.project.camphub.domain.camp.entity.Camp;
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OpenApiService {
 
-    private final AreaMappingHolder areaMappingHolder;
+    private final AreaMapRegistry areaMapRegistry;
     private final PropertiesValue propertiesValue;
 
     private final int numOfRows = 100;
@@ -55,7 +55,7 @@ public class OpenApiService {
         List<OpenApiResponse.Item> itemList = body.getItems().getItem();
 
         for (OpenApiResponse.Item item : itemList) {
-            Camp camp = Camp.apiToEntity(item, areaMappingHolder);
+            Camp camp = Camp.apiToEntity(item, areaMapRegistry);
             CampDetail campDetail = CampDetail.apiToEntity(item, camp);
             CampFacility campFacility = CampFacility.apiToEntity(item, camp);
             CampSite campSite = CampSite.apiToEntity(item, camp);

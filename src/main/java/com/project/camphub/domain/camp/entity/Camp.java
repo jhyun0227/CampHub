@@ -1,20 +1,14 @@
 package com.project.camphub.domain.camp.entity;
 
-import com.project.camphub.common.holder.AreaMappingHolder;
-import com.project.camphub.common.utils.CoordinateUtils;
-import com.project.camphub.common.utils.DateUtils;
-import com.project.camphub.domain.camp.entity.associations.*;
+import com.project.camphub.common.registry.AreaMapRegistry;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
 import com.project.camphub.domain.common.enumaration.YnType;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.project.camphub.common.utils.CoordinateUtils.*;
 import static com.project.camphub.common.utils.DateUtils.*;
@@ -81,7 +75,7 @@ public class Camp {
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
     private CampSite campSite;
 
-    public static Camp apiToEntity(OpenApiResponse.Item item, AreaMappingHolder areaMappingHolder) {
+    public static Camp apiToEntity(OpenApiResponse.Item item, AreaMapRegistry areaMapRegistry) {
         return Camp.builder()
                 .cpId(item.getContentId())
                 .cpName(item.getFacltNm())
@@ -89,8 +83,8 @@ public class Camp {
                 .cpHomepageUrl(item.getHomepage())
                 .cpResvUrl(item.getResveUrl())
                 .cpThumbUrl(item.getFirstImageUrl())
-                .provinceCode(areaMappingHolder.getNameToProvCdMap().get(item.getDoNm()))
-                .districtCode(areaMappingHolder.getNameToDistCdMap().get(item.getSigunguNm()))
+                .provinceCode(areaMapRegistry.findByProvCdNm(item.getDoNm()))
+                .districtCode(areaMapRegistry.findByDistCdNm(item.getDoNm(), item.getSigunguNm()))
                 .cpZipcode(item.getZipcode())
                 .cpAddr(item.getAddr1())
                 .cpAddrDetail(item.getAddr2())

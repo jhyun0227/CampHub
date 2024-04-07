@@ -1,4 +1,4 @@
-package com.project.camphub.common.holder;
+package com.project.camphub.common.registry;
 
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
@@ -18,7 +18,7 @@ import java.util.Map;
 @Getter
 @Component
 @RequiredArgsConstructor
-public class AreaMappingHolder {
+public class AreaMapRegistry {
 
     private final ProvinceCodeRepository provinceCodeRepository;
     private final DistrictCodeRepository districtCodeRepository;
@@ -30,7 +30,7 @@ public class AreaMappingHolder {
 
     @PostConstruct
     public void init() {
-        log.info("AreaMappingHolder.init() 실행");
+        log.info("AreaMapRegistry.init() 실행");
 
         List<ProvinceCode> provCdList = provinceCodeRepository.findAll();
         List<DistrictCode> distCdList = districtCodeRepository.findAllWithProvinceCode();
@@ -42,7 +42,7 @@ public class AreaMappingHolder {
         log.info("nameToProvCdMap.size()={}", nameToProvCdMap.size());
         log.info("distCdMap.size()={}", distCdMap.size());
         log.info("nameToDistCdMap.size()={}", nameToDistCdMap.size());
-        log.info("AreaMappingHolder.init() 종료");
+        log.info("AreaMapRegistry.init() 종료");
     }
 
     private void setProvCdMap(List<ProvinceCode> provCdList) {
@@ -60,5 +60,14 @@ public class AreaMappingHolder {
             String uniqueKey = distCd.getProvinceCode().getProvCdNm() + ":" + distCd.getDistCdNm();
             nameToDistCdMap.put(uniqueKey, distCd);
         });
+    }
+
+    public ProvinceCode findByProvCdNm(String provCdNm) {
+        return nameToProvCdMap.get(provCdNm);
+    }
+
+    public DistrictCode findByDistCdNm(String provCdNm, String distCdNm) {
+        String key = provCdNm + ":" + distCdNm;
+        return nameToDistCdMap.get(key);
     }
 }
