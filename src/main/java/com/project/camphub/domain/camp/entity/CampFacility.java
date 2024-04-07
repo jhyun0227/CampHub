@@ -1,8 +1,11 @@
 package com.project.camphub.domain.camp.entity;
 
 import com.project.camphub.domain.camp.enumeration.BrazierType;
+import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;
+
+import static java.lang.Integer.*;
 
 @Entity
 @Getter
@@ -45,4 +48,26 @@ public class CampFacility {
     private Integer cpfFireWaterCnt;
     private Integer cpfFireSandCnt;
     private Integer cpfFireSensorCnt;
+
+    public static CampFacility apiToEntity(OpenApiResponse.Item item, Camp camp) {
+        return CampFacility.builder()
+                .camp(camp)
+                .cpfTotalArea(parseInt(item.getAllar()))
+                .cpfAmntyEtc(item.getSbrsEtc())
+                .cpfNrbyFcltEtc(item.getPosblFcltyEtc())
+                .cpfGnrlSiteCnt(parseInt(item.getGnrlSiteCo()))
+                .cpfCarSiteCnt(parseInt(item.getAutoSiteCo()))
+                .cpfGlampSiteCnt(parseInt(item.getGlampSiteCo()))
+                .cpfCrvSiteCnt(parseInt(item.getCaravSiteCo()))
+                .cpfPrvtCrvSiteCnt(parseInt(item.getIndvdlCaravSiteCo()))
+                .cpfBrazierType(BrazierType.findByDescription(item.getBrazierCl()))
+                .cpfSinkCnt(parseInt(item.getWtrplCo()))
+                .cpfToiletCnt(parseInt(item.getToiletCo()))
+                .cpfSwrmCnt(parseInt(item.getSwrmCo()))
+                .cpfFireExtCnt(parseInt(item.getExtshrCo()))
+                .cpfFireWaterCnt(parseInt(item.getFrprvtWrppCo()))
+                .cpfFireSandCnt(parseInt(item.getFrprvtSandCo()))
+                .cpfFireSensorCnt(parseInt(item.getFireSensorCo()))
+                .build();
+    }
 }

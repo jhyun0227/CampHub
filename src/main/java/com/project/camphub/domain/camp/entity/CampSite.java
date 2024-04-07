@@ -1,5 +1,6 @@
 package com.project.camphub.domain.camp.entity;
 
+import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -46,4 +47,25 @@ public class CampSite {
     private Integer cpsBttmTechCnt;
     private Integer cpsBttmGravelCnt;
     private Integer cpsBttmDirtCnt;
+
+    public static CampSite apiToEntity(OpenApiResponse.Item item, Camp camp) {
+        return CampSite.builder()
+                .camp(camp)
+                .cpsSiteDist(Integer.parseInt(item.getSitedStnc()))
+                .cpsSiteSize1Cnt(Integer.parseInt(item.getSiteMg1Co()))
+                .cpsSiteSize1Width(Integer.parseInt(item.getSiteMg1Width()))
+                .cpsSiteSize1Length(Integer.parseInt(item.getSiteMg1Vrticl()))
+                .cpsSiteSize2Cnt(Integer.parseInt(item.getSiteMg2Co()))
+                .cpsSiteSize2Width(Integer.parseInt(item.getSiteMg2Width()))
+                .cpsSiteSize2Length(Integer.parseInt(item.getSiteMg2Vrticl()))
+                .cpsSiteSize3Cnt(Integer.parseInt(item.getSiteMg3Co()))
+                .cpsSiteSize3Width(Integer.parseInt(item.getSiteMg3Width()))
+                .cpsSiteSize3Length(Integer.parseInt(item.getSiteMg3Vrticl()))
+                .cpsBttmGrassCnt(Integer.parseInt(item.getSiteBottomCl1()))
+                .cpsBttmStnCnt(Integer.parseInt(item.getSiteBottomCl2()))
+                .cpsBttmTechCnt(Integer.parseInt(item.getSiteBottomCl3()))
+                .cpsBttmGravelCnt(Integer.parseInt(item.getSiteBottomCl4()))
+                .cpsBttmDirtCnt(Integer.parseInt(item.getSiteBottomCl5()))
+                .build();
+    }
 }

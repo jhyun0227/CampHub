@@ -10,6 +10,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 import static com.project.camphub.common.utils.DateUtils.*;
+import static java.lang.Integer.*;
 
 @Entity
 @Getter
@@ -101,7 +102,7 @@ public class CampDetail {
                 .cpdMngDivType(ManagingDivType.findByDescription(item.getMangeDivNm()))
                 .cpdMngOrg(item.getMgcDiv())
                 .cpdFcltDivType(FacilityDivType.findByDescription(item.getFacltDivNm()))
-                .cpdResStaffCnt(Integer.parseInt(item.getManageNmpr()))
+                .cpdResStaffCnt(parseInt(item.getManageNmpr()))
                 .cpdOffStartDt(parseStringToLocalDateTime(item.getHvofBgnde()))
                 .cpdOffEndDt(parseStringToLocalDateTime(item.getHvofEnddle()))
                 .cpdCultEvYn(YnType.findByDescription(item.getClturEventAt()))
