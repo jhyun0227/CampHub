@@ -2,6 +2,9 @@ package com.project.camphub.domain.camp.enumeration;
 
 import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 public enum AnimalEntryType {
 
@@ -14,4 +17,15 @@ public enum AnimalEntryType {
         this.description = description;
     }
 
+    private static final Map<String, AnimalEntryType> ANIMAL_ENTRY_TYPE_MAP = new HashMap<>();
+
+    static {
+        for (AnimalEntryType animalEntryType : values()) {
+            ANIMAL_ENTRY_TYPE_MAP.put(animalEntryType.getDescription(), animalEntryType);
+        }
+    }
+
+    public static AnimalEntryType findByDescription(String description) {
+        return ANIMAL_ENTRY_TYPE_MAP.get(description);
+    }
 }

@@ -4,6 +4,7 @@ import com.project.camphub.common.holder.AreaMappingHolder;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
 import com.project.camphub.domain.camp.entity.Camp;
+import com.project.camphub.domain.camp.entity.CampDetail;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,8 @@ public class OpenApiService {
 
         for (OpenApiResponse.Item item : itemList) {
             Camp camp = Camp.apiToEntity(item, areaMappingHolder);
+            CampDetail campDetail = CampDetail.apiToEntity(item, camp);
+
         }
 
         log.info("page={}, insertCampList 종료", pageNo);
