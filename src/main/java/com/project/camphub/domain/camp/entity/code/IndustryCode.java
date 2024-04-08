@@ -21,4 +21,7 @@ public class IndustryCode {
     @Column(length = 30)
     private String indstCdNm;
 
+    public IndustryCode(String indstCdNm) {
+        this.indstCdNm = indstCdNm;
+    }
 }

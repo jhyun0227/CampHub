@@ -27,4 +27,9 @@ public class CampIndustry {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indst_cd_id")
     private IndustryCode industryCode;
+
+    public CampIndustry(Camp camp, IndustryCode industryCode) {
+        this.camp = camp;
+        this.industryCode = industryCode;
+    }
 }

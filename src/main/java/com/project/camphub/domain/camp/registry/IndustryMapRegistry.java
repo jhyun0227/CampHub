@@ -50,4 +50,9 @@ public class IndustryMapRegistry {
     public IndustryCode findByIndstCdNm(String indstCdNm) {
         return nameToIndstCdMap.get(indstCdNm);
     }
+
+    public void addIndustryCodeMaps(IndustryCode industryCode) {
+        indstCdMap.put(industryCode.getIndstCdId(), industryCode);
+        nameToIndstCdMap.put(industryCode.getIndstCdNm(), industryCode);
+    }
 }
