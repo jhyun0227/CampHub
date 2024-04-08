@@ -21,4 +21,7 @@ public class AmenityCode {
     @Column(length = 30)
     private String amntyCdNm;
 
+    public AmenityCode(String amntyCdNm) {
+        this.amntyCdNm = amntyCdNm;
+    }
 }
