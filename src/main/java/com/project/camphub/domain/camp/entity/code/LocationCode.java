@@ -21,4 +21,7 @@ public class LocationCode {
     @Column(length = 30)
     private String loctCdNm;
 
+    public LocationCode(String loctCdNm) {
+        this.loctCdNm = loctCdNm;
+    }
 }

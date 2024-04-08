@@ -50,4 +50,9 @@ public class LocationMapRegistry {
     public LocationCode findByLoctCdNm(String loctCdNm) {
         return nameToLoctCdMap.get(loctCdNm);
     }
+
+    public void addLocationCodeMaps(LocationCode locationCode) {
+        loctCdMap.put(locationCode.getLoctCdId(), locationCode);
+        nameToLoctCdMap.put(locationCode.getLoctCdNm(), locationCode);
+    }
 }
