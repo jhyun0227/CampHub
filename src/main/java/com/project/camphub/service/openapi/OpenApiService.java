@@ -1,6 +1,5 @@
 package com.project.camphub.service.openapi;
 
-import com.project.camphub.domain.camp.registry.*;
 import com.project.camphub.domain.common.registry.AreaMapRegistry;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
@@ -9,7 +8,7 @@ import com.project.camphub.domain.camp.entity.CampDetail;
 import com.project.camphub.domain.camp.entity.CampFacility;
 import com.project.camphub.domain.camp.entity.CampSite;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
-import com.project.camphub.repository.camp.code.ReservationCodeRepository;
+import com.project.camphub.service.camp.helper.CampCodeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,8 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class OpenApiService {
+
+    private List<CampCodeHelper> campCodeHelpers;
 
     private final AreaMapRegistry areaMapRegistry;
     private final PropertiesValue propertiesValue;
@@ -83,6 +84,10 @@ public class OpenApiService {
             CampDetail campDetail = CampDetail.apiToEntity(item, camp);
             CampFacility campFacility = CampFacility.apiToEntity(item, camp);
             CampSite campSite = CampSite.apiToEntity(item, camp);
+
+            campCodeHelpers.forEach(campCodeHelper -> {
+                campCodeHelper.getCampCodeEntity(item, camp);
+            });
         }
 
         log.info("page={}, insertCampList 종료", pageNo);

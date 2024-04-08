@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampEquipmentRental;
 import com.project.camphub.domain.camp.entity.code.EquipmentCode;
 import com.project.camphub.domain.camp.registry.EquipmentMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampEquipmentRentalRepository;
 import com.project.camphub.repository.camp.code.EquipmentCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
 
     private final EquipmentMapRegistry equipmentMapRegistry;
     private final EquipmentCodeRepository equipmentCodeRepository;
+    private final CampEquipmentRentalRepository campEquipmentRentalRepository;
 
     @Override
     public List<CampEquipmentRental> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
     @Override
     public void addCodeToMap(EquipmentCode code) {
         equipmentMapRegistry.addEquipmentCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampEquipmentRental> campCodeList) {
+        campEquipmentRentalRepository.saveAll(campCodeList);
     }
 }

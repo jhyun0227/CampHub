@@ -10,6 +10,7 @@ public interface CampCodeHelper<T, D> {
     List<T> getCampCodeEntity(OpenApiResponse.Item item, Camp camp);
     void saveCode(D code);
     void addCodeToMap(D code);
+    void saveCampCode(List<T> campCodeList);
 
     default String[] convertStringToArray(String stringValue) {
         String[] values = stringValue.split(",");

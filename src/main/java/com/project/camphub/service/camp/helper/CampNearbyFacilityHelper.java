@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampNearbyFacility;
 import com.project.camphub.domain.camp.entity.code.NearbyFacilityCode;
 import com.project.camphub.domain.camp.registry.NearbyFacilityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampNearbyFacilityRepository;
 import com.project.camphub.repository.camp.code.NearbyFacilityCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
 
     private final NearbyFacilityMapRegistry nearbyFacilityMapRegistry;
     private final NearbyFacilityCodeRepository nearbyFacilityCodeRepository;
+    private final CampNearbyFacilityRepository campNearbyFacilityRepository;
 
     @Override
     public List<CampNearbyFacility> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
     @Override
     public void addCodeToMap(NearbyFacilityCode code) {
         nearbyFacilityMapRegistry.addNearbyFacilityCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampNearbyFacility> campCodeList) {
+        campNearbyFacilityRepository.saveAll(campCodeList);
     }
 }

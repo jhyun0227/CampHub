@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampGlampingInnerAmen
 import com.project.camphub.domain.camp.entity.code.InnerAmenityCode;
 import com.project.camphub.domain.camp.registry.InnerAmenityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampGlampingInnerAmenityRepository;
 import com.project.camphub.repository.camp.code.InnerAmenityCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampGlampingInnerAmenityHelper implements CampCodeHelper<CampGlampi
 
     private final InnerAmenityMapRegistry innerAmenityMapRegistry;
     private final InnerAmenityCodeRepository innerAmenityCodeRepository;
+    private final CampGlampingInnerAmenityRepository campGlampingInnerAmenityRepository;
 
     @Override
     public List<CampGlampingInnerAmenity> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampGlampingInnerAmenityHelper implements CampCodeHelper<CampGlampi
     @Override
     public void addCodeToMap(InnerAmenityCode code) {
         innerAmenityMapRegistry.addInnerAmenityCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampGlampingInnerAmenity> campCodeList) {
+        campGlampingInnerAmenityRepository.saveAll(campCodeList);
     }
 }

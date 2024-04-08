@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampReservation;
 import com.project.camphub.domain.camp.entity.code.ReservationCode;
 import com.project.camphub.domain.camp.registry.ReservationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampReservationRepository;
 import com.project.camphub.repository.camp.code.ReservationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
 
     private final ReservationMapRegistry reservationMapRegistry;
     private final ReservationCodeRepository reservationCodeRepository;
+    private final CampReservationRepository campReservationRepository;
 
     @Override
     public List<CampReservation> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
     @Override
     public void addCodeToMap(ReservationCode code) {
         reservationMapRegistry.addReservationCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampReservation> campCodeList) {
+        campReservationRepository.saveAll(campCodeList);
     }
 }

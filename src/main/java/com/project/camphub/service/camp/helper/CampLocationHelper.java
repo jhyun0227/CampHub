@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampLocation;
 import com.project.camphub.domain.camp.entity.code.LocationCode;
 import com.project.camphub.domain.camp.registry.LocationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampLocationRepository;
 import com.project.camphub.repository.camp.code.LocationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
 
     private final LocationMapRegistry locationMapRegistry;
     private final LocationCodeRepository locationCodeRepository;
+    private final CampLocationRepository campLocationRepository;
 
     @Override
     public List<CampLocation> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
     @Override
     public void addCodeToMap(LocationCode code) {
         locationMapRegistry.addLocationCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampLocation> campCodeList) {
+        campLocationRepository.saveAll(campCodeList);
     }
 }

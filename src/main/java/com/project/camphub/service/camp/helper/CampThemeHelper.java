@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampTheme;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
 import com.project.camphub.domain.camp.registry.ThemeMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampThemeRepository;
 import com.project.camphub.repository.camp.code.ThemeCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
 
     private final ThemeMapRegistry themeMapRegistry;
     private final ThemeCodeRepository themeCodeRepository;
+    private final CampThemeRepository campThemeRepository;
 
     @Override
     public List<CampTheme> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
     @Override
     public void addCodeToMap(ThemeCode code) {
         themeMapRegistry.addThemeCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampTheme> campCodeList) {
+        campThemeRepository.saveAll(campCodeList);
     }
 }

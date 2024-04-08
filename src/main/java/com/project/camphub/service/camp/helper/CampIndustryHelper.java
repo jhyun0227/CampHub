@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampIndustry;
 import com.project.camphub.domain.camp.entity.code.IndustryCode;
 import com.project.camphub.domain.camp.registry.IndustryMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampIndustryRepository;
 import com.project.camphub.repository.camp.code.IndustryCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
 
     private final IndustryMapRegistry industryMapRegistry;
     private final IndustryCodeRepository industryCodeRepository;
+    private final CampIndustryRepository campIndustryRepository;
 
     @Override
     public List<CampIndustry> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
     @Override
     public void addCodeToMap(IndustryCode code) {
         industryMapRegistry.addIndustryCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampIndustry> campCodeList) {
+        campIndustryRepository.saveAll(campCodeList);
     }
 }

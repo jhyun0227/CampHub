@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampAmenity;
 import com.project.camphub.domain.camp.entity.code.AmenityCode;
 import com.project.camphub.domain.camp.registry.AmenityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampAmenityRepository;
 import com.project.camphub.repository.camp.code.AmenityCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
 
     private final AmenityMapRegistry amenityMapRegistry;
     private final AmenityCodeRepository amenityCodeRepository;
+    private final CampAmenityRepository campAmenityRepository;
 
     @Override
     public List<CampAmenity> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
     @Override
     public void addCodeToMap(AmenityCode code) {
         amenityMapRegistry.addAmenityCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampAmenity> campCodeList) {
+        campAmenityRepository.saveAll(campCodeList);
     }
 }

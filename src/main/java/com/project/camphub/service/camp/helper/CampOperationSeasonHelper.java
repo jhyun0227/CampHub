@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.associations.CampOperationSeason;
 import com.project.camphub.domain.camp.entity.code.SeasonCode;
 import com.project.camphub.domain.camp.registry.SeasonMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampOperationSeasonRepository;
 import com.project.camphub.repository.camp.code.SeasonCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class CampOperationSeasonHelper implements CampCodeHelper<CampOperationSe
 
     private final SeasonMapRegistry seasonMapRegistry;
     private final SeasonCodeRepository seasonCodeRepository;
+    private final CampOperationSeasonRepository campOperationSeasonRepository;
 
     @Override
     public List<CampOperationSeason> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
@@ -60,5 +62,10 @@ public class CampOperationSeasonHelper implements CampCodeHelper<CampOperationSe
     @Override
     public void addCodeToMap(SeasonCode code) {
         seasonMapRegistry.addSeasonCodeMaps(code);
+    }
+
+    @Override
+    public void saveCampCode(List<CampOperationSeason> campCodeList) {
+        campOperationSeasonRepository.saveAll(campCodeList);
     }
 }
