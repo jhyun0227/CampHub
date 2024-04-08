@@ -27,4 +27,9 @@ public class CampNearbyFacility {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nrby_fclt_cd_id")
     private NearbyFacilityCode nearbyFacilityCode;
+
+    public CampNearbyFacility(Camp camp, NearbyFacilityCode nearbyFacilityCode) {
+        this.camp = camp;
+        this.nearbyFacilityCode = nearbyFacilityCode;
+    }
 }

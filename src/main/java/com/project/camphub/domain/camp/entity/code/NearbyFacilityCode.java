@@ -21,4 +21,7 @@ public class NearbyFacilityCode {
     @Column(length = 30)
     private String nrbyFcltCdNm;
 
+    public NearbyFacilityCode(String nrbyFcltCdNm) {
+        this.nrbyFcltCdNm = nrbyFcltCdNm;
+    }
 }

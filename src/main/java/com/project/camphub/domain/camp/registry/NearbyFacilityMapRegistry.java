@@ -50,4 +50,9 @@ public class NearbyFacilityMapRegistry {
     public NearbyFacilityCode findByNrbyFcltCdNm(String nrbyFcltCdNm) {
         return nameToNrbyFcltCdMap.get(nrbyFcltCdNm);
     }
+
+    public void addNearbyFacilityCodeMaps(NearbyFacilityCode nearbyFacilityCode) {
+        nrbyFcltCdMap.put(nearbyFacilityCode.getNrbyFcltCdId(), nearbyFacilityCode);
+        nameToNrbyFcltCdMap.put(nearbyFacilityCode.getNrbyFcltCdNm(), nearbyFacilityCode);
+    }
 }
