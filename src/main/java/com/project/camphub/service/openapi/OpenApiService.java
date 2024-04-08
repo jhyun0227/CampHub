@@ -8,6 +8,10 @@ import com.project.camphub.domain.camp.entity.CampDetail;
 import com.project.camphub.domain.camp.entity.CampFacility;
 import com.project.camphub.domain.camp.entity.CampSite;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.CampDetailRepository;
+import com.project.camphub.repository.camp.CampFacilityRepository;
+import com.project.camphub.repository.camp.CampRepository;
+import com.project.camphub.repository.camp.CampSiteRepository;
 import com.project.camphub.service.camp.helper.CampCodeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +30,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OpenApiService {
 
-    private final List<CampCodeHelper> campCodeHelpers;
+    private final CampRepository campRepository;
+    private final CampDetailRepository campDetailRepository;
+    private final CampFacilityRepository campFacilityRepository;
+    private final CampSiteRepository campSiteRepository;
 
+    private final List<CampCodeHelper> campCodeHelpers;
     private final AreaMapRegistry areaMapRegistry;
     private final PropertiesValue propertiesValue;
 
@@ -81,9 +89,16 @@ public class OpenApiService {
 
         for (OpenApiResponse.Item item : itemList) {
             Camp camp = Camp.apiToEntity(item, areaMapRegistry);
+            campRepository.save(camp);
+
             CampDetail campDetail = CampDetail.apiToEntity(item, camp);
+            campDetailRepository.save(campDetail);
+
             CampFacility campFacility = CampFacility.apiToEntity(item, camp);
+            campFacilityRepository.save(campFacility);
+
             CampSite campSite = CampSite.apiToEntity(item, camp);
+            campSiteRepository.save(campSite);
 
             campCodeHelpers.forEach(campCodeHelper -> {
                 campCodeHelper.saveCampCode(
