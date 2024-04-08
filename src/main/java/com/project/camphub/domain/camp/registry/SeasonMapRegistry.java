@@ -50,4 +50,9 @@ public class SeasonMapRegistry {
     public SeasonCode findBySeasonCdNm(String seasonCdNm) {
         return nameToSeasonCdMap.get(seasonCdNm);
     }
+
+    public void addSeasonCodeMaps(SeasonCode seasonCode) {
+        seasonCdMap.put(seasonCode.getSeasonCdId(), seasonCode);
+        nameToSeasonCdMap.put(seasonCode.getSeasonCdNm(), seasonCode);
+    }
 }

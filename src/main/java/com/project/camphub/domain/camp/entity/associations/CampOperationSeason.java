@@ -27,4 +27,9 @@ public class CampOperationSeason {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "season_cd_id")
     private SeasonCode seasonCode;
+
+    public CampOperationSeason(Camp camp, SeasonCode seasonCode) {
+        this.camp = camp;
+        this.seasonCode = seasonCode;
+    }
 }

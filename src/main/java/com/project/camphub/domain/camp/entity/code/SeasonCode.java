@@ -22,4 +22,7 @@ public class SeasonCode {
     @Column(length = 30)
     private String seasonCdNm;
 
+    public SeasonCode(String seasonCdNm) {
+        this.seasonCdNm = seasonCdNm;
+    }
 }
