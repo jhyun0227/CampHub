@@ -21,4 +21,7 @@ public class ThemeCode {
     @Column(length = 30)
     private String themeCdNm;
 
+    public ThemeCode(String themeCdNm) {
+        this.themeCdNm = themeCdNm;
+    }
 }

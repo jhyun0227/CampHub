@@ -27,4 +27,9 @@ public class CampTheme {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_cd_id")
     private ThemeCode themeCode;
+
+    public CampTheme(Camp camp, ThemeCode themeCode) {
+        this.camp = camp;
+        this.themeCode = themeCode;
+    }
 }

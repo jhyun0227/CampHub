@@ -50,4 +50,9 @@ public class ThemeMapRegistry {
     public ThemeCode findByThemeCdNm(String themeCdNm) {
         return nameToThemeCdMap.get(themeCdNm);
     }
+
+    public void addThemeCodeMaps(ThemeCode themeCode) {
+        themeCdMap.put(themeCode.getThemeCdId(), themeCode);
+        nameToThemeCdMap.put(themeCode.getThemeCdNm(), themeCode);
+    }
 }
