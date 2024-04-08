@@ -50,4 +50,9 @@ public class AmenityMapRegistry {
     public AmenityCode findByAmntyCdNm(String amntyCdNm) {
         return nameToAmntyCdMap.get(amntyCdNm);
     }
+
+    public void addAmenityCodeMaps (AmenityCode amenityCode) {
+        amntyCdMap.put(amenityCode.getAmntyCdId(), amenityCode);
+        nameToAmntyCdMap.put(amenityCode.getAmntyCdNm(), amenityCode);
+    }
 }

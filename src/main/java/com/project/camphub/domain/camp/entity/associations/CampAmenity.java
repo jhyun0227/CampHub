@@ -27,4 +27,9 @@ public class CampAmenity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "amnty_cd_id")
     private AmenityCode amenityCode;
+
+    public CampAmenity(Camp camp, AmenityCode amenityCode) {
+        this.camp = camp;
+        this.amenityCode = amenityCode;
+    }
 }

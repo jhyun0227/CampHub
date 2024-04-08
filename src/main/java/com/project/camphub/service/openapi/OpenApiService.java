@@ -1,5 +1,6 @@
 package com.project.camphub.service.openapi;
 
+import com.project.camphub.domain.camp.registry.*;
 import com.project.camphub.domain.common.registry.AreaMapRegistry;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
@@ -8,6 +9,7 @@ import com.project.camphub.domain.camp.entity.CampDetail;
 import com.project.camphub.domain.camp.entity.CampFacility;
 import com.project.camphub.domain.camp.entity.CampSite;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.code.ReservationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,24 +48,6 @@ public class OpenApiService {
                 .subscribe(this::insertCampList);
     }
 
-    private void insertCampList(OpenApiResponse openApiResponse) {
-        OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
-        int pageNo = body.getPageNo();
-
-        log.info("page={}, insertCampList 진입", pageNo);
-
-        List<OpenApiResponse.Item> itemList = body.getItems().getItem();
-
-        for (OpenApiResponse.Item item : itemList) {
-            Camp camp = Camp.apiToEntity(item, areaMapRegistry);
-            CampDetail campDetail = CampDetail.apiToEntity(item, camp);
-            CampFacility campFacility = CampFacility.apiToEntity(item, camp);
-            CampSite campSite = CampSite.apiToEntity(item, camp);
-        }
-
-        log.info("page={}, insertCampList 종료", pageNo);
-    }
-
     private Mono<OpenApiResponse> fetchCampList(int numOfRows, int page) {
         WebClient webClient = WebClientFactory.createWebClient(propertiesValue.getOpenApiEndPoint());
 
@@ -84,5 +68,23 @@ public class OpenApiService {
 
     private int calculatePagesRequired(int rowCount) {
         return rowCount%numOfRows==0 ? rowCount/numOfRows : (rowCount/numOfRows)+1;
+    }
+
+    private void insertCampList(OpenApiResponse openApiResponse) {
+        OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
+        int pageNo = body.getPageNo();
+
+        log.info("page={}, insertCampList 진입", pageNo);
+
+        List<OpenApiResponse.Item> itemList = body.getItems().getItem();
+
+        for (OpenApiResponse.Item item : itemList) {
+            Camp camp = Camp.apiToEntity(item, areaMapRegistry);
+            CampDetail campDetail = CampDetail.apiToEntity(item, camp);
+            CampFacility campFacility = CampFacility.apiToEntity(item, camp);
+            CampSite campSite = CampSite.apiToEntity(item, camp);
+        }
+
+        log.info("page={}, insertCampList 종료", pageNo);
     }
 }
