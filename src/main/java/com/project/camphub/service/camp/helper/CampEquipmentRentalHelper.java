@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampEquipmentRental;
+import com.project.camphub.domain.camp.entity.associations.id.CampEquipmentRentalId;
 import com.project.camphub.domain.camp.entity.code.EquipmentCode;
 import com.project.camphub.domain.camp.registry.EquipmentMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
                 saveCode(saveEquipmentCode);
                 addCodeToMap(saveEquipmentCode);
 
-                resultList.add(new CampEquipmentRental(camp, saveEquipmentCode));
+                resultList.add(createCampCode(camp, saveEquipmentCode));
             } else {
-                resultList.add(new CampEquipmentRental(camp, equipmentCode.get()));
+                resultList.add(createCampCode(camp, equipmentCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
     @Override
     public void saveCampCode(List<CampEquipmentRental> campCodeList) {
         campEquipmentRentalRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampEquipmentRental createCampCode(Camp camp, EquipmentCode code) {
+        CampEquipmentRentalId id = new CampEquipmentRentalId(camp.getCpId(), code.getEquipCdId());
+        return new CampEquipmentRental(id, camp, code);
     }
 }

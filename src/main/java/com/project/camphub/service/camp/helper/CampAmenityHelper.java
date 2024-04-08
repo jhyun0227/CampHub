@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampAmenity;
+import com.project.camphub.domain.camp.entity.associations.id.CampAmenityId;
 import com.project.camphub.domain.camp.entity.code.AmenityCode;
 import com.project.camphub.domain.camp.registry.AmenityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
                 saveCode(saveAmenityCode);
                 addCodeToMap(saveAmenityCode);
 
-                resultList.add(new CampAmenity(camp, saveAmenityCode));
+                resultList.add(createCampCode(camp, saveAmenityCode));
             } else {
-                resultList.add(new CampAmenity(camp, amenityCode.get()));
+                resultList.add(createCampCode(camp, amenityCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
     @Override
     public void saveCampCode(List<CampAmenity> campCodeList) {
         campAmenityRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampAmenity createCampCode(Camp camp, AmenityCode code) {
+        CampAmenityId id = new CampAmenityId(camp.getCpId(), code.getAmntyCdId());
+        return new CampAmenity(id, camp, code);
     }
 }

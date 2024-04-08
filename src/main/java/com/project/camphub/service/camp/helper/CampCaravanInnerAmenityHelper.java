@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampCaravanInnerAmenity;
+import com.project.camphub.domain.camp.entity.associations.id.CampCaravanInnerAmenityId;
 import com.project.camphub.domain.camp.entity.code.InnerAmenityCode;
 import com.project.camphub.domain.camp.registry.InnerAmenityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
                 saveCode(saveInnerAmenityCode);
                 addCodeToMap(saveInnerAmenityCode);
 
-                resultList.add(new CampCaravanInnerAmenity(camp, saveInnerAmenityCode));
+                resultList.add(createCampCode(camp, saveInnerAmenityCode));
             } else {
-                resultList.add(new CampCaravanInnerAmenity(camp, innerAmenityCode.get()));
+                resultList.add(createCampCode(camp, innerAmenityCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
     @Override
     public void saveCampCode(List<CampCaravanInnerAmenity> campCodeList) {
         campCaravanInnerAmenityRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampCaravanInnerAmenity createCampCode(Camp camp, InnerAmenityCode code) {
+        CampCaravanInnerAmenityId id = new CampCaravanInnerAmenityId(camp.getCpId(), code.getInnerAmntyCdId());
+        return new CampCaravanInnerAmenity(id, camp, code);
     }
 }

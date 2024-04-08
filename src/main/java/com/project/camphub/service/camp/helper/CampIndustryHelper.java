@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampIndustry;
+import com.project.camphub.domain.camp.entity.associations.id.CampIndustryId;
 import com.project.camphub.domain.camp.entity.code.IndustryCode;
 import com.project.camphub.domain.camp.registry.IndustryMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
                 saveCode(saveIndustryCode);
                 addCodeToMap(saveIndustryCode);
 
-                resultList.add(new CampIndustry(camp, saveIndustryCode));
+                resultList.add(createCampCode(camp, saveIndustryCode));
             } else {
-                resultList.add(new CampIndustry(camp, industryCode.get()));
+                resultList.add(createCampCode(camp, industryCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
     @Override
     public void saveCampCode(List<CampIndustry> campCodeList) {
         campIndustryRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampIndustry createCampCode(Camp camp, IndustryCode code) {
+        CampIndustryId id = new CampIndustryId(camp.getCpId(), code.getIndstCdId());
+        return new CampIndustry(id, camp, code);
     }
 }

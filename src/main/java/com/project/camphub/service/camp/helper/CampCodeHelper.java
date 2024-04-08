@@ -11,6 +11,7 @@ public interface CampCodeHelper<T, D> {
     void saveCode(D code);
     void addCodeToMap(D code);
     void saveCampCode(List<T> campCodeList);
+    T createCampCode(Camp camp, D code);
 
     default String[] convertStringToArray(String stringValue) {
         String[] values = stringValue.split(",");

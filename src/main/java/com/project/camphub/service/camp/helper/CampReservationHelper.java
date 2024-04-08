@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampReservation;
+import com.project.camphub.domain.camp.entity.associations.id.CampReservationId;
 import com.project.camphub.domain.camp.entity.code.ReservationCode;
 import com.project.camphub.domain.camp.registry.ReservationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
                 saveCode(saveReservationCode);
                 addCodeToMap(saveReservationCode);
 
-                resultList.add(new CampReservation(camp, saveReservationCode));
+                resultList.add(createCampCode(camp, saveReservationCode));
             } else {
-                resultList.add(new CampReservation(camp, reservationCode.get()));
+                resultList.add(createCampCode(camp, reservationCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
     @Override
     public void saveCampCode(List<CampReservation> campCodeList) {
         campReservationRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampReservation createCampCode(Camp camp, ReservationCode code) {
+        CampReservationId id = new CampReservationId(camp.getCpId(), code.getResvCdId());
+        return new CampReservation(id, camp, code);
     }
 }

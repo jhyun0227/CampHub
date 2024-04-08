@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampNearbyFacility;
+import com.project.camphub.domain.camp.entity.associations.id.CampNearbyFacilityId;
 import com.project.camphub.domain.camp.entity.code.NearbyFacilityCode;
 import com.project.camphub.domain.camp.registry.NearbyFacilityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
                 saveCode(saveNearbyFacilityCode);
                 addCodeToMap(saveNearbyFacilityCode);
 
-                resultList.add(new CampNearbyFacility(camp, saveNearbyFacilityCode));
+                resultList.add(createCampCode(camp, saveNearbyFacilityCode));
             } else {
-                resultList.add(new CampNearbyFacility(camp, nearbyFacilityCode.get()));
+                resultList.add(createCampCode(camp, nearbyFacilityCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
     @Override
     public void saveCampCode(List<CampNearbyFacility> campCodeList) {
         campNearbyFacilityRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampNearbyFacility createCampCode(Camp camp, NearbyFacilityCode code) {
+        CampNearbyFacilityId id = new CampNearbyFacilityId(camp.getCpId(), code.getNrbyFcltCdId());
+        return new CampNearbyFacility(id, camp, code);
     }
 }

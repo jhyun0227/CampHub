@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampTravelSeason;
+import com.project.camphub.domain.camp.entity.associations.id.CampTravelSeasonId;
 import com.project.camphub.domain.camp.entity.code.SeasonCode;
 import com.project.camphub.domain.camp.registry.SeasonMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampTravelSeasonHelper implements CampCodeHelper<CampTravelSeason, 
                 saveCode(saveSeasonCode);
                 addCodeToMap(saveSeasonCode);
 
-                resultList.add(new CampTravelSeason(camp, saveSeasonCode));
+                resultList.add(createCampCode(camp, saveSeasonCode));
             } else {
-                resultList.add(new CampTravelSeason(camp, seasonCode.get()));
+                resultList.add(createCampCode(camp, seasonCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampTravelSeasonHelper implements CampCodeHelper<CampTravelSeason, 
     @Override
     public void saveCampCode(List<CampTravelSeason> campCodeList) {
         campTravelSeasonRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampTravelSeason createCampCode(Camp camp, SeasonCode code) {
+        CampTravelSeasonId id = new CampTravelSeasonId(camp.getCpId(), code.getSeasonCdId());
+        return new CampTravelSeason(id, camp, code);
     }
 }

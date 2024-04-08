@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OpenApiService {
 
-    private List<CampCodeHelper> campCodeHelpers;
+    private final List<CampCodeHelper> campCodeHelpers;
 
     private final AreaMapRegistry areaMapRegistry;
     private final PropertiesValue propertiesValue;
@@ -86,7 +86,8 @@ public class OpenApiService {
             CampSite campSite = CampSite.apiToEntity(item, camp);
 
             campCodeHelpers.forEach(campCodeHelper -> {
-                campCodeHelper.saveCampCode(campCodeHelper.getCampCodeEntity(item, camp));
+                campCodeHelper.saveCampCode(
+                        campCodeHelper.getCampCodeEntity(item, camp));
             });
         }
 

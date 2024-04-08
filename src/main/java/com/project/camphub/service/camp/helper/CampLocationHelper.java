@@ -2,6 +2,7 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampLocation;
+import com.project.camphub.domain.camp.entity.associations.id.CampLocationId;
 import com.project.camphub.domain.camp.entity.code.LocationCode;
 import com.project.camphub.domain.camp.registry.LocationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -43,9 +44,9 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
                 saveCode(saveLocationCode);
                 addCodeToMap(saveLocationCode);
 
-                resultList.add(new CampLocation(camp, saveLocationCode));
+                resultList.add(createCampCode(camp, saveLocationCode));
             } else {
-                resultList.add(new CampLocation(camp, locationCode.get()));
+                resultList.add(createCampCode(camp, locationCode.get()));
             }
         }
 
@@ -67,5 +68,11 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
     @Override
     public void saveCampCode(List<CampLocation> campCodeList) {
         campLocationRepository.saveAll(campCodeList);
+    }
+
+    @Override
+    public CampLocation createCampCode(Camp camp, LocationCode code) {
+        CampLocationId id = new CampLocationId(camp.getCpId(), code.getLoctCdId());
+        return new CampLocation(id, camp, code);
     }
 }
