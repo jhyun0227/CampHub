@@ -27,4 +27,9 @@ public class CampGlampingInnerAmenity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "inner_amnty_cd_id")
     private InnerAmenityCode innerAmenityCode;
+
+    public CampGlampingInnerAmenity(Camp camp, InnerAmenityCode innerAmenityCode) {
+        this.camp = camp;
+        this.innerAmenityCode = innerAmenityCode;
+    }
 }
