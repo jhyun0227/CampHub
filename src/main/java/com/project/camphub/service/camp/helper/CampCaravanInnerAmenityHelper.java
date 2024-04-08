@@ -26,7 +26,6 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
 
     @Override
     public List<CampCaravanInnerAmenity> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
-        Map<String, InnerAmenityCode> nameToInnerAmntyCdMap = innerAmenityMapRegistry.getNameToInnerAmntyCdMap();
 
         String[] values = convertStringToArray(item.getCaravInnerFclty());
         if (values == null) {
@@ -35,7 +34,7 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
 
         List<CampCaravanInnerAmenity> resultList = new ArrayList<>();
         for (String value : values) {
-            Optional<InnerAmenityCode> innerAmenityCode = Optional.ofNullable(nameToInnerAmntyCdMap.get(value));
+            Optional<InnerAmenityCode> innerAmenityCode = Optional.ofNullable(innerAmenityMapRegistry.findByInnerAmntyCdNm(value));
 
             if (innerAmenityCode.isEmpty()) {
                 InnerAmenityCode saveInnerAmenityCode = new InnerAmenityCode(value);

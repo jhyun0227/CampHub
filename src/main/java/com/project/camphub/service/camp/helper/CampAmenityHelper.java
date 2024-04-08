@@ -26,7 +26,6 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
 
     @Override
     public List<CampAmenity> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
-        Map<String, AmenityCode> nameToAmntyCdMap = amenityMapRegistry.getNameToAmntyCdMap();
 
         String[] values = convertStringToArray(item.getSbrsCl());
         if (values == null) {
@@ -35,7 +34,7 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
 
         List<CampAmenity> resultList = new ArrayList<>();
         for (String value : values) {
-            Optional<AmenityCode> amenityCode = Optional.ofNullable(nameToAmntyCdMap.get(value));
+            Optional<AmenityCode> amenityCode = Optional.ofNullable(amenityMapRegistry.findByAmntyCdNm(value));
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (amenityCode.isEmpty()) {
