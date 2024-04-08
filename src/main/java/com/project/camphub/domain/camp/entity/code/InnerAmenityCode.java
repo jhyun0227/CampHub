@@ -22,4 +22,7 @@ public class InnerAmenityCode {
     @Column(length = 30)
     private String innerAmntyCdNm;
 
+    public InnerAmenityCode(String innerAmntyCdNm) {
+        this.innerAmntyCdNm = innerAmntyCdNm;
+    }
 }

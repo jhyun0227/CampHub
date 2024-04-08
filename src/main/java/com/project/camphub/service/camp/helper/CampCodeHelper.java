@@ -1,7 +1,6 @@
 package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.code.AmenityCode;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 
 import java.util.List;
@@ -9,8 +8,8 @@ import java.util.List;
 public interface CampCodeHelper<T, D> {
 
     List<T> getCampCodeEntity(OpenApiResponse.Item item, Camp camp);
-    void saveCampCode(D code);
-    void addCampCodeToMap(D code);
+    void saveCode(D code);
+    void addCodeToMap(D code);
 
     default String[] convertStringToArray(String stringValue) {
         String[] values = stringValue.split(",");

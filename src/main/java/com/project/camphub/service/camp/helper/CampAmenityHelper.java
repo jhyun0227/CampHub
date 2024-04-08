@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CampAmenityCodeHelper implements CampCodeHelper<CampAmenity, AmenityCode> {
+public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCode> {
 
     private final AmenityMapRegistry amenityMapRegistry;
     private final AmenityCodeRepository amenityCodeRepository;
@@ -41,8 +41,8 @@ public class CampAmenityCodeHelper implements CampCodeHelper<CampAmenity, Amenit
             if (amenityCode.isEmpty()) {
                 //amenityCode 저장 및 Map 추가
                 AmenityCode saveAmenityCode = new AmenityCode(value);
-                saveCampCode(saveAmenityCode);
-                addCampCodeToMap(saveAmenityCode);
+                saveCode(saveAmenityCode);
+                addCodeToMap(saveAmenityCode);
 
                 resultList.add(new CampAmenity(camp, saveAmenityCode));
             } else {
@@ -55,13 +55,13 @@ public class CampAmenityCodeHelper implements CampCodeHelper<CampAmenity, Amenit
 
     @Override
     @Transactional
-    public void saveCampCode(AmenityCode amenityCode) {
-        log.info("CampAmenityCodeHelper.saveCampCode 실행, id={}, name={}", amenityCode.getAmntyCdId(), amenityCode.getAmntyCdNm());
-        amenityCodeRepository.save(amenityCode);
+    public void saveCode(AmenityCode code) {
+        log.info("CampAmenityHelper.saveCampCode 실행, id={}, name={}", code.getAmntyCdId(), code.getAmntyCdNm());
+        amenityCodeRepository.save(code);
     }
 
     @Override
-    public void addCampCodeToMap(AmenityCode amenityCode) {
-        amenityMapRegistry.addAmenityCodeMaps(amenityCode);
+    public void addCodeToMap(AmenityCode code) {
+        amenityMapRegistry.addAmenityCodeMaps(code);
     }
 }
