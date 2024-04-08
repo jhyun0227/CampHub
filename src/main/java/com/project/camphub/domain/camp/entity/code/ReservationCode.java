@@ -18,4 +18,7 @@ public class ReservationCode {
     @Column(length = 30)
     private String resvCdNm;
 
+    public ReservationCode(String resvCdNm) {
+        this.resvCdNm = resvCdNm;
+    }
 }

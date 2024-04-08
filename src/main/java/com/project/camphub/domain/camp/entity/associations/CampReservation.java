@@ -27,4 +27,9 @@ public class CampReservation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resv_cd_id")
     private ReservationCode reservationCode;
+
+    public CampReservation(Camp camp, ReservationCode reservationCode) {
+        this.camp = camp;
+        this.reservationCode = reservationCode;
+    }
 }

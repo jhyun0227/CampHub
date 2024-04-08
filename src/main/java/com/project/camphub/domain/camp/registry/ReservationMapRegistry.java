@@ -50,4 +50,9 @@ public class ReservationMapRegistry {
     public ReservationCode findByResvCdNm(String resvCdNm) {
         return nameToResvCdMap.get(resvCdNm);
     }
+
+    public void addReservationCodeMaps(ReservationCode reservationCode) {
+        resvCdMap.put(reservationCode.getResvCdId(), reservationCode);
+        nameToResvCdMap.put(reservationCode.getResvCdNm(), reservationCode);
+    }
 }
