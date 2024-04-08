@@ -35,6 +35,7 @@ public class CampGlampingInnerAmenityHelper implements CampCodeHelper<CampGlampi
         for (String value : values) {
             Optional<InnerAmenityCode> innerAmenityCode = Optional.ofNullable(innerAmenityMapRegistry.findByInnerAmntyCdNm(value));
 
+            //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (innerAmenityCode.isEmpty()) {
                 InnerAmenityCode saveInnerAmenityCode = new InnerAmenityCode(value);
                 saveCode(saveInnerAmenityCode);

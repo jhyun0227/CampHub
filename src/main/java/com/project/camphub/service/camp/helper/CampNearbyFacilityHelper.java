@@ -37,7 +37,6 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (nearbyFacilityCode.isEmpty()) {
-                //amenityCode 저장 및 Map 추가
                 NearbyFacilityCode saveNearbyFacilityCode = new NearbyFacilityCode(value);
                 saveCode(saveNearbyFacilityCode);
                 addCodeToMap(saveNearbyFacilityCode);

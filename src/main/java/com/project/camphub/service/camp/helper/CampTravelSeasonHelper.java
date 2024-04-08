@@ -37,7 +37,6 @@ public class CampTravelSeasonHelper implements CampCodeHelper<CampTravelSeason, 
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (seasonCode.isEmpty()) {
-                //amenityCode 저장 및 Map 추가
                 SeasonCode saveSeasonCode = new SeasonCode(value);
                 saveCode(saveSeasonCode);
                 addCodeToMap(saveSeasonCode);

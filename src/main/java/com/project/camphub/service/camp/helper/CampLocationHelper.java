@@ -37,7 +37,6 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (locationCode.isEmpty()) {
-                //amenityCode 저장 및 Map 추가
                 LocationCode saveLocationCode = new LocationCode(value);
                 saveCode(saveLocationCode);
                 addCodeToMap(saveLocationCode);
