@@ -55,8 +55,8 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
     @Override
     @Transactional
     public void saveCode(AmenityCode code) {
-        log.info("CampAmenityHelper.saveCampCode 실행, id={}, name={}", code.getAmntyCdId(), code.getAmntyCdNm());
         amenityCodeRepository.save(code);
+        log.info("CampAmenityHelper.saveCampCode 실행, id={}, name={}", code.getAmntyCdId(), code.getAmntyCdNm());
     }
 
     @Override

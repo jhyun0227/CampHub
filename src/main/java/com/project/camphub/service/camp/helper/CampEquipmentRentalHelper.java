@@ -55,8 +55,8 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
     @Override
     @Transactional
     public void saveCode(EquipmentCode code) {
-        log.info("CampEquipmentRentalHelper.saveCampCode 실행, id={}, name={}", code.getEquipCdId(), code.getEquipCdNm());
         equipmentCodeRepository.save(code);
+        log.info("CampEquipmentRentalHelper.saveCampCode 실행, id={}, name={}", code.getEquipCdId(), code.getEquipCdNm());
     }
 
     @Override

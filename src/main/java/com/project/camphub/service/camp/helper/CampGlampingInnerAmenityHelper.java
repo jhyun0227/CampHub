@@ -52,8 +52,8 @@ public class CampGlampingInnerAmenityHelper implements CampCodeHelper<CampGlampi
     @Override
     @Transactional
     public void saveCode(InnerAmenityCode code) {
-        log.info("CampGlampingInnerAmenityHelper.saveCampCode 실행, id={}, name={}", code.getInnerAmntyCdId(), code.getInnerAmntyCdNm());
         innerAmenityCodeRepository.save(code);
+        log.info("CampGlampingInnerAmenityHelper.saveCampCode 실행, id={}, name={}", code.getInnerAmntyCdId(), code.getInnerAmntyCdNm());
     }
 
     @Override
