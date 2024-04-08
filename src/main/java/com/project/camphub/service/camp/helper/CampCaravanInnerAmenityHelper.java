@@ -9,6 +9,7 @@ import com.project.camphub.repository.camp.code.InnerAmenityCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
     }
 
     @Override
+    @Transactional
     public void saveCode(InnerAmenityCode code) {
         log.info("CampCaravanInnerAmenityHelper.saveCampCode 실행, id={}, name={}", code.getInnerAmntyCdId(), code.getInnerAmntyCdNm());
         innerAmenityCodeRepository.save(code);

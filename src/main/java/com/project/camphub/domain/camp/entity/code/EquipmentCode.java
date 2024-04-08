@@ -21,4 +21,7 @@ public class EquipmentCode {
     @Column(length = 30)
     private String equipCdNm;
 
+    public EquipmentCode(String equipCdNm) {
+        this.equipCdNm = equipCdNm;
+    }
 }

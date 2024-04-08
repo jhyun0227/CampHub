@@ -52,4 +52,9 @@ public class EquipmentMapRegistry {
         return nameToEquipCdMap.get(equipCdNm);
     }
 
+    public void addEquipmentCodeMaps(EquipmentCode equipmentCode) {
+        equipCdMap.put(equipmentCode.getEquipCdId(), equipmentCode);
+        nameToEquipCdMap.put(equipmentCode.getEquipCdNm(), equipmentCode);
+    }
+
 }

@@ -27,4 +27,9 @@ public class CampEquipmentRental {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equip_cd_id")
     private EquipmentCode equipmentCode;
+
+    public CampEquipmentRental(Camp camp, EquipmentCode equipmentCode) {
+        this.camp = camp;
+        this.equipmentCode = equipmentCode;
+    }
 }
