@@ -86,7 +86,7 @@ public class OpenApiService {
             CampSite campSite = CampSite.apiToEntity(item, camp);
 
             campCodeHelpers.forEach(campCodeHelper -> {
-                campCodeHelper.getCampCodeEntity(item, camp);
+                campCodeHelper.saveCampCode(campCodeHelper.getCampCodeEntity(item, camp));
             });
         }
 
