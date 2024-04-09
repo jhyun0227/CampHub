@@ -7,6 +7,7 @@ import com.project.camphub.domain.common.enumaration.YnType;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDateTime;
 
@@ -18,8 +19,8 @@ import static com.project.camphub.common.utils.DateUtils.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@ToString
-public class Camp {
+//@ToString
+public class Camp implements Persistable<String> {
 
     @Id
     @Column(length = 10)
@@ -75,6 +76,25 @@ public class Camp {
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
     private CampSite campSite;
 
+    /**
+     * persistable 구현메서드
+     * isNew()를 무조건 true를 반환하는 이유
+     * repository.save()를 호출하면 Entity의 PK 유무로 persist(), merge() 분기가 나뉜다.
+     * Id를 수동으로 할당하는 방식을 사용하기 때문에 merge()를 호출하게 되는데 select 쿼리를 한번 DB에 전달하고
+     * 없을 경우 insert 쿼리를 다시 전달하기 때문에 성능상으로 비효율적이게 된다.
+     * Camp 관련 Entity들이 외부 API를 통해 데이터를 적재하는 것 외에 repository.save()를 호출하는 경우는 없을 것으로 판단된다.
+     * 수정의 경우에는 더티 체킹을 사용하는것을 명심하도록 하자.
+     */
+    @Override
+    public String getId() {
+        return this.getCpId();
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
+
     public static Camp apiToEntity(OpenApiResponse.Item item, AreaMapRegistry areaMapRegistry) {
         return Camp.builder()
                 .cpId(item.getContentId())
@@ -107,6 +127,4 @@ public class Camp {
 
         return YnType.Y;
     }
-
-
 }
