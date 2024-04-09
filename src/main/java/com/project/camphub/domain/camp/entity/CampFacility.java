@@ -13,14 +13,13 @@ import static java.lang.Integer.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@ToString
+//@ToString
 public class CampFacility implements Persistable<String> {
 
     @Id
     @Column(length = 10)
     private String cpId;
 
-//    @MapsId(value = "cpId")
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cp_id")

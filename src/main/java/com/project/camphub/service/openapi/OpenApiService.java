@@ -51,7 +51,7 @@ public class OpenApiService {
         log.info("maxPageCount = {}", maxPageCount);
 
         List<OpenApiResponse> openApiResponseList = Flux.range(1, 1)
-                .flatMap(page -> fetchCampList(numOfRows, page) // 각 페이지에 대한 요청
+                .flatMap(page -> fetchCampList(1, page) // 각 페이지에 대한 요청
                                 .subscribeOn(Schedulers.parallel()), // 병렬 처리
                         10)//동시 실행할 작업의 최대 수
                 .collectList()
@@ -96,8 +96,9 @@ public class OpenApiService {
         List<OpenApiResponse.Item> itemList = body.getItems().getItem();
 
         for (OpenApiResponse.Item item : itemList) {
-            Camp camp = campRepository.save(Camp.apiToEntity(item, areaMapRegistry));
+            Camp camp = Camp.apiToEntity(item, areaMapRegistry);
 
+            campRepository.save(camp);
             campDetailRepository.save(CampDetail.apiToEntity(item, camp));
             campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
             campSiteRepository.save(CampSite.apiToEntity(item, camp));

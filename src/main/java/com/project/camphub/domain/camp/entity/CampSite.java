@@ -10,14 +10,13 @@ import org.springframework.data.domain.Persistable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@ToString
+//@ToString
 public class CampSite implements Persistable<String> {
 
     @Id
     @Column(length = 10)
     private String cpId;
 
-//    @MapsId(value = "cpId")
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cp_id")
