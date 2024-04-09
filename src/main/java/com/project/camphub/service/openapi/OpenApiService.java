@@ -50,14 +50,22 @@ public class OpenApiService {
         int maxPageCount = calculatePagesRequired(totalCount);
         log.info("maxPageCount = {}", maxPageCount);
 
-        Flux.range(1, maxPageCount)
+        List<OpenApiResponse> openApiResponseList = Flux.range(1, maxPageCount)
                 .flatMap(page -> fetchCampList(numOfRows, page) // 각 페이지에 대한 요청
                                 .subscribeOn(Schedulers.parallel()), // 병렬 처리
-                        5)//동시 실행할 작업의 최대 수
-                .subscribe(this::insertCampList);
+                        10)//동시 실행할 작업의 최대 수
+                .collectList()
+                .block();
+
+        if (!openApiResponseList.isEmpty()) {
+            log.info("openApiResponse.size() = {}", openApiResponseList.size());
+            openApiResponseList.forEach(this::insertCampList);
+        }
     }
 
     private Mono<OpenApiResponse> fetchCampList(int numOfRows, int page) {
+        log.info("fetchCampList 실행, page={}", page);
+
         WebClient webClient = WebClientFactory.createWebClient(propertiesValue.getOpenApiEndPoint());
 
         return webClient.get()
@@ -83,22 +91,15 @@ public class OpenApiService {
         OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
         int pageNo = body.getPageNo();
 
-        log.info("page={}, insertCampList 진입", pageNo);
+        log.info("insertCampList 실행, page={}", pageNo);
 
         List<OpenApiResponse.Item> itemList = body.getItems().getItem();
 
         for (OpenApiResponse.Item item : itemList) {
-            Camp camp = Camp.apiToEntity(item, areaMapRegistry);
-            campRepository.save(camp);
-
-            CampDetail campDetail = CampDetail.apiToEntity(item, camp);
-            campDetailRepository.save(campDetail);
-
-            CampFacility campFacility = CampFacility.apiToEntity(item, camp);
-            campFacilityRepository.save(campFacility);
-
-            CampSite campSite = CampSite.apiToEntity(item, camp);
-            campSiteRepository.save(campSite);
+            Camp camp = campRepository.save(Camp.apiToEntity(item, areaMapRegistry));
+            campDetailRepository.save(CampDetail.apiToEntity(item, camp));
+            campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
+            campSiteRepository.save(CampSite.apiToEntity(item, camp));
 
             campCodeHelpers.forEach(campCodeHelper -> {
                 campCodeHelper.saveCampCode(
@@ -106,6 +107,6 @@ public class OpenApiService {
             });
         }
 
-        log.info("page={}, insertCampList 종료", pageNo);
+        log.info("insertCampList 종료, page={}", pageNo);
     }
 }
