@@ -4,6 +4,7 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.code.SeasonCode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampOperationSeason {
+public class CampOperationSeason implements Persistable<CampOperationSeason.CampOperationSeasonId> {
 
     @EmbeddedId
     private CampOperationSeasonId campOperationSeasonId;
@@ -40,5 +41,15 @@ public class CampOperationSeason {
     public static CampOperationSeason createCampOperationSeason(Camp camp, SeasonCode seasonCode) {
         CampOperationSeasonId id = new CampOperationSeasonId(camp.getCpId(), seasonCode.getSeasonCdId());
         return new CampOperationSeason(id, camp, seasonCode);
+    }
+
+    @Override
+    public CampOperationSeasonId getId() {
+        return getCampOperationSeasonId();
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 }

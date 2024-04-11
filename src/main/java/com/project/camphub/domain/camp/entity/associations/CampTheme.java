@@ -4,6 +4,7 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampTheme {
+public class CampTheme implements Persistable<CampTheme.CampThemeId> {
 
     @EmbeddedId
     private CampThemeId campThemeId;
@@ -40,5 +41,15 @@ public class CampTheme {
     public static CampTheme createCampTheme(Camp camp, ThemeCode themeCode) {
         CampThemeId id = new CampThemeId(camp.getCpId(), themeCode.getThemeCdId());
         return new CampTheme(id, camp, themeCode);
+    }
+
+    @Override
+    public CampThemeId getId() {
+        return getCampThemeId();
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 }

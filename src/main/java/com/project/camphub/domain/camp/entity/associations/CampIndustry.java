@@ -4,6 +4,7 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.code.IndustryCode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampIndustry {
+public class CampIndustry implements Persistable<CampIndustry.CampIndustryId> {
 
     @EmbeddedId
     private CampIndustryId campIndustryId;
@@ -40,5 +41,15 @@ public class CampIndustry {
     public static CampIndustry createCampIndustry(Camp camp, IndustryCode industryCode) {
         CampIndustryId id = new CampIndustryId(camp.getCpId(), industryCode.getIndstCdId());
         return new CampIndustry(id, camp, industryCode);
+    }
+
+    @Override
+    public CampIndustryId getId() {
+        return getCampIndustryId();
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 }

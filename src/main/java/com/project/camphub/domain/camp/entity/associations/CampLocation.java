@@ -4,6 +4,7 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.code.LocationCode;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.domain.Persistable;
 
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampLocation {
+public class CampLocation implements Persistable<CampLocation.CampLocationId> {
 
     @EmbeddedId
     private CampLocationId campLocationId;
@@ -40,5 +41,15 @@ public class CampLocation {
     public static CampLocation createCampLocation(Camp camp, LocationCode locationCode) {
         CampLocationId id = new CampLocationId(camp.getCpId(), locationCode.getLoctCdId());
         return new CampLocation(id, camp, locationCode);
+    }
+
+    @Override
+    public CampLocationId getId() {
+        return getCampLocationId();
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
     }
 }
