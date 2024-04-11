@@ -2,7 +2,6 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampGlampingInnerAmenity;
-import com.project.camphub.domain.camp.entity.associations.id.CampGlampingInnerAmenityId;
 import com.project.camphub.domain.camp.entity.code.InnerAmenityCode;
 import com.project.camphub.domain.camp.registry.InnerAmenityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -72,7 +71,6 @@ public class CampGlampingInnerAmenityHelper implements CampCodeHelper<CampGlampi
 
     @Override
     public CampGlampingInnerAmenity createCampCode(Camp camp, InnerAmenityCode code) {
-        CampGlampingInnerAmenityId id = new CampGlampingInnerAmenityId(camp.getCpId(), code.getInnerAmntyCdId());
-        return new CampGlampingInnerAmenity(id, camp, code);
+        return CampGlampingInnerAmenity.createCampGlampingInnerAmenity(camp, code);
     }
 }

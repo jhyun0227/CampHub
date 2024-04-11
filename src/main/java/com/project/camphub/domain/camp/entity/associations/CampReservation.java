@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampReservationId;
 import com.project.camphub.domain.camp.entity.code.ReservationCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampReservation {
     @JoinColumn(name = "resv_cd_id")
     private ReservationCode reservationCode;
 
-    public CampReservation(Camp camp, ReservationCode reservationCode) {
-        this.camp = camp;
-        this.reservationCode = reservationCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampReservationId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long resvCdId;
+    }
+
+    public static CampReservation createCampReservation(Camp camp, ReservationCode reservationCode) {
+        CampReservationId id = new CampReservationId(camp.getCpId(), reservationCode.getResvCdId());
+        return new CampReservation(id, camp, reservationCode);
     }
 }

@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampOperationSeasonId;
 import com.project.camphub.domain.camp.entity.code.SeasonCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampOperationSeason {
     @JoinColumn(name = "season_cd_id")
     private SeasonCode seasonCode;
 
-    public CampOperationSeason(Camp camp, SeasonCode seasonCode) {
-        this.camp = camp;
-        this.seasonCode = seasonCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampOperationSeasonId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long seasonCdId;
+    }
+
+    public static CampOperationSeason createCampOperationSeason(Camp camp, SeasonCode seasonCode) {
+        CampOperationSeasonId id = new CampOperationSeasonId(camp.getCpId(), seasonCode.getSeasonCdId());
+        return new CampOperationSeason(id, camp, seasonCode);
     }
 }

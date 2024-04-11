@@ -2,7 +2,6 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampNearbyFacility;
-import com.project.camphub.domain.camp.entity.associations.id.CampNearbyFacilityId;
 import com.project.camphub.domain.camp.entity.code.NearbyFacilityCode;
 import com.project.camphub.domain.camp.registry.NearbyFacilityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -72,7 +71,6 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
 
     @Override
     public CampNearbyFacility createCampCode(Camp camp, NearbyFacilityCode code) {
-        CampNearbyFacilityId id = new CampNearbyFacilityId(camp.getCpId(), code.getNrbyFcltCdId());
-        return new CampNearbyFacility(id, camp, code);
+        return CampNearbyFacility.createCampNearbyFacility(camp, code);
     }
 }

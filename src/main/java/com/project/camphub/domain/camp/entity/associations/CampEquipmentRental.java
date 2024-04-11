@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampEquipmentRentalId;
 import com.project.camphub.domain.camp.entity.code.EquipmentCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampEquipmentRental {
     @JoinColumn(name = "equip_cd_id")
     private EquipmentCode equipmentCode;
 
-    public CampEquipmentRental(Camp camp, EquipmentCode equipmentCode) {
-        this.camp = camp;
-        this.equipmentCode = equipmentCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampEquipmentRentalId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long equipCdId;
+    }
+
+    public static CampEquipmentRental createCampEquipmentRental(Camp camp, EquipmentCode equipmentCode) {
+        CampEquipmentRentalId id = new CampEquipmentRentalId(camp.getCpId(), equipmentCode.getEquipCdId());
+        return new CampEquipmentRental(id, camp, equipmentCode);
     }
 }

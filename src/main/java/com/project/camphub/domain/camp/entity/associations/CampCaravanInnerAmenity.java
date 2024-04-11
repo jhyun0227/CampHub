@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampCaravanInnerAmenityId;
 import com.project.camphub.domain.camp.entity.code.InnerAmenityCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampCaravanInnerAmenity {
     @JoinColumn(name = "inner_amnty_cd_id")
     private InnerAmenityCode innerAmenityCode;
 
-    public CampCaravanInnerAmenity(Camp camp, InnerAmenityCode innerAmenityCode) {
-        this.camp = camp;
-        this.innerAmenityCode = innerAmenityCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampCaravanInnerAmenityId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long innerAmntyCdId;
+    }
+
+    public static CampCaravanInnerAmenity createCampCaravanInnerAmenity(Camp camp, InnerAmenityCode innerAmenityCode) {
+        CampCaravanInnerAmenityId id = new CampCaravanInnerAmenityId(camp.getCpId(), innerAmenityCode.getInnerAmntyCdId());
+        return new CampCaravanInnerAmenity(id, camp, innerAmenityCode);
     }
 }

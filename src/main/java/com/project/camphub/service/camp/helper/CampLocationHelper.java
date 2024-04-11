@@ -2,7 +2,6 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampLocation;
-import com.project.camphub.domain.camp.entity.associations.id.CampLocationId;
 import com.project.camphub.domain.camp.entity.code.LocationCode;
 import com.project.camphub.domain.camp.registry.LocationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -72,7 +71,6 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
 
     @Override
     public CampLocation createCampCode(Camp camp, LocationCode code) {
-        CampLocationId id = new CampLocationId(camp.getCpId(), code.getLoctCdId());
-        return new CampLocation(id, camp, code);
+        return CampLocation.createCampLocation(camp, code);
     }
 }

@@ -2,7 +2,6 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampEquipmentRental;
-import com.project.camphub.domain.camp.entity.associations.id.CampEquipmentRentalId;
 import com.project.camphub.domain.camp.entity.code.EquipmentCode;
 import com.project.camphub.domain.camp.registry.EquipmentMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -72,7 +71,6 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
 
     @Override
     public CampEquipmentRental createCampCode(Camp camp, EquipmentCode code) {
-        CampEquipmentRentalId id = new CampEquipmentRentalId(camp.getCpId(), code.getEquipCdId());
-        return new CampEquipmentRental(id, camp, code);
+        return CampEquipmentRental.createCampEquipmentRental(camp, code);
     }
 }

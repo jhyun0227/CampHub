@@ -2,7 +2,6 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampTheme;
-import com.project.camphub.domain.camp.entity.associations.id.CampThemeId;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
 import com.project.camphub.domain.camp.registry.ThemeMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
@@ -72,7 +71,6 @@ public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
 
     @Override
     public CampTheme createCampCode(Camp camp, ThemeCode code) {
-        CampThemeId id = new CampThemeId(camp.getCpId(), code.getThemeCdId());
-        return new CampTheme(id, camp, code);
+        return CampTheme.createCampTheme(camp, code);
     }
 }

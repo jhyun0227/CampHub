@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampNearbyFacilityId;
 import com.project.camphub.domain.camp.entity.code.NearbyFacilityCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampNearbyFacility {
     @JoinColumn(name = "nrby_fclt_cd_id")
     private NearbyFacilityCode nearbyFacilityCode;
 
-    public CampNearbyFacility(Camp camp, NearbyFacilityCode nearbyFacilityCode) {
-        this.camp = camp;
-        this.nearbyFacilityCode = nearbyFacilityCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampNearbyFacilityId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long nrbyFcltCdId;
+    }
+
+    public static CampNearbyFacility createCampNearbyFacility(Camp camp, NearbyFacilityCode nearbyFacilityCode) {
+        CampNearbyFacilityId id = new CampNearbyFacilityId(camp.getCpId(), nearbyFacilityCode.getNrbyFcltCdId());
+        return new CampNearbyFacility(id, camp, nearbyFacilityCode);
     }
 }

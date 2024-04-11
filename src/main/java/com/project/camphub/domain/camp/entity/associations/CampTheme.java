@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampThemeId;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampTheme {
     @JoinColumn(name = "theme_cd_id")
     private ThemeCode themeCode;
 
-    public CampTheme(Camp camp, ThemeCode themeCode) {
-        this.camp = camp;
-        this.themeCode = themeCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampThemeId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long themeCdId;
+    }
+
+    public static CampTheme createCampTheme(Camp camp, ThemeCode themeCode) {
+        CampThemeId id = new CampThemeId(camp.getCpId(), themeCode.getThemeCdId());
+        return new CampTheme(id, camp, themeCode);
     }
 }

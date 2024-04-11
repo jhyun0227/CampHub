@@ -1,13 +1,11 @@
 package com.project.camphub.domain.camp.entity.associations;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.camp.entity.associations.id.CampIndustryId;
 import com.project.camphub.domain.camp.entity.code.IndustryCode;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 @Entity
 @Getter
@@ -28,8 +26,19 @@ public class CampIndustry {
     @JoinColumn(name = "indst_cd_id")
     private IndustryCode industryCode;
 
-    public CampIndustry(Camp camp, IndustryCode industryCode) {
-        this.camp = camp;
-        this.industryCode = industryCode;
+    @Embeddable
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    public static class CampIndustryId implements Serializable {
+        @Column(length = 10)
+        private String cpId;
+        private Long indstCdId;
+    }
+
+    public static CampIndustry createCampIndustry(Camp camp, IndustryCode industryCode) {
+        CampIndustryId id = new CampIndustryId(camp.getCpId(), industryCode.getIndstCdId());
+        return new CampIndustry(id, camp, industryCode);
     }
 }
