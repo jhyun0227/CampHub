@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class LocationCode {
+public class LocationCode implements Code {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long loctCdId;
@@ -23,5 +23,10 @@ public class LocationCode {
 
     public LocationCode(String loctCdNm) {
         this.loctCdNm = loctCdNm;
+    }
+
+    @Override
+    public String getCodeNm() {
+        return loctCdNm;
     }
 }

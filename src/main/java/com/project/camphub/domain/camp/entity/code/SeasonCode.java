@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SeasonCode {
+public class SeasonCode implements Code {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seasonCdId;
@@ -24,5 +24,10 @@ public class SeasonCode {
 
     public SeasonCode(String seasonCdNm) {
         this.seasonCdNm = seasonCdNm;
+    }
+
+    @Override
+    public String getCodeNm() {
+        return seasonCdNm;
     }
 }

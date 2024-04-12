@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class NearbyFacilityCode {
+public class NearbyFacilityCode implements Code {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long nrbyFcltCdId;
@@ -23,5 +23,10 @@ public class NearbyFacilityCode {
 
     public NearbyFacilityCode(String nrbyFcltCdNm) {
         this.nrbyFcltCdNm = nrbyFcltCdNm;
+    }
+
+    @Override
+    public String getCodeNm() {
+        return nrbyFcltCdNm;
     }
 }

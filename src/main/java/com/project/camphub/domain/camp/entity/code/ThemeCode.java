@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ThemeCode {
+public class ThemeCode implements Code {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long themeCdId;
@@ -23,5 +23,10 @@ public class ThemeCode {
 
     public ThemeCode(String themeCdNm) {
         this.themeCdNm = themeCdNm;
+    }
+
+    @Override
+    public String getCodeNm() {
+        return themeCdNm;
     }
 }

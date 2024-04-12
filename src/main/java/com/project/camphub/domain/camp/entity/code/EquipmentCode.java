@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class EquipmentCode {
+public class EquipmentCode implements Code {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long equipCdId;
@@ -23,5 +23,10 @@ public class EquipmentCode {
 
     public EquipmentCode(String equipCdNm) {
         this.equipCdNm = equipCdNm;
+    }
+
+    @Override
+    public String getCodeNm() {
+        return equipCdNm;
     }
 }

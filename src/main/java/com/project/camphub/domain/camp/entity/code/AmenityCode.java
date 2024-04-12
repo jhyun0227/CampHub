@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class AmenityCode {
+public class AmenityCode implements Code {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long amntyCdId;
@@ -23,5 +23,10 @@ public class AmenityCode {
 
     public AmenityCode(String amntyCdNm) {
         this.amntyCdNm = amntyCdNm;
+    }
+
+    @Override
+    public String getCodeNm() {
+        return amntyCdNm;
     }
 }
