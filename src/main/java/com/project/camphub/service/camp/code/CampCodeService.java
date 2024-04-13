@@ -1,7 +1,6 @@
 package com.project.camphub.service.camp.code;
 
-import com.project.camphub.domain.camp.entity.code.AmenityCode;
-import com.project.camphub.domain.camp.entity.code.Code;
+import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.repository.camp.code.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import java.util.Map;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CodeService {
+public class CampCodeService {
 
     private final AmenityCodeRepository amenityCodeRepository;
     private final EquipmentCodeRepository equipmentCodeRepository;
@@ -29,8 +28,8 @@ public class CodeService {
     private final ThemeCodeRepository themeCodeRepository;
 
     @Transactional(readOnly = true)
-    public Map<String, Map<String, Code>> getNameToCodeMap() {
-        Map<String, Map<String, Code>> resultMaps = new HashMap<>();
+    public Map<String, Map<String, CampCode>> getNameToCodeMap() {
+        Map<String, Map<String, CampCode>> resultMaps = new HashMap<>();
 
         resultMaps.put("amenityCode", setCodeMaps(amenityCodeRepository.findAll()));
         resultMaps.put("equipmentCode", setCodeMaps(equipmentCodeRepository.findAll()));
@@ -45,8 +44,8 @@ public class CodeService {
         return resultMaps;
     }
 
-    private Map<String, Code> setCodeMaps(List<? extends Code> codeList) {
-        Map<String, Code> resultMaps = new HashMap<>();
+    private Map<String, CampCode> setCodeMaps(List<? extends CampCode> codeList) {
+        Map<String, CampCode> resultMaps = new HashMap<>();
 
         codeList.forEach(code -> {
             resultMaps.put(code.getCodeNm(), code);

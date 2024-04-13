@@ -1,6 +1,6 @@
 package com.project.camphub.domain.camp.entity.code;
 
-public interface Code {
+public interface CampCode {
 
     public String getCodeNm();
 }

@@ -12,7 +12,7 @@ import com.project.camphub.repository.camp.CampDetailRepository;
 import com.project.camphub.repository.camp.CampFacilityRepository;
 import com.project.camphub.repository.camp.CampRepository;
 import com.project.camphub.repository.camp.CampSiteRepository;
-import com.project.camphub.service.camp.code.CodeService;
+import com.project.camphub.service.camp.code.CampCodeService;
 import com.project.camphub.service.camp.helper.CampAssociationHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class OpenApiService {
     private final CampFacilityRepository campFacilityRepository;
     private final CampSiteRepository campSiteRepository;
 
-    private final CodeService codeService;
+    private final CampCodeService campCodeService;
     private final List<CampAssociationHelper> campAssociationHelpers;
 
     private final AreaMapRegistry areaMapRegistry;
