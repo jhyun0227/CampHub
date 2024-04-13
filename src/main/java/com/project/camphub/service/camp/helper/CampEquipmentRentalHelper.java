@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRental, EquipmentCode> {
+public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEquipmentRental, EquipmentCode> {
 
     private final EquipmentMapRegistry equipmentMapRegistry;
     private final EquipmentCodeRepository equipmentCodeRepository;
     private final CampEquipmentRentalRepository campEquipmentRentalRepository;
 
     @Override
-    public List<CampEquipmentRental> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampEquipmentRental> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getEqpmnLendCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
                 saveCode(saveEquipmentCode);
                 addCodeToMap(saveEquipmentCode);
 
-                resultList.add(createCampCode(camp, saveEquipmentCode));
+                resultList.add(createCampAssociation(camp, saveEquipmentCode));
             } else {
-                resultList.add(createCampCode(camp, equipmentCode.get()));
+                resultList.add(createCampAssociation(camp, equipmentCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
     }
 
     @Override
-    @Transactional
     public void saveCode(EquipmentCode code) {
         equipmentCodeRepository.save(code);
-        log.info("CampEquipmentRentalHelper.saveCampCode 실행, id={}, name={}", code.getEquipCdId(), code.getEquipCdNm());
+        log.info("CampEquipmentRentalHelper.saveCode 실행, id={}, name={}", code.getEquipCdId(), code.getEquipCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampEquipmentRentalHelper implements CampCodeHelper<CampEquipmentRe
     }
 
     @Override
-    public void saveCampCode(List<CampEquipmentRental> campCodeList) {
-        campEquipmentRentalRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampEquipmentRental> CampAssociationList) {
+        campEquipmentRentalRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampEquipmentRental createCampCode(Camp camp, EquipmentCode code) {
+    public CampEquipmentRental createCampAssociation(Camp camp, EquipmentCode code) {
         return CampEquipmentRental.createCampEquipmentRental(camp, code);
     }
 }

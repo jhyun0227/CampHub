@@ -5,13 +5,13 @@ import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 
 import java.util.List;
 
-public interface CampCodeHelper<T, D> {
+public interface CampAssociationHelper<T, D> {
 
-    List<T> getCampCodeEntity(OpenApiResponse.Item item, Camp camp);
+    List<T> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp);
     void saveCode(D code);
     void addCodeToMap(D code);
-    void saveCampCode(List<T> campCodeList);
-    T createCampCode(Camp camp, D code);
+    void saveCampAssociation(List<T> campAssociationList);
+    T createCampAssociation(Camp camp, D code);
 
     default String[] convertStringToArray(String stringValue) {
         String[] values = stringValue.split(",");

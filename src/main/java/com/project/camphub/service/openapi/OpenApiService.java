@@ -13,7 +13,7 @@ import com.project.camphub.repository.camp.CampFacilityRepository;
 import com.project.camphub.repository.camp.CampRepository;
 import com.project.camphub.repository.camp.CampSiteRepository;
 import com.project.camphub.service.camp.code.CodeService;
-import com.project.camphub.service.camp.helper.CampCodeHelper;
+import com.project.camphub.service.camp.helper.CampAssociationHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class OpenApiService {
     private final CampSiteRepository campSiteRepository;
 
     private final CodeService codeService;
-    private final List<CampCodeHelper> campCodeHelpers;
+    private final List<CampAssociationHelper> campAssociationHelpers;
 
     private final AreaMapRegistry areaMapRegistry;
     private final PropertiesValue propertiesValue;
@@ -106,9 +106,9 @@ public class OpenApiService {
             campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
             campSiteRepository.save(CampSite.apiToEntity(item, camp));
 
-            campCodeHelpers.forEach(campCodeHelper -> {
-                campCodeHelper.saveCampCode(
-                        campCodeHelper.getCampCodeEntity(item, camp));
+            campAssociationHelpers.forEach(campAssociationHelper -> {
+                campAssociationHelper.saveCampAssociation(
+                        campAssociationHelper.getCampAssociationEntity(item, camp));
             });
         }
 

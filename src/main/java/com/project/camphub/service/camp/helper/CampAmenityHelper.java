@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCode> {
+public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, AmenityCode> {
 
     private final AmenityMapRegistry amenityMapRegistry;
     private final AmenityCodeRepository amenityCodeRepository;
     private final CampAmenityRepository campAmenityRepository;
 
     @Override
-    public List<CampAmenity> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampAmenity> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getSbrsCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
                 saveCode(saveAmenityCode);
                 addCodeToMap(saveAmenityCode);
 
-                resultList.add(createCampCode(camp, saveAmenityCode));
+                resultList.add(createCampAssociation(camp, saveAmenityCode));
             } else {
-                resultList.add(createCampCode(camp, amenityCode.get()));
+                resultList.add(createCampAssociation(camp, amenityCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
     }
 
     @Override
-    @Transactional
     public void saveCode(AmenityCode code) {
         amenityCodeRepository.save(code);
-        log.info("CampAmenityHelper.saveCampCode 실행, id={}, name={}", code.getAmntyCdId(), code.getAmntyCdNm());
+        log.info("CampAmenityHelper.saveCode 실행, id={}, name={}", code.getAmntyCdId(), code.getAmntyCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampAmenityHelper implements CampCodeHelper<CampAmenity, AmenityCod
     }
 
     @Override
-    public void saveCampCode(List<CampAmenity> campCodeList) {
-        campAmenityRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampAmenity> CampAssociationList) {
+        campAmenityRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampAmenity createCampCode(Camp camp, AmenityCode code) {
+    public CampAmenity createCampAssociation(Camp camp, AmenityCode code) {
         return CampAmenity.createCampAmenity(camp, code);
     }
 }

@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampLocationHelper implements CampCodeHelper<CampLocation, LocationCode> {
+public class CampLocationHelper implements CampAssociationHelper<CampLocation, LocationCode> {
 
     private final LocationMapRegistry locationMapRegistry;
     private final LocationCodeRepository locationCodeRepository;
     private final CampLocationRepository campLocationRepository;
 
     @Override
-    public List<CampLocation> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampLocation> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getLctCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
                 saveCode(saveLocationCode);
                 addCodeToMap(saveLocationCode);
 
-                resultList.add(createCampCode(camp, saveLocationCode));
+                resultList.add(createCampAssociation(camp, saveLocationCode));
             } else {
-                resultList.add(createCampCode(camp, locationCode.get()));
+                resultList.add(createCampAssociation(camp, locationCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
     }
 
     @Override
-    @Transactional
     public void saveCode(LocationCode code) {
         locationCodeRepository.save(code);
-        log.info("CampLocationHelper.saveCampCode 실행, id={}, name={}", code.getLoctCdId(), code.getLoctCdNm());
+        log.info("CampLocationHelper.saveCode 실행, id={}, name={}", code.getLoctCdId(), code.getLoctCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampLocationHelper implements CampCodeHelper<CampLocation, Location
     }
 
     @Override
-    public void saveCampCode(List<CampLocation> campCodeList) {
-        campLocationRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampLocation> CampAssociationList) {
+        campLocationRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampLocation createCampCode(Camp camp, LocationCode code) {
+    public CampLocation createCampAssociation(Camp camp, LocationCode code) {
         return CampLocation.createCampLocation(camp, code);
     }
 }

@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampReservationHelper implements CampCodeHelper<CampReservation, ReservationCode> {
+public class CampReservationHelper implements CampAssociationHelper<CampReservation, ReservationCode> {
 
     private final ReservationMapRegistry reservationMapRegistry;
     private final ReservationCodeRepository reservationCodeRepository;
     private final CampReservationRepository campReservationRepository;
 
     @Override
-    public List<CampReservation> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampReservation> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getResveCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
                 saveCode(saveReservationCode);
                 addCodeToMap(saveReservationCode);
 
-                resultList.add(createCampCode(camp, saveReservationCode));
+                resultList.add(createCampAssociation(camp, saveReservationCode));
             } else {
-                resultList.add(createCampCode(camp, reservationCode.get()));
+                resultList.add(createCampAssociation(camp, reservationCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
     }
 
     @Override
-    @Transactional
     public void saveCode(ReservationCode code) {
         reservationCodeRepository.save(code);
-        log.info("CampReservationHelper.saveCampCode 실행, id={}, name={}", code.getResvCdId(), code.getResvCdNm());
+        log.info("CampReservationHelper.saveCode 실행, id={}, name={}", code.getResvCdId(), code.getResvCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampReservationHelper implements CampCodeHelper<CampReservation, Re
     }
 
     @Override
-    public void saveCampCode(List<CampReservation> campCodeList) {
-        campReservationRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampReservation> CampAssociationList) {
+        campReservationRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampReservation createCampCode(Camp camp, ReservationCode code) {
+    public CampReservation createCampAssociation(Camp camp, ReservationCode code) {
         return CampReservation.createCampReservation(camp, code);
     }
 }

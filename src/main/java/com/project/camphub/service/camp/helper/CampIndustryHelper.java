@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampIndustryHelper implements CampCodeHelper<CampIndustry, IndustryCode> {
+public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, IndustryCode> {
 
     private final IndustryMapRegistry industryMapRegistry;
     private final IndustryCodeRepository industryCodeRepository;
     private final CampIndustryRepository campIndustryRepository;
 
     @Override
-    public List<CampIndustry> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampIndustry> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getInduty());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
                 saveCode(saveIndustryCode);
                 addCodeToMap(saveIndustryCode);
 
-                resultList.add(createCampCode(camp, saveIndustryCode));
+                resultList.add(createCampAssociation(camp, saveIndustryCode));
             } else {
-                resultList.add(createCampCode(camp, industryCode.get()));
+                resultList.add(createCampAssociation(camp, industryCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
     }
 
     @Override
-    @Transactional
     public void saveCode(IndustryCode code) {
         industryCodeRepository.save(code);
-        log.info("CampIndustryHelper.saveCampCode 실행, id={}, name={}", code.getIndstCdId(), code.getIndstCdNm());
+        log.info("CampIndustryHelper.saveCode 실행, id={}, name={}", code.getIndstCdId(), code.getIndstCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampIndustryHelper implements CampCodeHelper<CampIndustry, Industry
     }
 
     @Override
-    public void saveCampCode(List<CampIndustry> campCodeList) {
-        campIndustryRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampIndustry> CampAssociationList) {
+        campIndustryRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampIndustry createCampCode(Camp camp, IndustryCode code) {
+    public CampIndustry createCampAssociation(Camp camp, IndustryCode code) {
         return CampIndustry.createCampIndustry(camp, code);
     }
 }

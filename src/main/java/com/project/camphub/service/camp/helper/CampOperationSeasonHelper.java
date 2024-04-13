@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampOperationSeasonHelper implements CampCodeHelper<CampOperationSeason, SeasonCode> {
+public class CampOperationSeasonHelper implements CampAssociationHelper<CampOperationSeason, SeasonCode> {
 
     private final SeasonMapRegistry seasonMapRegistry;
     private final SeasonCodeRepository seasonCodeRepository;
     private final CampOperationSeasonRepository campOperationSeasonRepository;
 
     @Override
-    public List<CampOperationSeason> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampOperationSeason> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getOperPdCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampOperationSeasonHelper implements CampCodeHelper<CampOperationSe
                 saveCode(saveSeasonCode);
                 addCodeToMap(saveSeasonCode);
 
-                resultList.add(createCampCode(camp, saveSeasonCode));
+                resultList.add(createCampAssociation(camp, saveSeasonCode));
             } else {
-                resultList.add(createCampCode(camp, seasonCode.get()));
+                resultList.add(createCampAssociation(camp, seasonCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampOperationSeasonHelper implements CampCodeHelper<CampOperationSe
     }
 
     @Override
-    @Transactional
     public void saveCode(SeasonCode code) {
         seasonCodeRepository.save(code);
-        log.info("CampOperationSeasonHelper.saveCampCode 실행, id={}, name={}", code.getSeasonCdId(), code.getSeasonCdNm());
+        log.info("CampOperationSeasonHelper.saveCode 실행, id={}, name={}", code.getSeasonCdId(), code.getSeasonCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampOperationSeasonHelper implements CampCodeHelper<CampOperationSe
     }
 
     @Override
-    public void saveCampCode(List<CampOperationSeason> campCodeList) {
-        campOperationSeasonRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampOperationSeason> CampAssociationList) {
+        campOperationSeasonRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampOperationSeason createCampCode(Camp camp, SeasonCode code) {
+    public CampOperationSeason createCampAssociation(Camp camp, SeasonCode code) {
         return CampOperationSeason.createCampOperationSeason(camp, code);
     }
 }

@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
+public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCode> {
 
     private final ThemeMapRegistry themeMapRegistry;
     private final ThemeCodeRepository themeCodeRepository;
     private final CampThemeRepository campThemeRepository;
 
     @Override
-    public List<CampTheme> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampTheme> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
                 saveCode(saveThemeCode);
                 addCodeToMap(saveThemeCode);
 
-                resultList.add(createCampCode(camp, saveThemeCode));
+                resultList.add(createCampAssociation(camp, saveThemeCode));
             } else {
-                resultList.add(createCampCode(camp, themeCode.get()));
+                resultList.add(createCampAssociation(camp, themeCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
     }
 
     @Override
-    @Transactional
     public void saveCode(ThemeCode code) {
         themeCodeRepository.save(code);
-        log.info("CampThemeHelper.saveCampCode 실행, id={}, name={}", code.getThemeCdId(), code.getThemeCdNm());
+        log.info("CampThemeHelper.saveCode 실행, id={}, name={}", code.getThemeCdId(), code.getThemeCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampThemeHelper implements CampCodeHelper<CampTheme, ThemeCode> {
     }
 
     @Override
-    public void saveCampCode(List<CampTheme> campCodeList) {
-        campThemeRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampTheme> CampAssociationList) {
+        campThemeRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampTheme createCampCode(Camp camp, ThemeCode code) {
+    public CampTheme createCampAssociation(Camp camp, ThemeCode code) {
         return CampTheme.createCampTheme(camp, code);
     }
 }

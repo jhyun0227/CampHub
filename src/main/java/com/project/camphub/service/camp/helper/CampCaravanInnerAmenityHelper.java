@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravanInnerAmenity, InnerAmenityCode>{
+public class CampCaravanInnerAmenityHelper implements CampAssociationHelper<CampCaravanInnerAmenity, InnerAmenityCode> {
 
     private final InnerAmenityMapRegistry innerAmenityMapRegistry;
     private final InnerAmenityCodeRepository innerAmenityCodeRepository;
     private final CampCaravanInnerAmenityRepository campCaravanInnerAmenityRepository;
 
     @Override
-    public List<CampCaravanInnerAmenity> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampCaravanInnerAmenity> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getCaravInnerFclty());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
                 saveCode(saveInnerAmenityCode);
                 addCodeToMap(saveInnerAmenityCode);
 
-                resultList.add(createCampCode(camp, saveInnerAmenityCode));
+                resultList.add(createCampAssociation(camp, saveInnerAmenityCode));
             } else {
-                resultList.add(createCampCode(camp, innerAmenityCode.get()));
+                resultList.add(createCampAssociation(camp, innerAmenityCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
     }
 
     @Override
-    @Transactional
     public void saveCode(InnerAmenityCode code) {
         innerAmenityCodeRepository.save(code);
-        log.info("CampCaravanInnerAmenityHelper.saveCampCode 실행, id={}, name={}", code.getInnerAmntyCdId(), code.getInnerAmntyCdNm());
+        log.info("CampCaravanInnerAmenityHelper.saveCode 실행, id={}, name={}", code.getInnerAmntyCdId(), code.getInnerAmntyCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampCaravanInnerAmenityHelper implements CampCodeHelper<CampCaravan
     }
 
     @Override
-    public void saveCampCode(List<CampCaravanInnerAmenity> campCodeList) {
-        campCaravanInnerAmenityRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampCaravanInnerAmenity> CampAssociationList) {
+        campCaravanInnerAmenityRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampCaravanInnerAmenity createCampCode(Camp camp, InnerAmenityCode code) {
+    public CampCaravanInnerAmenity createCampAssociation(Camp camp, InnerAmenityCode code) {
         return CampCaravanInnerAmenity.createCampCaravanInnerAmenity(camp, code);
     }
 }

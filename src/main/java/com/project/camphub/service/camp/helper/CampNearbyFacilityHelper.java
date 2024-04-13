@@ -18,15 +18,16 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacility, NearbyFacilityCode> {
+public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearbyFacility, NearbyFacilityCode> {
 
     private final NearbyFacilityMapRegistry nearbyFacilityMapRegistry;
     private final NearbyFacilityCodeRepository nearbyFacilityCodeRepository;
     private final CampNearbyFacilityRepository campNearbyFacilityRepository;
 
     @Override
-    public List<CampNearbyFacility> getCampCodeEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampNearbyFacility> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
 
         String[] values = convertStringToArray(item.getPosblFcltyCl());
         if (values == null) {
@@ -43,9 +44,9 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
                 saveCode(saveNearbyFacilityCode);
                 addCodeToMap(saveNearbyFacilityCode);
 
-                resultList.add(createCampCode(camp, saveNearbyFacilityCode));
+                resultList.add(createCampAssociation(camp, saveNearbyFacilityCode));
             } else {
-                resultList.add(createCampCode(camp, nearbyFacilityCode.get()));
+                resultList.add(createCampAssociation(camp, nearbyFacilityCode.get()));
             }
         }
 
@@ -53,10 +54,9 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
     }
 
     @Override
-    @Transactional
     public void saveCode(NearbyFacilityCode code) {
         nearbyFacilityCodeRepository.save(code);
-        log.info("CampNearbyFacilityHelper.saveCampCode 실행, id={}, name={}", code.getNrbyFcltCdId(), code.getNrbyFcltCdNm());
+        log.info("CampNearbyFacilityHelper.saveCode 실행, id={}, name={}", code.getNrbyFcltCdId(), code.getNrbyFcltCdNm());
     }
 
     @Override
@@ -65,12 +65,12 @@ public class CampNearbyFacilityHelper implements CampCodeHelper<CampNearbyFacili
     }
 
     @Override
-    public void saveCampCode(List<CampNearbyFacility> campCodeList) {
-        campNearbyFacilityRepository.saveAll(campCodeList);
+    public void saveCampAssociation(List<CampNearbyFacility> CampAssociationList) {
+        campNearbyFacilityRepository.saveAll(CampAssociationList);
     }
 
     @Override
-    public CampNearbyFacility createCampCode(Camp camp, NearbyFacilityCode code) {
+    public CampNearbyFacility createCampAssociation(Camp camp, NearbyFacilityCode code) {
         return CampNearbyFacility.createCampNearbyFacility(camp, code);
     }
 }
