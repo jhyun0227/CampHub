@@ -1,5 +1,8 @@
 package com.project.camphub.service.openapi;
 
+import com.project.camphub.domain.camp.entity.code.CampCode;
+import com.project.camphub.domain.common.entity.area.DistrictCode;
+import com.project.camphub.domain.common.entity.area.ProvinceCode;
 import com.project.camphub.domain.common.registry.AreaMapRegistry;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
@@ -14,6 +17,7 @@ import com.project.camphub.repository.camp.CampRepository;
 import com.project.camphub.repository.camp.CampSiteRepository;
 import com.project.camphub.service.camp.code.CampCodeService;
 import com.project.camphub.service.camp.helper.CampAssociationHelper;
+import com.project.camphub.service.common.area.AreaCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -37,6 +42,8 @@ public class OpenApiService {
     private final CampSiteRepository campSiteRepository;
 
     private final CampCodeService campCodeService;
+    private final AreaCodeService areaCodeService;
+
     private final List<CampAssociationHelper> campAssociationHelpers;
 
     private final AreaMapRegistry areaMapRegistry;
@@ -91,6 +98,11 @@ public class OpenApiService {
     }
 
     private void insertCampList(OpenApiResponse openApiResponse) {
+        //캠프코드, 시도코드, 시군구 코드
+        Map<String, Map<String, CampCode>> nameToCodeMap = campCodeService.getNameToCodeMap();
+        Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
+        Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
+
         OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
         int pageNo = body.getPageNo();
 
@@ -99,7 +111,7 @@ public class OpenApiService {
         List<OpenApiResponse.Item> itemList = body.getItems().getItem();
 
         for (OpenApiResponse.Item item : itemList) {
-            Camp camp = Camp.apiToEntity(item, areaMapRegistry);
+            Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
 
             campRepository.save(camp);
             campDetailRepository.save(CampDetail.apiToEntity(item, camp));

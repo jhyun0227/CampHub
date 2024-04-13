@@ -10,6 +10,7 @@ import lombok.*;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import static com.project.camphub.common.utils.CoordinateUtils.*;
 import static com.project.camphub.common.utils.DateUtils.*;
@@ -95,7 +96,7 @@ public class Camp implements Persistable<String> {
         return true;
     }
 
-    public static Camp apiToEntity(OpenApiResponse.Item item, AreaMapRegistry areaMapRegistry) {
+    public static Camp apiToEntity(OpenApiResponse.Item item, Map<String, ProvinceCode> provinceCodeMap, Map<String, DistrictCode> districtCodeMap) {
         return Camp.builder()
                 .cpId(item.getContentId())
                 .cpName(item.getFacltNm())
@@ -103,8 +104,8 @@ public class Camp implements Persistable<String> {
                 .cpHomepageUrl(item.getHomepage())
                 .cpResvUrl(item.getResveUrl())
                 .cpThumbUrl(item.getFirstImageUrl())
-                .provinceCode(areaMapRegistry.findByProvCdNm(item.getDoNm()))
-                .districtCode(areaMapRegistry.findByDistCdNm(item.getDoNm(), item.getSigunguNm()))
+                .provinceCode(setProvinceCode(item, provinceCodeMap))
+                .districtCode(setDistrictCode(item, districtCodeMap))
                 .cpZipcode(item.getZipcode())
                 .cpAddr(item.getAddr1())
                 .cpAddrDetail(item.getAddr2())
@@ -118,6 +119,15 @@ public class Camp implements Persistable<String> {
                 .cpModDt(parseStringToLocalDateTime(item.getModifiedtime()))
                 .cpIsActive(checkIsActive(item.getSyncStatus()))
                 .build();
+    }
+
+    private static ProvinceCode setProvinceCode(OpenApiResponse.Item item, Map<String, ProvinceCode> provinceCodeMap) {
+        return provinceCodeMap.get(item.getDoNm());
+    }
+
+    private static DistrictCode setDistrictCode(OpenApiResponse.Item item, Map<String, DistrictCode> districtCodeMap) {
+        String key = item.getDoNm() + ":" + item.getSigunguNm();
+        return districtCodeMap.get(key);
     }
 
     private static YnType checkIsActive(String syncStatus) {
