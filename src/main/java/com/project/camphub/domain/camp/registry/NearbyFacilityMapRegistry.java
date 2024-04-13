@@ -21,7 +21,7 @@ public class NearbyFacilityMapRegistry {
     private final NearbyFacilityCodeRepository nearbyFacilityCodeRepository;
 
     private final Map<Long, NearbyFacilityCode> nrbyFcltCdMap = new HashMap<>();
-    private final Map<String, NearbyFacilityCode> nameToNrbyFcltCdMap = new HashMap<>();
+//    private final Map<String, NearbyFacilityCode> nameToNrbyFcltCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class NearbyFacilityMapRegistry {
         setNearbyFacilityCodeMaps(nrbyFcltCdList);
 
         log.info("nrbyFcltCdMap.size()={}", nrbyFcltCdMap.size());
-        log.info("nameToNrbyFcltCdMap.size()={}", nameToNrbyFcltCdMap.size());
+//        log.info("nameToNrbyFcltCdMap.size()={}", nameToNrbyFcltCdMap.size());
         log.info("NearbyFacilityMapRegistry.init() 종료");
     }
 
     private void setNearbyFacilityCodeMaps(List<NearbyFacilityCode> nrbyFcltCdList) {
         nrbyFcltCdList.forEach(nrbyFcltCd -> {
             nrbyFcltCdMap.put(nrbyFcltCd.getNrbyFcltCdId(), nrbyFcltCd);
-            nameToNrbyFcltCdMap.put(nrbyFcltCd.getNrbyFcltCdNm(), nrbyFcltCd);
+//            nameToNrbyFcltCdMap.put(nrbyFcltCd.getNrbyFcltCdNm(), nrbyFcltCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class NearbyFacilityMapRegistry {
         return nrbyFcltCdMap.get(nrbyFcltCdId);
     }
 
+    /*
     public NearbyFacilityCode findByNrbyFcltCdNm(String nrbyFcltCdNm) {
         return nameToNrbyFcltCdMap.get(nrbyFcltCdNm);
     }
@@ -55,4 +56,5 @@ public class NearbyFacilityMapRegistry {
         nrbyFcltCdMap.put(nearbyFacilityCode.getNrbyFcltCdId(), nearbyFacilityCode);
         nameToNrbyFcltCdMap.put(nearbyFacilityCode.getNrbyFcltCdNm(), nearbyFacilityCode);
     }
+    */
 }

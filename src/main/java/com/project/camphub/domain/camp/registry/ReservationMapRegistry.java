@@ -21,7 +21,7 @@ public class ReservationMapRegistry {
     private final ReservationCodeRepository reservationCodeRepository;
 
     private final Map<Long, ReservationCode> resvCdMap = new HashMap<>();
-    private final Map<String, ReservationCode> nameToResvCdMap = new HashMap<>();
+//    private final Map<String, ReservationCode> nameToResvCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class ReservationMapRegistry {
         setReservationCodeMaps(resvCdList);
 
         log.info("resvCdMap.size()={}", resvCdMap.size());
-        log.info("nameToResvCdMap.size()={}", nameToResvCdMap.size());
+//        log.info("nameToResvCdMap.size()={}", nameToResvCdMap.size());
         log.info("ReservationMapRegistry.init() 종료");
     }
 
     private void setReservationCodeMaps(List<ReservationCode> resvCdList) {
         resvCdList.forEach(resvCd -> {
             resvCdMap.put(resvCd.getResvCdId(), resvCd);
-            nameToResvCdMap.put(resvCd.getResvCdNm(), resvCd);
+//            nameToResvCdMap.put(resvCd.getResvCdNm(), resvCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class ReservationMapRegistry {
         return resvCdMap.get(resvCdId);
     }
 
+    /*
     public ReservationCode findByResvCdNm(String resvCdNm) {
         return nameToResvCdMap.get(resvCdNm);
     }
@@ -55,4 +56,5 @@ public class ReservationMapRegistry {
         resvCdMap.put(reservationCode.getResvCdId(), reservationCode);
         nameToResvCdMap.put(reservationCode.getResvCdNm(), reservationCode);
     }
+    */
 }

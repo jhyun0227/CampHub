@@ -22,7 +22,7 @@ public class EquipmentMapRegistry {
     private final EquipmentCodeRepository equipmentCodeRepository;
 
     private final Map<Long, EquipmentCode> equipCdMap = new HashMap<>();
-    private final Map<String, EquipmentCode> nameToEquipCdMap = new HashMap<>();
+//    private final Map<String, EquipmentCode> nameToEquipCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,14 +33,14 @@ public class EquipmentMapRegistry {
         setEquipmentCodeMaps(equipCdList);
 
         log.info("equipCdMap.size()={}", equipCdMap.size());
-        log.info("nameToEquipCdMap.size()={}", nameToEquipCdMap.size());
+//        log.info("nameToEquipCdMap.size()={}", nameToEquipCdMap.size());
         log.info("EquipmentMapRegistry.init() 종료");
     }
 
     private void setEquipmentCodeMaps(List<EquipmentCode> equipCdList) {
         equipCdList.forEach(equipCd -> {
             equipCdMap.put(equipCd.getEquipCdId(), equipCd);
-            nameToEquipCdMap.put(equipCd.getEquipCdNm(), equipCd);
+//            nameToEquipCdMap.put(equipCd.getEquipCdNm(), equipCd);
         });
     }
 
@@ -48,6 +48,7 @@ public class EquipmentMapRegistry {
         return equipCdMap.get(equipCdId);
     }
 
+    /*
     public EquipmentCode findByEquipCdNm(String equipCdNm) {
         return nameToEquipCdMap.get(equipCdNm);
     }
@@ -56,5 +57,5 @@ public class EquipmentMapRegistry {
         equipCdMap.put(equipmentCode.getEquipCdId(), equipmentCode);
         nameToEquipCdMap.put(equipmentCode.getEquipCdNm(), equipmentCode);
     }
-
+    */
 }

@@ -21,7 +21,7 @@ public class AmenityMapRegistry {
     private final AmenityCodeRepository amenityCodeRepository;
 
     private final Map<Long, AmenityCode> amntyCdMap = new HashMap<>();
-    private final Map<String, AmenityCode> nameToAmntyCdMap = new HashMap<>();
+//    private final Map<String, AmenityCode> nameToAmntyCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class AmenityMapRegistry {
         setAmenityCodeMaps(amntyCdList);
 
         log.info("amntyCdMap.size()={}", amntyCdMap.size());
-        log.info("nameToAmntyCdMap.size()={}", nameToAmntyCdMap.size());
+//        log.info("nameToAmntyCdMap.size()={}", nameToAmntyCdMap.size());
         log.info("AmenityMapRegistry.init() 종료");
     }
 
     private void setAmenityCodeMaps(List<AmenityCode> amntyCdList) {
         amntyCdList.forEach(amntyCd -> {
             amntyCdMap.put(amntyCd.getAmntyCdId(), amntyCd);
-            nameToAmntyCdMap.put(amntyCd.getAmntyCdNm(), amntyCd);
+//            nameToAmntyCdMap.put(amntyCd.getAmntyCdNm(), amntyCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class AmenityMapRegistry {
         return amntyCdMap.get(amntyCdId);
     }
 
+    /*
     public AmenityCode findByAmntyCdNm(String amntyCdNm) {
         return nameToAmntyCdMap.get(amntyCdNm);
     }
@@ -55,4 +56,5 @@ public class AmenityMapRegistry {
         amntyCdMap.put(amenityCode.getAmntyCdId(), amenityCode);
         nameToAmntyCdMap.put(amenityCode.getAmntyCdNm(), amenityCode);
     }
+    */
 }

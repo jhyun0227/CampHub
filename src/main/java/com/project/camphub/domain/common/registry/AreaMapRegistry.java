@@ -25,8 +25,8 @@ public class AreaMapRegistry {
 
     private final Map<Long, ProvinceCode> provCdMap = new HashMap<>();
     private final Map<Long, DistrictCode> distCdMap = new HashMap<>();
-    private final Map<String, ProvinceCode> nameToProvCdMap = new HashMap<>();
-    private final Map<String, DistrictCode> nameToDistCdMap = new HashMap<>();
+//    private final Map<String, ProvinceCode> nameToProvCdMap = new HashMap<>();
+//    private final Map<String, DistrictCode> nameToDistCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -39,16 +39,16 @@ public class AreaMapRegistry {
         setDistCdMap(distCdList);
 
         log.info("provCdMap.size()={}", provCdMap.size());
-        log.info("nameToProvCdMap.size()={}", nameToProvCdMap.size());
+//        log.info("nameToProvCdMap.size()={}", nameToProvCdMap.size());
         log.info("distCdMap.size()={}", distCdMap.size());
-        log.info("nameToDistCdMap.size()={}", nameToDistCdMap.size());
+//        log.info("nameToDistCdMap.size()={}", nameToDistCdMap.size());
         log.info("AreaMapRegistry.init() 종료");
     }
 
     private void setProvCdMap(List<ProvinceCode> provCdList) {
         provCdList.forEach(provCd -> {
             provCdMap.put(provCd.getProvCdId(), provCd);
-            nameToProvCdMap.put(provCd.getProvCdNm(), provCd);
+//            nameToProvCdMap.put(provCd.getProvCdNm(), provCd);
         });
     }
 
@@ -58,10 +58,11 @@ public class AreaMapRegistry {
 
             //시군구의 경우 중복 명이 있기에 복합키를 만든다.
             String uniqueKey = distCd.getProvinceCode().getProvCdNm() + ":" + distCd.getDistCdNm();
-            nameToDistCdMap.put(uniqueKey, distCd);
+//            nameToDistCdMap.put(uniqueKey, distCd);
         });
     }
 
+    /*
     public ProvinceCode findByProvCdNm(String provCdNm) {
         return nameToProvCdMap.get(provCdNm);
     }
@@ -70,4 +71,5 @@ public class AreaMapRegistry {
         String key = provCdNm + ":" + distCdNm;
         return nameToDistCdMap.get(key);
     }
+    */
 }

@@ -21,7 +21,7 @@ public class LocationMapRegistry {
     private final LocationCodeRepository locationCodeRepository;
 
     private final Map<Long, LocationCode> loctCdMap = new HashMap<>();
-    private final Map<String, LocationCode> nameToLoctCdMap = new HashMap<>();
+//    private final Map<String, LocationCode> nameToLoctCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class LocationMapRegistry {
         setLocationCodeMaps(loctCdList);
 
         log.info("loctCdMap.size()={}", loctCdMap.size());
-        log.info("nameToLoctCdMap.size()={}", nameToLoctCdMap.size());
+//        log.info("nameToLoctCdMap.size()={}", nameToLoctCdMap.size());
         log.info("LocationMapRegistry.init() 종료");
     }
 
     private void setLocationCodeMaps (List<LocationCode> loctCdList) {
         loctCdList.forEach(loctCd -> {
             loctCdMap.put(loctCd.getLoctCdId(), loctCd);
-            nameToLoctCdMap.put(loctCd.getLoctCdNm(), loctCd);
+//            nameToLoctCdMap.put(loctCd.getLoctCdNm(), loctCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class LocationMapRegistry {
         return loctCdMap.get(loctCdId);
     }
 
+    /*
     public LocationCode findByLoctCdNm(String loctCdNm) {
         return nameToLoctCdMap.get(loctCdNm);
     }
@@ -55,4 +56,5 @@ public class LocationMapRegistry {
         loctCdMap.put(locationCode.getLoctCdId(), locationCode);
         nameToLoctCdMap.put(locationCode.getLoctCdNm(), locationCode);
     }
+    */
 }

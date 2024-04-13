@@ -21,7 +21,7 @@ public class ThemeMapRegistry {
     private final ThemeCodeRepository themeCodeRepository;
     
     private final Map<Long, ThemeCode> themeCdMap = new HashMap<>();
-    private final Map<String, ThemeCode> nameToThemeCdMap = new HashMap<>();
+//    private final Map<String, ThemeCode> nameToThemeCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class ThemeMapRegistry {
         setThemeCodeMaps(themeCdList);
 
         log.info("themeCdMap.size()={}", themeCdMap.size());
-        log.info("nameToThemeCdMap.size()={}", nameToThemeCdMap.size());
+//        log.info("nameToThemeCdMap.size()={}", nameToThemeCdMap.size());
         log.info("ThemeMapRegistry.init() 종료");
     }
 
     private void setThemeCodeMaps(List<ThemeCode> themeCdList) {
         themeCdList.forEach(themeCd -> {
             themeCdMap.put(themeCd.getThemeCdId(), themeCd);
-            nameToThemeCdMap.put(themeCd.getThemeCdNm(), themeCd);
+//            nameToThemeCdMap.put(themeCd.getThemeCdNm(), themeCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class ThemeMapRegistry {
         return themeCdMap.get(themeCdId);
     }
 
+    /*
     public ThemeCode findByThemeCdNm(String themeCdNm) {
         return nameToThemeCdMap.get(themeCdNm);
     }
@@ -55,4 +56,5 @@ public class ThemeMapRegistry {
         themeCdMap.put(themeCode.getThemeCdId(), themeCode);
         nameToThemeCdMap.put(themeCode.getThemeCdNm(), themeCode);
     }
+    */
 }

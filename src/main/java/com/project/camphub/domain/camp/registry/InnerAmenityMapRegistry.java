@@ -21,7 +21,7 @@ public class InnerAmenityMapRegistry {
     private final InnerAmenityCodeRepository innerAmenityCodeRepository;
 
     private final Map<Long, InnerAmenityCode> innerAmntyCdMap = new HashMap<>();
-    private final Map<String, InnerAmenityCode> nameToInnerAmntyCdMap = new HashMap<>();
+//    private final Map<String, InnerAmenityCode> nameToInnerAmntyCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class InnerAmenityMapRegistry {
         setInnerAmenityCodeMaps(innerAmntyCdList);
 
         log.info("innerAmntyCdMap.size()={}", innerAmntyCdMap.size());
-        log.info("nameToInnerAmntyCdMap.size()={}", nameToInnerAmntyCdMap.size());
+//        log.info("nameToInnerAmntyCdMap.size()={}", nameToInnerAmntyCdMap.size());
         log.info("InnerAmenityMapRegistry.init() 종료");
     }
 
     private void setInnerAmenityCodeMaps(List<InnerAmenityCode> innerAmntyCdList) {
         innerAmntyCdList.forEach(innerAmntyCd -> {
             innerAmntyCdMap.put(innerAmntyCd.getInnerAmntyCdId(), innerAmntyCd);
-            nameToInnerAmntyCdMap.put(innerAmntyCd.getInnerAmntyCdNm(), innerAmntyCd);
+//            nameToInnerAmntyCdMap.put(innerAmntyCd.getInnerAmntyCdNm(), innerAmntyCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class InnerAmenityMapRegistry {
         return innerAmntyCdMap.get(innerAmntyCdId);
     }
 
+    /*
     public InnerAmenityCode findByInnerAmntyCdNm(String innerAmntyCdNm) {
         return nameToInnerAmntyCdMap.get(innerAmntyCdNm);
     }
@@ -55,4 +56,5 @@ public class InnerAmenityMapRegistry {
         innerAmntyCdMap.put(innerAmenityCode.getInnerAmntyCdId(), innerAmenityCode);
         nameToInnerAmntyCdMap.put(innerAmenityCode.getInnerAmntyCdNm(), innerAmenityCode);
     }
+    */
 }

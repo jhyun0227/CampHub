@@ -21,7 +21,7 @@ public class IndustryMapRegistry {
     private final IndustryCodeRepository industryCodeRepository;
 
     private final Map<Long, IndustryCode> indstCdMap = new HashMap<>();
-    private final Map<String, IndustryCode> nameToIndstCdMap = new HashMap<>();
+//    private final Map<String, IndustryCode> nameToIndstCdMap = new HashMap<>();
 
     @PostConstruct
     private void init() {
@@ -32,14 +32,14 @@ public class IndustryMapRegistry {
         setIndustryCodeMaps(indstCdList);
 
         log.info("indstCdMap.size()={}", indstCdMap.size());
-        log.info("nameToIndstCdMap.size()={}", nameToIndstCdMap.size());
+//        log.info("nameToIndstCdMap.size()={}", nameToIndstCdMap.size());
         log.info("IndustryMapRegistry.init() 종료");
     }
 
     private void setIndustryCodeMaps(List<IndustryCode> indstCdList) {
         indstCdList.forEach(indstCd -> {
             indstCdMap.put(indstCd.getIndstCdId(), indstCd);
-            nameToIndstCdMap.put(indstCd.getIndstCdNm(), indstCd);
+//            nameToIndstCdMap.put(indstCd.getIndstCdNm(), indstCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class IndustryMapRegistry {
         return indstCdMap.get(indstCdId);
     }
 
+    /*
     public IndustryCode findByIndstCdNm(String indstCdNm) {
         return nameToIndstCdMap.get(indstCdNm);
     }
@@ -55,4 +56,5 @@ public class IndustryMapRegistry {
         indstCdMap.put(industryCode.getIndstCdId(), industryCode);
         nameToIndstCdMap.put(industryCode.getIndstCdNm(), industryCode);
     }
+    */
 }

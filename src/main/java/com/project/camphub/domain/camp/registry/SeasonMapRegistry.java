@@ -21,7 +21,7 @@ public class SeasonMapRegistry {
     private final SeasonCodeRepository seasonCodeRepository;
 
     private final Map<Long, SeasonCode> seasonCdMap = new HashMap<>();
-    private final Map<String, SeasonCode> nameToSeasonCdMap = new HashMap<>();
+//    private final Map<String, SeasonCode> nameToSeasonCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -32,14 +32,14 @@ public class SeasonMapRegistry {
         setSeasonCodeMaps(seasonCdList);
 
         log.info("seasonCdMap.size()={}", seasonCdMap.size());
-        log.info("nameToSeasonCdMap.size()={}", nameToSeasonCdMap.size());
+//        log.info("nameToSeasonCdMap.size()={}", nameToSeasonCdMap.size());
         log.info("SeasonMapRegistry.init() 종료");
     }
 
     private void setSeasonCodeMaps(List<SeasonCode> seasonCdList) {
         seasonCdList.forEach(seasonCd -> {
             seasonCdMap.put(seasonCd.getSeasonCdId(), seasonCd);
-            nameToSeasonCdMap.put(seasonCd.getSeasonCdNm(), seasonCd);
+//            nameToSeasonCdMap.put(seasonCd.getSeasonCdNm(), seasonCd);
         });
     }
 
@@ -47,6 +47,7 @@ public class SeasonMapRegistry {
         return seasonCdMap.get(seasonCdId);
     }
 
+    /*
     public SeasonCode findBySeasonCdNm(String seasonCdNm) {
         return nameToSeasonCdMap.get(seasonCdNm);
     }
@@ -55,4 +56,5 @@ public class SeasonMapRegistry {
         seasonCdMap.put(seasonCode.getSeasonCdId(), seasonCode);
         nameToSeasonCdMap.put(seasonCode.getSeasonCdNm(), seasonCode);
     }
+    */
 }
