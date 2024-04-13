@@ -46,7 +46,6 @@ public class OpenApiService {
 
     private final List<CampAssociationHelper> campAssociationHelpers;
 
-    private final AreaMapRegistry areaMapRegistry;
     private final PropertiesValue propertiesValue;
 
     private final int numOfRows = 100;
@@ -99,7 +98,7 @@ public class OpenApiService {
 
     private void insertCampList(OpenApiResponse openApiResponse) {
         //캠프코드, 시도코드, 시군구 코드
-        Map<String, Map<String, CampCode>> nameToCodeMap = campCodeService.getNameToCodeMap();
+        Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
         Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
 
@@ -120,7 +119,7 @@ public class OpenApiService {
 
             campAssociationHelpers.forEach(campAssociationHelper -> {
                 campAssociationHelper.saveCampAssociation(
-                        campAssociationHelper.getCampAssociationEntity(item, camp));
+                        campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps));
             });
         }
 

@@ -2,8 +2,8 @@ package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampTheme;
+import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
-import com.project.camphub.domain.camp.registry.ThemeMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import com.project.camphub.repository.camp.associations.CampThemeRepository;
 import com.project.camphub.repository.camp.code.ThemeCodeRepository;
@@ -12,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static com.project.camphub.domain.camp.CampCodeConst.THEME_CODE;
 
 @Slf4j
 @Service
@@ -22,12 +22,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCode> {
 
-    private final ThemeMapRegistry themeMapRegistry;
     private final ThemeCodeRepository themeCodeRepository;
     private final CampThemeRepository campThemeRepository;
 
     @Override
-    public List<CampTheme> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp) {
+    public List<CampTheme> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
         if (values == null) {
@@ -35,14 +34,16 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
         }
 
         List<CampTheme> resultList = new ArrayList<>();
+
+        Map<String, ThemeCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
-            Optional<ThemeCode> themeCode = Optional.ofNullable(themeMapRegistry.findByThemeCdNm(value));
+            Optional<ThemeCode> themeCode = Optional.ofNullable(nameToCodeMap.get(value));
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (themeCode.isEmpty()) {
                 ThemeCode saveThemeCode = new ThemeCode(value);
                 saveCode(saveThemeCode);
-                addCodeToMap(saveThemeCode);
+                addCodeToMap(saveThemeCode, nameToCodeMaps);
 
                 resultList.add(createCampAssociation(camp, saveThemeCode));
             } else {
@@ -54,14 +55,27 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
     }
 
     @Override
+    public Map<String, ThemeCode> getNameToCodeMap(Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        Map<String, ThemeCode> resultMaps = new HashMap<>();
+
+        Map<String, CampCode> findCodeMaps = nameToCodeMaps.get(THEME_CODE);
+
+        for (Map.Entry<String, CampCode> entry : findCodeMaps.entrySet()) {
+            resultMaps.put(entry.getKey(), (ThemeCode) entry.getValue());
+        }
+
+        return resultMaps;
+    }
+
+    @Override
     public void saveCode(ThemeCode code) {
         themeCodeRepository.save(code);
         log.info("CampThemeHelper.saveCode 실행, id={}, name={}", code.getThemeCdId(), code.getThemeCdNm());
     }
 
     @Override
-    public void addCodeToMap(ThemeCode code) {
-        themeMapRegistry.addThemeCodeMaps(code);
+    public void addCodeToMap(ThemeCode code, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        nameToCodeMaps.get(THEME_CODE).put(code.getThemeCdNm(), code);
     }
 
     @Override

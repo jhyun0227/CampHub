@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.project.camphub.domain.camp.CampCodeConst.*;
+
 @Slf4j
 @Service
 @Transactional
@@ -28,18 +30,18 @@ public class CampCodeService {
     private final ThemeCodeRepository themeCodeRepository;
 
     @Transactional(readOnly = true)
-    public Map<String, Map<String, CampCode>> getNameToCodeMap() {
+    public Map<String, Map<String, CampCode>> getNameToCodeMaps() {
         Map<String, Map<String, CampCode>> resultMaps = new HashMap<>();
 
-        resultMaps.put("amenityCode", setCodeMaps(amenityCodeRepository.findAll()));
-        resultMaps.put("equipmentCode", setCodeMaps(equipmentCodeRepository.findAll()));
-        resultMaps.put("industryCode", setCodeMaps(industryCodeRepository.findAll()));
-        resultMaps.put("innerAmenityCode", setCodeMaps(innerAmenityCodeRepository.findAll()));
-        resultMaps.put("locationCode", setCodeMaps(locationCodeRepository.findAll()));
-        resultMaps.put("nearbyFacilityCode", setCodeMaps(nearbyFacilityCodeRepository.findAll()));
-        resultMaps.put("reservationCode", setCodeMaps(reservationCodeRepository.findAll()));
-        resultMaps.put("seasonCode", setCodeMaps(seasonCodeRepository.findAll()));
-        resultMaps.put("themeCode", setCodeMaps(themeCodeRepository.findAll()));
+        resultMaps.put(AMENITY_CODE, setCodeMaps(amenityCodeRepository.findAll()));
+        resultMaps.put(EQUIPMENT_CODE, setCodeMaps(equipmentCodeRepository.findAll()));
+        resultMaps.put(INDUSTRY_CODE, setCodeMaps(industryCodeRepository.findAll()));
+        resultMaps.put(INNER_AMENITY_CODE, setCodeMaps(innerAmenityCodeRepository.findAll()));
+        resultMaps.put(LOCATION_CODE, setCodeMaps(locationCodeRepository.findAll()));
+        resultMaps.put(NEARBY_FACILITY_CODE, setCodeMaps(nearbyFacilityCodeRepository.findAll()));
+        resultMaps.put(RESERVATION_CODE, setCodeMaps(reservationCodeRepository.findAll()));
+        resultMaps.put(SEASON_CODE, setCodeMaps(seasonCodeRepository.findAll()));
+        resultMaps.put(THEME_CODE, setCodeMaps(themeCodeRepository.findAll()));
 
         return resultMaps;
     }
