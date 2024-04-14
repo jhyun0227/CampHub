@@ -109,6 +109,8 @@ public class OpenApiService {
 
         List<OpenApiResponse.Item> itemList = body.getItems().getItem();
 
+        log.info("itemList = {}", itemList);
+
         for (OpenApiResponse.Item item : itemList) {
             Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
 
@@ -119,7 +121,7 @@ public class OpenApiService {
 
             campAssociationHelpers.forEach(campAssociationHelper -> {
                 List campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
-                if (campAssociationEntity != null || !campAssociationEntity.isEmpty()) {
+                if (campAssociationEntity != null) {
                     campAssociationHelper.saveCampAssociation(campAssociationEntity);
                 }
             });
