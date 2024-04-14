@@ -31,8 +31,6 @@ public class AreaCodeService {
             resultList.put(provinceCode.getProvCdNm(), provinceCode);
         });
 
-        log.info("nameToProvinceCodeMap.size() = {}", resultList.size());
-
         return resultList;
     }
 
@@ -45,8 +43,6 @@ public class AreaCodeService {
             String key = districtCode.getProvinceCode().getProvCdNm() + ":" + districtCode.getDistCdNm();
             resultList.put(key, districtCode);
         });
-
-        log.info("nameToDistrictCodeMap.size() = {}", resultList.size());
 
         return resultList;
     }
