@@ -3,6 +3,7 @@ package com.project.camphub.service.camp.helper;
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,10 @@ public interface CampAssociationHelper<T, D> {
     T createCampAssociation(Camp camp, D code);
 
     default String[] convertStringToArray(String stringValue) {
+        if (!StringUtils.hasText(stringValue)) {
+            return null;
+        }
+
         String[] values = stringValue.split(",");
 
         if (values.length == 0) {

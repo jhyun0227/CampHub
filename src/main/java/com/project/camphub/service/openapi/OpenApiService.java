@@ -118,8 +118,10 @@ public class OpenApiService {
             campSiteRepository.save(CampSite.apiToEntity(item, camp));
 
             campAssociationHelpers.forEach(campAssociationHelper -> {
-                campAssociationHelper.saveCampAssociation(
-                        campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps));
+                List campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
+                if (campAssociationEntity != null || !campAssociationEntity.isEmpty()) {
+                    campAssociationHelper.saveCampAssociation(campAssociationEntity);
+                }
             });
         }
 
