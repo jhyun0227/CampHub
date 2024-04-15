@@ -22,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -51,78 +53,116 @@ public class OpenApiService {
     private final int numOfRows = 100;
 
     public void fetchAndInsertCampList() {
-        //데이터 total 개수 확인
-        Mono<OpenApiResponse> findTotalCountResponse = fetchCampList(1, 1);
-        int totalCount = findTotalCountResponse.map(openApiResponse -> openApiResponse.getResponse().getBody().getTotalCount()).block().intValue();
+        int maxPageCount = getMaxPageCount(null);
 
-        //조회할 페이지 수 저장
-        int maxPageCount = calculatePagesRequired(totalCount);
-        log.info("maxPageCount = {}", maxPageCount);
-
-        List<OpenApiResponse> openApiResponseList = Flux.range(1, maxPageCount)
-                .flatMap(page -> fetchCampList(numOfRows, page) // 각 페이지에 대한 요청
-                                .subscribeOn(Schedulers.parallel()), // 병렬 처리
-                        5)//동시 실행할 작업의 최대 수
-                .collectList()
-                .block();
+        List<OpenApiResponse> openApiResponseList = getOpenApiResponseList(maxPageCount, null);
 
         if (!openApiResponseList.isEmpty()) {
-            log.info("openApiResponse.size() = {}", openApiResponseList.size());
-            openApiResponseList.forEach(this::insertCampList);
+            insertCampList(openApiResponseList);
         }
     }
 
-    private Mono<OpenApiResponse> fetchCampList(int numOfRows, int page) {
+    /*
+    public void fetchAndUpdateCampList(String modDate) {
+        int maxPageCount = getMaxPageCount(modDate);
+
+        List<OpenApiResponse> openApiResponseList = getOpenApiResponseList(maxPageCount, modDate);
+
+        if (!openApiResponseList.isEmpty()) {
+            updateCampList(openApiResponseList);
+        }
+    }
+     */
+
+    private Mono<OpenApiResponse> fetchCampList(int numOfRows, int page, String modDate) {
         log.info("fetchCampList 실행, page={}", page);
 
         WebClient webClient = WebClientFactory.createWebClient(propertiesValue.getOpenApiEndPoint());
 
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(propertiesValue.getOpenApiSyncPath())
-                        .queryParam("numOfRows", numOfRows)
-                        .queryParam("pageNo", page)
-                        .queryParam("MobileOS", "ETC")
-                        .queryParam("MobileApp", "CampHub")
-                        .queryParam("serviceKey", propertiesValue.getOpenApiEncodingKey())
-                        .queryParam("_type", "json")
-                        .build()
+                .uri(uriBuilder -> {
+                            UriBuilder builder = uriBuilder
+                                    .path(propertiesValue.getOpenApiSyncPath())
+                                    .queryParam("numOfRows", numOfRows)
+                                    .queryParam("pageNo", page)
+                                    .queryParam("MobileOS", "ETC")
+                                    .queryParam("MobileApp", "CampHub")
+                                    .queryParam("serviceKey", propertiesValue.getOpenApiEncodingKey())
+                                    .queryParam("_type", "json");
+
+                            if (StringUtils.hasText(modDate)) {
+                                builder.queryParam("syncModTime", modDate);
+                            }
+
+                            return builder.build();
+                        }
                 )
                 .retrieve()
                 .bodyToMono(OpenApiResponse.class);
+    }
+
+    private int getMaxPageCount(String modDate) {
+        Mono<OpenApiResponse> findTotalCountResponse = fetchCampList(1, 1, modDate);
+        int totalCount = findTotalCountResponse.map(openApiResponse -> openApiResponse.getResponse().getBody().getTotalCount()).block().intValue();
+
+        return calculatePagesRequired(totalCount);
     }
 
     private int calculatePagesRequired(int rowCount) {
         return rowCount%numOfRows==0 ? rowCount/numOfRows : (rowCount/numOfRows)+1;
     }
 
-    private void insertCampList(OpenApiResponse openApiResponse) {
+    private List<OpenApiResponse> getOpenApiResponseList(int maxPageCount, String modDate) {
+        log.info("maxPageCount = {}", maxPageCount);
+        log.info("modDate = {}", modDate == null ? "날짜 없음" : modDate);
+
+        return Flux.range(1, maxPageCount)
+                .flatMap(page -> fetchCampList(numOfRows, page, modDate) // 각 페이지에 대한 요청
+                                .subscribeOn(Schedulers.parallel()), // 병렬 처리
+                        5)//동시 실행할 작업의 최대 수
+                .collectList()
+                .block();
+    }
+
+    private void insertCampList(List<OpenApiResponse> openApiResponseList) {
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
         Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
 
-        OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
-        int pageNo = body.getPageNo();
+        for (OpenApiResponse openApiResponse : openApiResponseList) {
 
-        List<OpenApiResponse.Item> itemList = body.getItems().getItem();
+            OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
+            int pageNo = body.getPageNo();
 
-        for (OpenApiResponse.Item item : itemList) {
-            Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
+            List<OpenApiResponse.Item> itemList = body.getItems().getItem();
 
-            campRepository.save(camp);
-            campDetailRepository.save(CampDetail.apiToEntity(item, camp));
-            campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
-            campSiteRepository.save(CampSite.apiToEntity(item, camp));
+            for (OpenApiResponse.Item item : itemList) {
+                Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
 
-            campAssociationHelpers.forEach(campAssociationHelper -> {
-                List campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
-                if (campAssociationEntity != null) {
-                    campAssociationHelper.saveCampAssociation(campAssociationEntity);
-                }
-            });
+                campRepository.save(camp);
+                campDetailRepository.save(CampDetail.apiToEntity(item, camp));
+                campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
+                campSiteRepository.save(CampSite.apiToEntity(item, camp));
+
+                campAssociationHelpers.forEach(campAssociationHelper -> {
+                    List campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
+                    if (campAssociationEntity != null) {
+                        campAssociationHelper.saveCampAssociation(campAssociationEntity);
+                    }
+                });
+            }
+
+            log.info("insertCampList 종료, page={}", pageNo);
         }
-
-        log.info("insertCampList 종료, page={}", pageNo);
     }
+
+    /*
+    private void updateCampList(List<OpenApiResponse> openApiResponseList) {
+        //캠프코드, 시도코드, 시군구 코드
+        Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
+        Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
+        Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
+    }
+     */
 }
