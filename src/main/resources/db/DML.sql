@@ -336,7 +336,7 @@ INSERT INTO amenity_code(amnty_cd_nm) VALUE ('전기');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('무선인터넷');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('장작판매');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('온수');
-INSERT INTO amenity_code(amnty_cd_nm) VALUE ('트램폴린');
+INSERT INTO amenity_code(amnty_cd_nm) VALUE ('트렘폴린');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('물놀이장');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('놀이터');
 INSERT INTO amenity_code(amnty_cd_nm) VALUE ('산책로');
