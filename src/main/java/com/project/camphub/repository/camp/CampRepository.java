@@ -10,4 +10,11 @@ import java.util.List;
 public interface CampRepository extends JpaRepository<Camp, String> {
     @EntityGraph(attributePaths = {"campDetail", "campFacility", "campSite"})
     List<Camp> findCampsByCpIdIn(List<String> cpIdList);
+
+    @EntityGraph(attributePaths =
+            {"campDetail", "campFacility", "campSite", "campAmenityList", "campCaravanInnerAmenityList", "campEquipmentRentalList",
+                    "campGlampingInnerAmenityList", "campIndustryList", "campLocationList", "campNearbyFacilityList", "campOperationSeasonList",
+                    "campReservationList", "campThemeList", "campTravelSeasonList"
+            })
+    List<Camp> findAllByCpIdIn(List<String> cpIdList);
 }

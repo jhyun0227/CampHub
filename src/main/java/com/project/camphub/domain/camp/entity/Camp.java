@@ -1,5 +1,6 @@
 package com.project.camphub.domain.camp.entity;
 
+import com.project.camphub.domain.camp.entity.associations.*;
 import com.project.camphub.domain.common.registry.AreaMapRegistry;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
@@ -10,6 +11,8 @@ import lombok.*;
 import org.springframework.data.domain.Persistable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.project.camphub.common.utils.CoordinateUtils.*;
@@ -70,12 +73,40 @@ public class Camp implements Persistable<String> {
     private YnType cpIsActive;
 
     //캠프 상세, 시설, 사이트
-    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private CampDetail campDetail;
-    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private CampFacility campFacility;
-    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private CampSite campSite;
+
+    public void assignCampDetail(CampDetail campDetail) { this.campDetail = campDetail; }
+    public void assignCampFacility(CampFacility campFacility) { this.campFacility = campFacility; }
+    public void assignCampSite(CampSite campSite) { this.campSite = campSite; }
+
+    //캠프코드 연관관계
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampAmenity> campAmenityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampCaravanInnerAmenity> campCaravanInnerAmenityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampEquipmentRental> campEquipmentRentalList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampIndustry> campIndustryList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampLocation> campLocationList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampNearbyFacility> campNearbyFacilityList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampOperationSeason> campOperationSeasonList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampReservation> campReservationList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampTheme> campThemeList = new ArrayList<>();
+    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CampTravelSeason> campTravelSeasonList = new ArrayList<>();
 
     /**
      * persistable 구현메서드

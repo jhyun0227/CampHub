@@ -71,7 +71,7 @@ public class CampSite implements Persistable<String> {
     }
 
     public static CampSite apiToEntity(OpenApiResponse.Item item, Camp camp) {
-        return CampSite.builder()
+        CampSite campSite = CampSite.builder()
                 .camp(camp)
                 .cpsSiteDist(parseInt(item.getSitedStnc()))
                 .cpsSiteSize1Cnt(parseInt(item.getSiteMg1Co()))
@@ -89,6 +89,10 @@ public class CampSite implements Persistable<String> {
                 .cpsBttmGravelCnt(parseInt(item.getSiteBottomCl4()))
                 .cpsBttmDirtCnt(parseInt(item.getSiteBottomCl5()))
                 .build();
+
+        camp.assignCampSite(campSite);
+
+        return campSite;
     }
 
     public void updateCampSite(OpenApiResponse.Item item) {

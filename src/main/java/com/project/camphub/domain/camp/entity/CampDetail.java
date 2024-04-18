@@ -110,7 +110,7 @@ public class CampDetail implements Persistable<String> {
     }
 
     public static CampDetail apiToEntity(OpenApiResponse.Item item, Camp camp) {
-        return CampDetail.builder()
+        CampDetail campDetail = CampDetail.builder()
                 .camp(camp)
                 .cpdIntro(item.getIntro())
                 .cpdLineIntro(item.getLineIntro())
@@ -133,6 +133,10 @@ public class CampDetail implements Persistable<String> {
                 .cpdPrvtTrlYn(YnType.findByDescription(item.getTrlerAcmpnyAt()))
                 .cpdInsuredYn(YnType.findByDescription(item.getInsrncAt()))
                 .build();
+
+        camp.assignCampDetail(campDetail);
+
+        return campDetail;
     }
 
     public void updateCampDetail(OpenApiResponse.Item item) {

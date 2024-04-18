@@ -93,7 +93,7 @@ public class OpenApiService {
                 .collect(Collectors.toList());
 
         //Camp 데이터 조회 (영속성 컨텍스트)
-        List<Camp> findCampList = campRepository.findCampsByCpIdIn(itemContentIds);
+        List<Camp> findCampList = campRepository.findAllByCpIdIn(itemContentIds);
         Map<String, Camp> findCampMap = findCampList.stream()
                 .collect(Collectors.toMap(Camp::getCpId, camp -> camp));
 
@@ -217,16 +217,14 @@ public class OpenApiService {
 
         for (OpenApiResponse.Item item : itemList) {
             Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
-
-            campRepository.save(camp);
-            campDetailRepository.save(CampDetail.apiToEntity(item, camp));
-            campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
-            campSiteRepository.save(CampSite.apiToEntity(item, camp));
+            CampDetail campDetail = CampDetail.apiToEntity(item, camp);
+            CampFacility campFacility = CampFacility.apiToEntity(item, camp);
+            CampSite campSite = CampSite.apiToEntity(item, camp);
 
             campAssociationHelpers.forEach(campAssociationHelper -> {
                 List<?> campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
                 if (campAssociationEntity != null) {
-                    campAssociationHelper.saveCampAssociation(campAssociationEntity);
+                    campAssociationHelper.saveCampAssociation(camp, campAssociationEntity);
                 }
             });
         }
