@@ -137,4 +137,26 @@ public class Camp implements Persistable<String> {
 
         return YnType.Y;
     }
+
+    public void updateCamp(OpenApiResponse.Item item, Map<String, ProvinceCode> provinceCodeMap, Map<String, DistrictCode> districtCodeMap) {
+        this.cpName = item.getFeatureNm();
+        this.cpTel = item.getTel();
+        this.cpHomepageUrl = item.getHomepage();
+        this.cpResvUrl = item.getResveUrl();
+        this.cpThumbUrl = item.getFirstImageUrl();
+        this.provinceCode = setProvinceCode(item, provinceCodeMap);
+        this.districtCode = setDistrictCode(item, districtCodeMap);
+        this.cpZipcode = item.getZipcode();
+        this.cpAddr = item.getAddr1();
+        this.cpAddrDetail = item.getAddr2();
+        this.cpLon = parseLonOrLatToDouble(item.getMapX());
+        this.cpLat = parseLonOrLatToDouble(item.getMapY());
+        this.cpDirections = item.getDirection();
+        this.cpTourBizNo = item.getTrsagntNo();
+        this.cpBizNo = item.getBizrno();
+        this.cpPermitDt = parseStringToLocalDateTime(item.getPrmisnDe());
+        this.cpCreateDt = parseStringToLocalDateTime(item.getCreatedtime());
+        this.cpModDt = parseStringToLocalDateTime(item.getModifiedtime());
+        this.cpIsActive = checkIsActive(item.getSyncStatus());
+    }
 }

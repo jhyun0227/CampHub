@@ -29,10 +29,12 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.project.camphub.common.utils.DateUtils.parseStringToLocalDateTime;
 
 @Slf4j
 @Service
@@ -54,26 +56,89 @@ public class OpenApiService {
 
     private final int numOfRows = 100;
 
+    /**
+     * 데이터 초기화
+     */
     public void initializeCampList() {
         int maxPageCount = getMaxPageCount(null);
 
-        List<OpenApiResponse> openApiResponseList = getOpenApiResponseList(maxPageCount, null);
+        List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, null);
+        log.info("initializeCampList 실행, itemList.size() = {}", itemList.size());
 
-        if (!openApiResponseList.isEmpty()) {
-            insertCampList(openApiResponseList);
+        if (itemList.isEmpty()) {
+            log.info("initializeCampList 실행, 초기화 데이터 없음");
+            return;
         }
+
+        insertCampList(itemList);
     }
 
+    /**
+     * 데이터 동기화 및 수정
+     */
     public void refreshCampListFromAPI(String modDate) {
         int maxPageCount = getMaxPageCount(modDate);
 
-        List<OpenApiResponse> openApiResponseList = getOpenApiResponseList(maxPageCount, modDate);
+        List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, modDate);
+        log.info("refreshCampListFromAPI 실행, itemList.size() = {}", itemList.size());
 
-        if (!openApiResponseList.isEmpty()) {
-            updateCampList(openApiResponseList);
+        if (itemList.isEmpty()) {
+            log.info("refreshCampListFromAPI 실행, 리프레시 데이터 없음. 해당날짜 = {}", modDate);
+            return;
         }
+
+        //기존에 적재된 데이터인지 조회에 필요한 idList
+        List<String> itemContentIds = itemList.stream()
+                .map(OpenApiResponse.Item::getContentId)
+                .collect(Collectors.toList());
+
+        //Camp 데이터 조회 (영속성 컨텍스트)
+        List<Camp> findCampList = campRepository.findCampsByCpIdIn(itemContentIds);
+        Map<String, Camp> findCampMap = findCampList.stream()
+                .collect(Collectors.toMap(Camp::getCpId, camp -> camp));
+
+        /**
+         * 변경사항 ID를 반복문으로 돌려 동기화 및 수정 반영
+         * 1. DB를 통해 조회한 CampMaps에서 itemContentId를 이용하여 인스턴스를 가져온다. 인스턴스가 없을 경우 새로 추가되는 데이터로 간주
+         *    (item.contentId == camp.cpId), 데이터 저장 List에 담은 후 continue를 통해 다음 반복으로 이동
+         *
+         * 2. Item의 데이터 수정 날짜와 DB 수정 날짜가 같을 경우 동일한 수정사항이므로 반복문을 건너 뛴다.
+         *
+         * 3. 위의 두 조건이 일치하지 않을 경우 수정 대상 데이터로 간주, 데이터 업데이트 List에 담는다.
+         */
+        List<OpenApiResponse.Item> newCampItemList = new ArrayList<>();
+        List<OpenApiResponse.Item> updateCampItemList = new ArrayList<>();
+
+        for (OpenApiResponse.Item item : itemList) {
+            //1
+            Optional<Camp> optionalCamp = Optional.ofNullable(findCampMap.get(item.getContentId()));
+            if (optionalCamp.isEmpty()) {
+                newCampItemList.add(item);
+                continue;
+            }
+
+            //2
+            Camp camp = optionalCamp.get();
+            boolean equalModified
+                    = camp.getCpModDt().isEqual(parseStringToLocalDateTime(item.getModifiedtime()));
+
+            if (equalModified) {
+                continue;
+            }
+
+            //3
+            updateCampItemList.add(item);
+        }
+
+        //저장 및 수정 진행
+        insertCampList(newCampItemList);
+        updateCampList(updateCampItemList, findCampMap);
+
     }
 
+    /**
+     * 공공 데이터 포털 측에 API를 요청하여 응답 값을 받는 메서드
+     */
     private Mono<OpenApiResponse> fetchCampList(int numOfRows, int page, String modDate) {
         log.info("fetchCampList 실행, page={}", page);
 
@@ -101,81 +166,90 @@ public class OpenApiService {
                 .bodyToMono(OpenApiResponse.class);
     }
 
+    /**
+     * 데이터 초기화 및 데이터 리프레쉬 시에 요청할 페이지의 수를 구하는 메서드
+     * OpenAPI 요청은 1번에 최대 100개 가능
+     */
     private int getMaxPageCount(String modDate) {
         Mono<OpenApiResponse> findTotalCountResponse = fetchCampList(1, 1, modDate);
         int totalCount = findTotalCountResponse.map(openApiResponse -> openApiResponse.getResponse().getBody().getTotalCount()).block().intValue();
 
+        log.info("getMaxPageCount 실행, totalCount = {}",  totalCount);
+
         return calculatePagesRequired(totalCount);
     }
 
+    /**
+     * 요청 페이지 수를 구하는 메서드
+     */
     private int calculatePagesRequired(int rowCount) {
         return rowCount%numOfRows==0 ? rowCount/numOfRows : (rowCount/numOfRows)+1;
     }
 
-    private List<OpenApiResponse> getOpenApiResponseList(int maxPageCount, String modDate) {
+    /**
+     * 요청 페이지 수 만큼의 응답값을 모아 하나의 Item List로 변환하는 메서드
+     * 하나의 페이지당 한 개의 OpenApiResponse 응답을 반환, 응답안의 Item 인스턴스들을 flatMap을 통해 하나의 리스트로 반환
+     */
+    private List<OpenApiResponse.Item> getOpenApiResponseItemList(int maxPageCount, String modDate) {
         log.info("maxPageCount = {}", maxPageCount);
         log.info("modDate = {}", modDate == null ? "날짜 없음" : modDate);
 
-        return Flux.range(1, maxPageCount)
+        List<OpenApiResponse> openApiResponseList = Flux.range(1, maxPageCount)
                 .flatMap(page -> fetchCampList(numOfRows, page, modDate) // 각 페이지에 대한 요청
                                 .subscribeOn(Schedulers.parallel()), // 병렬 처리
                         5)//동시 실행할 작업의 최대 수
                 .collectList()
                 .block();
+
+        return openApiResponseList.stream()
+                .flatMap(openApiResponse -> openApiResponse.getResponse().getBody().getItems().getItem().stream())
+                .collect(Collectors.toList());
     }
 
-    private void insertCampList(List<OpenApiResponse> openApiResponseList) {
+    /**
+     * DB에 캠핑 정보를 Insert 하는 메서드
+     */
+    private void insertCampList(List<OpenApiResponse.Item> itemList) {
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
         Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
 
-        for (OpenApiResponse openApiResponse : openApiResponseList) {
+        for (OpenApiResponse.Item item : itemList) {
+            Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
 
-            OpenApiResponse.Body body = openApiResponse.getResponse().getBody();
-            int pageNo = body.getPageNo();
+            campRepository.save(camp);
+            campDetailRepository.save(CampDetail.apiToEntity(item, camp));
+            campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
+            campSiteRepository.save(CampSite.apiToEntity(item, camp));
 
-            List<OpenApiResponse.Item> itemList = body.getItems().getItem();
-
-            for (OpenApiResponse.Item item : itemList) {
-                Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
-
-                campRepository.save(camp);
-                campDetailRepository.save(CampDetail.apiToEntity(item, camp));
-                campFacilityRepository.save(CampFacility.apiToEntity(item, camp));
-                campSiteRepository.save(CampSite.apiToEntity(item, camp));
-
-                campAssociationHelpers.forEach(campAssociationHelper -> {
-                    List<?> campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
-                    if (campAssociationEntity != null) {
-                        campAssociationHelper.saveCampAssociation(campAssociationEntity);
-                    }
-                });
-            }
-
-            log.info("insertCampList 종료, page={}", pageNo);
+            campAssociationHelpers.forEach(campAssociationHelper -> {
+                List<?> campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
+                if (campAssociationEntity != null) {
+                    campAssociationHelper.saveCampAssociation(campAssociationEntity);
+                }
+            });
         }
     }
 
-    private void updateCampList(List<OpenApiResponse> openApiResponseList) {
+    private void updateCampList(List<OpenApiResponse.Item> itemList, Map<String, Camp> campMap) {
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
         Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
 
-        //ContentId로 Item 찾는 맵
-        Map<String, OpenApiResponse.Item> itemMaps = new HashMap<>();
-        //엔티티 조회를 위한 Id 리스트
-        List<String> updateContentIds = new ArrayList<>();
+        for (OpenApiResponse.Item item : itemList) {
+            Camp camp = campMap.get(item.getContentId());
+            CampDetail campDetail = camp.getCampDetail();
+            CampFacility campFacility = camp.getCampFacility();
+            CampSite campSite = camp.getCampSite();
 
-        openApiResponseList.stream()
-                .flatMap(openApiResponse -> openApiResponse.getResponse().getBody().getItems().getItem().stream())
-                .forEach(item -> {
-                    itemMaps.put(item.getContentId(), item);
-                    updateContentIds.add(item.getContentId());
-                });
+            camp.updateCamp(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
+            campDetail.updateCampDetail(item);
+            campFacility.updateCampFacility(item);
+            campSite.updateCampSite(item);
 
-        
 
+        }
     }
 }

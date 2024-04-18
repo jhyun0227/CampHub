@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
+import static java.lang.Integer.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -71,21 +73,39 @@ public class CampSite implements Persistable<String> {
     public static CampSite apiToEntity(OpenApiResponse.Item item, Camp camp) {
         return CampSite.builder()
                 .camp(camp)
-                .cpsSiteDist(Integer.parseInt(item.getSitedStnc()))
-                .cpsSiteSize1Cnt(Integer.parseInt(item.getSiteMg1Co()))
-                .cpsSiteSize1Width(Integer.parseInt(item.getSiteMg1Width()))
-                .cpsSiteSize1Length(Integer.parseInt(item.getSiteMg1Vrticl()))
-                .cpsSiteSize2Cnt(Integer.parseInt(item.getSiteMg2Co()))
-                .cpsSiteSize2Width(Integer.parseInt(item.getSiteMg2Width()))
-                .cpsSiteSize2Length(Integer.parseInt(item.getSiteMg2Vrticl()))
-                .cpsSiteSize3Cnt(Integer.parseInt(item.getSiteMg3Co()))
-                .cpsSiteSize3Width(Integer.parseInt(item.getSiteMg3Width()))
-                .cpsSiteSize3Length(Integer.parseInt(item.getSiteMg3Vrticl()))
-                .cpsBttmGrassCnt(Integer.parseInt(item.getSiteBottomCl1()))
-                .cpsBttmStnCnt(Integer.parseInt(item.getSiteBottomCl2()))
-                .cpsBttmTechCnt(Integer.parseInt(item.getSiteBottomCl3()))
-                .cpsBttmGravelCnt(Integer.parseInt(item.getSiteBottomCl4()))
-                .cpsBttmDirtCnt(Integer.parseInt(item.getSiteBottomCl5()))
+                .cpsSiteDist(parseInt(item.getSitedStnc()))
+                .cpsSiteSize1Cnt(parseInt(item.getSiteMg1Co()))
+                .cpsSiteSize1Width(parseInt(item.getSiteMg1Width()))
+                .cpsSiteSize1Length(parseInt(item.getSiteMg1Vrticl()))
+                .cpsSiteSize2Cnt(parseInt(item.getSiteMg2Co()))
+                .cpsSiteSize2Width(parseInt(item.getSiteMg2Width()))
+                .cpsSiteSize2Length(parseInt(item.getSiteMg2Vrticl()))
+                .cpsSiteSize3Cnt(parseInt(item.getSiteMg3Co()))
+                .cpsSiteSize3Width(parseInt(item.getSiteMg3Width()))
+                .cpsSiteSize3Length(parseInt(item.getSiteMg3Vrticl()))
+                .cpsBttmGrassCnt(parseInt(item.getSiteBottomCl1()))
+                .cpsBttmStnCnt(parseInt(item.getSiteBottomCl2()))
+                .cpsBttmTechCnt(parseInt(item.getSiteBottomCl3()))
+                .cpsBttmGravelCnt(parseInt(item.getSiteBottomCl4()))
+                .cpsBttmDirtCnt(parseInt(item.getSiteBottomCl5()))
                 .build();
+    }
+
+    public void updateCampSite(OpenApiResponse.Item item) {
+        this.cpsSiteDist = parseInt(item.getSitedStnc());
+        this.cpsSiteSize1Cnt = parseInt(item.getSiteMg1Co());
+        this.cpsSiteSize1Width = parseInt(item.getSiteMg1Width());
+        this.cpsSiteSize1Length = parseInt(item.getSiteMg1Vrticl());
+        this.cpsSiteSize2Cnt = parseInt(item.getSiteMg2Co());
+        this.cpsSiteSize2Width = parseInt(item.getSiteMg2Width());
+        this.cpsSiteSize2Length = parseInt(item.getSiteMg2Vrticl());
+        this.cpsSiteSize3Cnt = parseInt(item.getSiteMg3Co());
+        this.cpsSiteSize3Width = parseInt(item.getSiteMg3Width());
+        this.cpsSiteSize3Length = parseInt(item.getSiteMg3Vrticl());
+        this.cpsBttmGrassCnt = parseInt(item.getSiteBottomCl1());
+        this.cpsBttmStnCnt = parseInt(item.getSiteBottomCl2());
+        this.cpsBttmTechCnt = parseInt(item.getSiteBottomCl3());
+        this.cpsBttmGravelCnt = parseInt(item.getSiteBottomCl4());
+        this.cpsBttmDirtCnt = parseInt(item.getSiteBottomCl5());
     }
 }

@@ -134,4 +134,27 @@ public class CampDetail implements Persistable<String> {
                 .cpdInsuredYn(YnType.findByDescription(item.getInsrncAt()))
                 .build();
     }
+
+    public void updateCampDetail(OpenApiResponse.Item item) {
+        this.cpdIntro = item.getIntro();
+        this.cpdLineIntro = item.getLineIntro();
+        this.cpdFeatures = item.getFeatureNm();
+        this.cpdTooltip = item.getTooltip();
+        this.cpdOperDaysType = OperationDaysType.findByDescription(item.getOperDeCl());
+        this.cpdMngStatType = ManagingStatusType.findByDescription(item.getManageSttus());
+        this.cpdMngDivType = ManagingDivType.findByDescription(item.getMangeDivNm());
+        this.cpdMngOrg = item.getMgcDiv();
+        this.cpdFcltDivType = FacilityDivType.findByDescription(item.getFacltDivNm());
+        this.cpdResStaffCnt = parseInt(item.getManageNmpr());
+        this.cpdOffStartDt = parseStringToLocalDateTime(item.getHvofBgnde());
+        this.cpdOffEndDt = parseStringToLocalDateTime(item.getHvofEnddle());
+        this.cpdCultEvYn = YnType.findByDescription(item.getClturEventAt());
+        this.cpdCultEvNm = item.getClturEvent();
+        this.cpdExprPrgmYn = YnType.findByDescription(item.getExprnProgrmAt());
+        this.cpdExprPrgmNm = item.getExprnProgrm();
+        this.cpdAnimEntType = AnimalEntryType.findByDescription(item.getAnimalCmgCl());
+        this.cpdPrvtCrvYn = YnType.findByDescription(item.getCaravAcmpnyAt());
+        this.cpdPrvtTrlYn = YnType.findByDescription(item.getTrlerAcmpnyAt());
+        this.cpdInsuredYn = YnType.findByDescription(item.getInsrncAt());
+    }
 }

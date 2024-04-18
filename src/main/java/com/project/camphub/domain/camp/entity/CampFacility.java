@@ -90,4 +90,23 @@ public class CampFacility implements Persistable<String> {
                 .cpfFireSensorCnt(parseInt(item.getFireSensorCo()))
                 .build();
     }
+
+    public void updateCampFacility(OpenApiResponse.Item item) {
+        this.cpfTotalArea = parseInt(item.getAllar());
+        this.cpfAmntyEtc = item.getSbrsEtc();
+        this.cpfNrbyFcltEtc = item.getPosblFcltyEtc();
+        this.cpfGnrlSiteCnt = parseInt(item.getGnrlSiteCo());
+        this.cpfCarSiteCnt = parseInt(item.getAutoSiteCo());
+        this.cpfGlampSiteCnt = parseInt(item.getGlampSiteCo());
+        this.cpfCrvSiteCnt = parseInt(item.getCaravSiteCo());
+        this.cpfPrvtCrvSiteCnt = parseInt(item.getIndvdlCaravSiteCo());
+        this.cpfBrazierType = BrazierType.findByDescription(item.getBrazierCl());
+        this.cpfSinkCnt = parseInt(item.getWtrplCo());
+        this.cpfToiletCnt = parseInt(item.getToiletCo());
+        this.cpfSwrmCnt = parseInt(item.getSwrmCo());
+        this.cpfFireExtCnt = parseInt(item.getExtshrCo());
+        this.cpfFireWaterCnt = parseInt(item.getFrprvtWrppCo());
+        this.cpfFireSandCnt = parseInt(item.getFrprvtSandCo());
+        this.cpfFireSensorCnt = parseInt(item.getFireSensorCo());
+    }
 }
