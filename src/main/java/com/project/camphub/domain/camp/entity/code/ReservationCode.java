@@ -18,6 +18,10 @@ public class ReservationCode implements CampCode {
         this.resvCdNm = resvCdNm;
     }
 
+    public static ReservationCode createReservationCode(String resvCdNm) {
+        return new ReservationCode(resvCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return resvCdNm;

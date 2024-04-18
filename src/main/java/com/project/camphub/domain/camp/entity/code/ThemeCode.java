@@ -21,6 +21,10 @@ public class ThemeCode implements CampCode {
         this.themeCdNm = themeCdNm;
     }
 
+    public static ThemeCode createThemeCode(String themeCdNm) {
+        return new ThemeCode(themeCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return themeCdNm;

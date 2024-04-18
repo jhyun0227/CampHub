@@ -21,6 +21,10 @@ public class InnerAmenityCode implements CampCode {
         this.innerAmntyCdNm = innerAmntyCdNm;
     }
 
+    public static InnerAmenityCode createInnerAmenityCode(String innerAmntyCdNm) {
+        return new InnerAmenityCode(innerAmntyCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return innerAmntyCdNm;

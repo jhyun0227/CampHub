@@ -41,7 +41,7 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (themeCode.isEmpty()) {
-                ThemeCode saveThemeCode = new ThemeCode(value);
+                ThemeCode saveThemeCode = ThemeCode.createThemeCode(value);
                 saveCode(saveThemeCode);
                 addCodeToMap(saveThemeCode, nameToCodeMaps);
 

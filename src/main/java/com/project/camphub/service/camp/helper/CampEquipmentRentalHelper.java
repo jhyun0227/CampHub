@@ -41,7 +41,7 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (equipmentCode.isEmpty()) {
-                EquipmentCode saveEquipmentCode = new EquipmentCode(value);
+                EquipmentCode saveEquipmentCode = EquipmentCode.createEquipmentCode(value);
                 saveCode(saveEquipmentCode);
                 addCodeToMap(saveEquipmentCode, nameToCodeMaps);
 

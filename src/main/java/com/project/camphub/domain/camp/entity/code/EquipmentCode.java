@@ -21,6 +21,10 @@ public class EquipmentCode implements CampCode {
         this.equipCdNm = equipCdNm;
     }
 
+    public static EquipmentCode createEquipmentCode(String equipCdNm) {
+        return new EquipmentCode(equipCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return equipCdNm;

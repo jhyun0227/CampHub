@@ -21,6 +21,10 @@ public class SeasonCode implements CampCode {
         this.seasonCdNm = seasonCdNm;
     }
 
+    public static SeasonCode createSeasonCode(String seasonCdNm) {
+        return new SeasonCode(seasonCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return seasonCdNm;

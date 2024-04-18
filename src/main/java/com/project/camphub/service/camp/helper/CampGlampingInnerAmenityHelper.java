@@ -41,7 +41,7 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (innerAmenityCode.isEmpty()) {
-                InnerAmenityCode saveInnerAmenityCode = new InnerAmenityCode(value);
+                InnerAmenityCode saveInnerAmenityCode = InnerAmenityCode.createInnerAmenityCode(value);
                 saveCode(saveInnerAmenityCode);
                 addCodeToMap(saveInnerAmenityCode, nameToCodeMaps);
 

@@ -21,6 +21,10 @@ public class NearbyFacilityCode implements CampCode {
         this.nrbyFcltCdNm = nrbyFcltCdNm;
     }
 
+    public static NearbyFacilityCode createNearbyFacilityCode(String nrbyFcltCdNm) {
+        return new NearbyFacilityCode(nrbyFcltCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return nrbyFcltCdNm;

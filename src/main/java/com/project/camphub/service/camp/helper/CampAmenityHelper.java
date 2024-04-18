@@ -41,7 +41,7 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Maps에 해당 객체 추가
             if (amenityCode.isEmpty()) {
-                AmenityCode saveAmenityCode = new AmenityCode(value);
+                AmenityCode saveAmenityCode = AmenityCode.createAmenityCode(value);
                 saveCode(saveAmenityCode);
                 addCodeToMap(saveAmenityCode, nameToCodeMaps);
 

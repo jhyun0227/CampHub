@@ -41,7 +41,7 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
 
             //기존 Map에 없는 값일 경우 DB에 코드 추가 후, Map에 해당 객체 추가
             if (industryCode.isEmpty()) {
-                IndustryCode saveIndustryCode = new IndustryCode(value);
+                IndustryCode saveIndustryCode = IndustryCode.createIndustryCode(value);
                 saveCode(saveIndustryCode);
                 addCodeToMap(saveIndustryCode, nameToCodeMaps);
 

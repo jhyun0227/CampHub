@@ -21,6 +21,10 @@ public class AmenityCode implements CampCode {
         this.amntyCdNm = amntyCdNm;
     }
 
+    public static AmenityCode createAmenityCode(String amntyCdNm) {
+        return new AmenityCode(amntyCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return amntyCdNm;

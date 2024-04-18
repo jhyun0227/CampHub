@@ -21,6 +21,10 @@ public class LocationCode implements CampCode {
         this.loctCdNm = loctCdNm;
     }
 
+    public static LocationCode createLocationCode(String loctCdNm) {
+        return new LocationCode(loctCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return loctCdNm;

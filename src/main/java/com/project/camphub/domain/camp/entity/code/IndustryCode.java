@@ -21,6 +21,10 @@ public class IndustryCode implements CampCode {
         this.indstCdNm = indstCdNm;
     }
 
+    public static IndustryCode createIndustryCode(String indstCdNm) {
+        return new IndustryCode(indstCdNm);
+    }
+
     @Override
     public String getCodeNm() {
         return indstCdNm;
