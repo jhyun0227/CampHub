@@ -23,8 +23,8 @@ public class OpenApiController {
      * 공공 데이터 포털을 통해서 모든 캠핑장을 조회 후 데이터베이스에 저장
      */
     @GetMapping("/fetch/insert")
-    public ResponseEntity<Map<String, Object>> fetchAndInsertCampList() {
-        openApiService.fetchAndInsertCampList();
+    public ResponseEntity<Map<String, Object>> initializeCampList() {
+        openApiService.initializeCampList();
 
         Map<String, Object> result = new HashMap<>();
         return ResponseEntity.ok()

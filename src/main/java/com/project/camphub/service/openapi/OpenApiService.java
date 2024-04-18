@@ -54,7 +54,7 @@ public class OpenApiService {
 
     private final int numOfRows = 100;
 
-    public void fetchAndInsertCampList() {
+    public void initializeCampList() {
         int maxPageCount = getMaxPageCount(null);
 
         List<OpenApiResponse> openApiResponseList = getOpenApiResponseList(maxPageCount, null);
@@ -64,7 +64,7 @@ public class OpenApiService {
         }
     }
 
-    public void fetchAndUpdateCampList(String modDate) {
+    public void refreshCampListFromAPI(String modDate) {
         int maxPageCount = getMaxPageCount(modDate);
 
         List<OpenApiResponse> openApiResponseList = getOpenApiResponseList(maxPageCount, modDate);
