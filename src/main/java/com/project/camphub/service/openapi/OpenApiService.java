@@ -68,6 +68,8 @@ public class OpenApiService {
         }
 
         insertCampList(itemList);
+
+        log.info("initializeCampList 완료");
     }
 
     /**
