@@ -57,6 +57,8 @@ public class OpenApiService {
      * 데이터 초기화
      */
     public void initializeCampList() {
+        log.info("initializeCampList 시작");
+
         int maxPageCount = getMaxPageCount(null);
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, null);
@@ -76,6 +78,8 @@ public class OpenApiService {
      * 데이터 동기화 및 수정
      */
     public void refreshCampListFromAPI(String modDate) {
+        log.info("refreshCampListFromAPI 시작");
+
         int maxPageCount = getMaxPageCount(modDate);
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, modDate);
@@ -133,6 +137,7 @@ public class OpenApiService {
         insertCampList(newCampItemList);
         updateCampList(updateCampItemList, findCampMap);
 
+        log.info("refreshCampListFromAPI 완료");
     }
 
     /**
@@ -209,6 +214,8 @@ public class OpenApiService {
      * DB에 캠핑 정보를 Insert 하는 메서드
      */
     private void insertCampList(List<OpenApiResponse.Item> itemList) {
+        log.info("insertCampList 시작");
+
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
@@ -230,9 +237,13 @@ public class OpenApiService {
         }
 
         campRepository.saveAll(saveCampList);
+
+        log.info("insertCampList 종료, saveCampList.size() = {}", saveCampList.size());
     }
 
     private void updateCampList(List<OpenApiResponse.Item> itemList, Map<String, Camp> campMap) {
+        log.info("updateCampList 시작");
+
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
@@ -253,5 +264,7 @@ public class OpenApiService {
                 campAssociationHelper.updateCampAssociations(item, camp, nameToCodeMaps);
             });
         }
+
+        log.info("updateCampList 종료, updateCampList.size() = {}", itemList.size());
     }
 }
