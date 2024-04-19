@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -57,4 +58,10 @@ public class ReservationMapRegistry {
         nameToResvCdMap.put(reservationCode.getResvCdNm(), reservationCode);
     }
     */
+
+    public List<String> getResvCdNmListByIds(List<Long> resvCdIdList) {
+        return resvCdIdList.stream()
+                .map(resvCdId -> resvCdMap.get(resvCdId).getResvCdNm())
+                .collect(Collectors.toList());
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -57,4 +58,10 @@ public class IndustryMapRegistry {
         nameToIndstCdMap.put(industryCode.getIndstCdNm(), industryCode);
     }
     */
+
+    public List<String> getIndstCdNmListByIds(List<Long> indstCdIdList) {
+        return indstCdIdList.stream()
+                .map(indstCdId -> indstCdMap.get(indstCdId).getIndstCdNm())
+                .collect(Collectors.toList());
+    }
 }

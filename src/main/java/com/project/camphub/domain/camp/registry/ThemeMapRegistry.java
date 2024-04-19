@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -57,4 +58,10 @@ public class ThemeMapRegistry {
         nameToThemeCdMap.put(themeCode.getThemeCdNm(), themeCode);
     }
     */
+
+    public List<String> getThemeCdNmListByIds(List<Long> themeCdIdList) {
+        return themeCdIdList.stream()
+                .map(themeCdId -> themeCdMap.get(themeCdId).getThemeCdNm())
+                .collect(Collectors.toList());
+    }
 }

@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -60,12 +60,8 @@ public class AmenityMapRegistry {
     */
 
     public List<String> getAmntyCdNmListByIds(List<Long> amntyCdIdList) {
-        List<String> resultList = new ArrayList<>();
-
-        for (Long amntyCdId : amntyCdIdList) {
-            resultList.add(amntyCdMap.get(amntyCdId).getAmntyCdNm());
-        }
-
-        return resultList;
+        return amntyCdIdList.stream()
+                .map(amntyCdId -> amntyCdMap.get(amntyCdId).getAmntyCdNm())
+                .collect(Collectors.toList());
     }
 }

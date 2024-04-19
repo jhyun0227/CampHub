@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -57,4 +58,10 @@ public class InnerAmenityMapRegistry {
         nameToInnerAmntyCdMap.put(innerAmenityCode.getInnerAmntyCdNm(), innerAmenityCode);
     }
     */
+
+    public List<String> getInnerAmntyCdNmListByIds(List<Long> innerAmntyCdIdList) {
+        return innerAmntyCdIdList.stream()
+                .map(innerAmntyCdId -> innerAmntyCdMap.get(innerAmntyCdId).getInnerAmntyCdNm())
+                .collect(Collectors.toList());
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -57,4 +58,10 @@ public class SeasonMapRegistry {
         nameToSeasonCdMap.put(seasonCode.getSeasonCdNm(), seasonCode);
     }
     */
+
+    public List<String> getSeasonCdNmListByIds(List<Long> seasonCdIdList) {
+        return seasonCdIdList.stream()
+                .map(seasonCdId -> seasonCdMap.get(seasonCdId).getSeasonCdNm())
+                .collect(Collectors.toList());
+    }
 }
