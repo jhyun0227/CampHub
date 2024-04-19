@@ -4,6 +4,7 @@ import com.project.camphub.domain.camp.entity.Camp;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface CampRepository extends JpaRepository<Camp, String> {
     List<Camp> findCampsByCpIdIn(List<String> cpIdList);
 
     @EntityGraph(attributePaths =
-            {"campDetail", "campFacility", "campSite", "campAmenityList", "campCaravanInnerAmenityList", "campEquipmentRentalList",
+            {"provinceCode", "districtCode", "campDetail", "campFacility", "campSite", "campAmenityList", "campCaravanInnerAmenityList", "campEquipmentRentalList",
                     "campGlampingInnerAmenityList", "campIndustryList", "campLocationList", "campNearbyFacilityList", "campOperationSeasonList",
                     "campReservationList", "campThemeList", "campTravelSeasonList"
             })
