@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.EQUIPMENT_CODE;
 public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEquipmentRental, EquipmentCode> {
 
     private final EquipmentCodeRepository equipmentCodeRepository;
-    private final CampEquipmentRentalRepository campEquipmentRentalRepository;
 
     @Override
-    public List<CampEquipmentRental> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getEqpmnLendCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampEquipmentRental> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
                 saveCode(saveEquipmentCode);
                 addCodeToMap(saveEquipmentCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveEquipmentCode));
+                createCampAssociationAndLinkToCamp(camp, saveEquipmentCode);
             } else {
-                resultList.add(createCampAssociation(camp, equipmentCode.get()));
+                createCampAssociationAndLinkToCamp(camp, equipmentCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
     }
 
     @Override
-    public void saveCampAssociation(List<CampEquipmentRental> CampAssociationList) {
-        campEquipmentRentalRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampEquipmentRental createCampAssociation(Camp camp, EquipmentCode code) {
-        return CampEquipmentRental.createCampEquipmentRental(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, EquipmentCode code) {
+        CampEquipmentRental.createCampEquipmentRentalAndLinkToCamp(camp, code);
     }
 }

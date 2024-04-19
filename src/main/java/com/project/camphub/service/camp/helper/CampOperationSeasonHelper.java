@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.SEASON_CODE;
 public class CampOperationSeasonHelper implements CampAssociationHelper<CampOperationSeason, SeasonCode> {
 
     private final SeasonCodeRepository seasonCodeRepository;
-    private final CampOperationSeasonRepository campOperationSeasonRepository;
 
     @Override
-    public List<CampOperationSeason> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getOperPdCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampOperationSeason> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampOperationSeasonHelper implements CampAssociationHelper<CampOper
                 saveCode(saveSeasonCode);
                 addCodeToMap(saveSeasonCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveSeasonCode));
+                createCampAssociationAndLinkToCamp(camp, saveSeasonCode);
             } else {
-                resultList.add(createCampAssociation(camp, seasonCode.get()));
+                createCampAssociationAndLinkToCamp(camp, seasonCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampOperationSeasonHelper implements CampAssociationHelper<CampOper
     }
 
     @Override
-    public void saveCampAssociation(List<CampOperationSeason> CampAssociationList) {
-        campOperationSeasonRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampOperationSeason createCampAssociation(Camp camp, SeasonCode code) {
-        return CampOperationSeason.createCampOperationSeason(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, SeasonCode code) {
+        CampOperationSeason.createCampOperationSeasonAndLinkToCamp(camp, code);
     }
 }

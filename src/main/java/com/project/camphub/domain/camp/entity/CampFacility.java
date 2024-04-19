@@ -69,9 +69,8 @@ public class CampFacility implements Persistable<String> {
         return true;
     }
 
-    public static CampFacility apiToEntity(OpenApiResponse.Item item, Camp camp) {
-        CampFacility campFacility = CampFacility.builder()
-                .camp(camp)
+    public static CampFacility apiToEntity(OpenApiResponse.Item item) {
+        return CampFacility.builder()
                 .cpfTotalArea(parseInt(item.getAllar()))
                 .cpfAmntyEtc(item.getSbrsEtc())
                 .cpfNrbyFcltEtc(item.getPosblFcltyEtc())
@@ -89,10 +88,6 @@ public class CampFacility implements Persistable<String> {
                 .cpfFireSandCnt(parseInt(item.getFrprvtSandCo()))
                 .cpfFireSensorCnt(parseInt(item.getFireSensorCo()))
                 .build();
-
-        camp.assignCampFacility(campFacility);
-
-        return campFacility;
     }
 
     public void updateCampFacility(OpenApiResponse.Item item) {
@@ -112,5 +107,10 @@ public class CampFacility implements Persistable<String> {
         this.cpfFireWaterCnt = parseInt(item.getFrprvtWrppCo());
         this.cpfFireSandCnt = parseInt(item.getFrprvtSandCo());
         this.cpfFireSensorCnt = parseInt(item.getFireSensorCo());
+    }
+
+    public void linkToCamp(Camp camp) {
+        this.camp = camp;
+        camp.linkToCampFacility(this);
     }
 }

@@ -38,9 +38,11 @@ public class CampLocation implements Persistable<CampLocation.CampLocationId> {
         private Long loctCdId;
     }
 
-    public static CampLocation createCampLocation(Camp camp, LocationCode locationCode) {
+    public static void createCampLocationAndLinkToCamp(Camp camp, LocationCode locationCode) {
         CampLocationId id = new CampLocationId(camp.getCpId(), locationCode.getLoctCdId());
-        return new CampLocation(id, camp, locationCode);
+        CampLocation campLocation = new CampLocation(id, camp, locationCode);
+
+        camp.getCampLocationList().add(campLocation);
     }
 
     @Override

@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.LOCATION_CODE;
 public class CampLocationHelper implements CampAssociationHelper<CampLocation, LocationCode> {
 
     private final LocationCodeRepository locationCodeRepository;
-    private final CampLocationRepository campLocationRepository;
 
     @Override
-    public List<CampLocation> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getLctCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampLocation> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
                 saveCode(saveLocationCode);
                 addCodeToMap(saveLocationCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveLocationCode));
+                createCampAssociationAndLinkToCamp(camp, saveLocationCode);
             } else {
-                resultList.add(createCampAssociation(camp, locationCode.get()));
+                createCampAssociationAndLinkToCamp(camp, locationCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
     }
 
     @Override
-    public void saveCampAssociation(List<CampLocation> CampAssociationList) {
-        campLocationRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampLocation createCampAssociation(Camp camp, LocationCode code) {
-        return CampLocation.createCampLocation(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, LocationCode code) {
+        CampLocation.createCampLocationAndLinkToCamp(camp, code);
     }
 }

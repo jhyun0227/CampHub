@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.THEME_CODE;
 public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCode> {
 
     private final ThemeCodeRepository themeCodeRepository;
-    private final CampThemeRepository campThemeRepository;
 
     @Override
-    public List<CampTheme> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampTheme> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
                 saveCode(saveThemeCode);
                 addCodeToMap(saveThemeCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveThemeCode));
+                createCampAssociationAndLinkToCamp(camp, saveThemeCode);
             } else {
-                resultList.add(createCampAssociation(camp, themeCode.get()));
+                createCampAssociationAndLinkToCamp(camp, themeCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
     }
 
     @Override
-    public void saveCampAssociation(List<CampTheme> CampAssociationList) {
-        campThemeRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampTheme createCampAssociation(Camp camp, ThemeCode code) {
-        return CampTheme.createCampTheme(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, ThemeCode code) {
+        CampTheme.createCampThemeAndLinkToCamp(camp, code);
     }
 }

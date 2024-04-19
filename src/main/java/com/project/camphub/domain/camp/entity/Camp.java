@@ -80,9 +80,9 @@ public class Camp implements Persistable<String> {
     @OneToOne(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private CampSite campSite;
 
-    public void assignCampDetail(CampDetail campDetail) { this.campDetail = campDetail; }
-    public void assignCampFacility(CampFacility campFacility) { this.campFacility = campFacility; }
-    public void assignCampSite(CampSite campSite) { this.campSite = campSite; }
+    public void linkToCampDetail(CampDetail campDetail) { this.campDetail = campDetail; }
+    public void linkToCampFacility(CampFacility campFacility) { this.campFacility = campFacility; }
+    public void linkToCampSite(CampSite campSite) { this.campSite = campSite; }
 
     //캠프코드 연관관계
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -149,6 +149,24 @@ public class Camp implements Persistable<String> {
                 .cpCreateDt(parseStringToLocalDateTime(item.getCreatedtime()))
                 .cpModDt(parseStringToLocalDateTime(item.getModifiedtime()))
                 .cpIsActive(checkIsActive(item.getSyncStatus()))
+
+                /**
+                 * 클래스의 필드에서 new ArrayList<>()로 초기화하더라도
+                 * 빌더 패턴으로 인해 필드의 값이 null로 덮어 씌워지는 문제 발생
+                 * 빌더 패턴 초기화에서 new ArrayList<>() 를 생성하여 반환하도록 설정
+                 */
+                .campAmenityList(new ArrayList<>())
+                .campCaravanInnerAmenityList(new ArrayList<>())
+                .campEquipmentRentalList(new ArrayList<>())
+                .campGlampingInnerAmenityList(new ArrayList<>())
+                .campIndustryList(new ArrayList<>())
+                .campLocationList(new ArrayList<>())
+                .campNearbyFacilityList(new ArrayList<>())
+                .campOperationSeasonList(new ArrayList<>())
+                .campReservationList(new ArrayList<>())
+                .campThemeList(new ArrayList<>())
+                .campTravelSeasonList(new ArrayList<>())
+
                 .build();
     }
 

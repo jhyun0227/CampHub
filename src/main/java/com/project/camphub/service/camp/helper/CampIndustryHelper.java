@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.INDUSTRY_CODE;
 public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, IndustryCode> {
 
     private final IndustryCodeRepository industryCodeRepository;
-    private final CampIndustryRepository campIndustryRepository;
 
     @Override
-    public List<CampIndustry> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getInduty());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampIndustry> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
                 saveCode(saveIndustryCode);
                 addCodeToMap(saveIndustryCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveIndustryCode));
+                createCampAssociationAndLinkToCamp(camp, saveIndustryCode);
             } else {
-                resultList.add(createCampAssociation(camp, industryCode.get()));
+                createCampAssociationAndLinkToCamp(camp, industryCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
     }
 
     @Override
-    public void saveCampAssociation(List<CampIndustry> CampAssociationList) {
-        campIndustryRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampIndustry createCampAssociation(Camp camp, IndustryCode code) {
-        return CampIndustry.createCampIndustry(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, IndustryCode code) {
+        CampIndustry.createCampIndustryAndLinkToCamp(camp, code);
     }
 }

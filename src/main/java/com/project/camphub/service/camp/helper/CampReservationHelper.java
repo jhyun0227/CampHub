@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.RESERVATION_CODE;
 public class CampReservationHelper implements CampAssociationHelper<CampReservation, ReservationCode> {
 
     private final ReservationCodeRepository reservationCodeRepository;
-    private final CampReservationRepository campReservationRepository;
 
     @Override
-    public List<CampReservation> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getResveCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampReservation> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
                 saveCode(saveReservationCode);
                 addCodeToMap(saveReservationCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveReservationCode));
+                createCampAssociationAndLinkToCamp(camp, saveReservationCode);
             } else {
-                resultList.add(createCampAssociation(camp, reservationCode.get()));
+                createCampAssociationAndLinkToCamp(camp, reservationCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
     }
 
     @Override
-    public void saveCampAssociation(List<CampReservation> CampAssociationList) {
-        campReservationRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampReservation createCampAssociation(Camp camp, ReservationCode code) {
-        return CampReservation.createCampReservation(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, ReservationCode code) {
+        CampReservation.createCampReservationAndLinkToCamp(camp, code);
     }
 }

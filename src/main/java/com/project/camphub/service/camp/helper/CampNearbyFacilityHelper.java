@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.NEARBY_FACILITY_CODE
 public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearbyFacility, NearbyFacilityCode> {
 
     private final NearbyFacilityCodeRepository nearbyFacilityCodeRepository;
-    private final CampNearbyFacilityRepository campNearbyFacilityRepository;
 
     @Override
-    public List<CampNearbyFacility> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp,  Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp,  Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getPosblFcltyCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampNearbyFacility> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearb
                 saveCode(saveNearbyFacilityCode);
                 addCodeToMap(saveNearbyFacilityCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveNearbyFacilityCode));
+                createCampAssociationAndLinkToCamp(camp, saveNearbyFacilityCode);
             } else {
-                resultList.add(createCampAssociation(camp, nearbyFacilityCode.get()));
+                createCampAssociationAndLinkToCamp(camp, nearbyFacilityCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearb
     }
 
     @Override
-    public void saveCampAssociation(List<CampNearbyFacility> CampAssociationList) {
-        campNearbyFacilityRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampNearbyFacility createCampAssociation(Camp camp, NearbyFacilityCode code) {
-        return CampNearbyFacility.createCampNearbyFacility(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, NearbyFacilityCode code) {
+        CampNearbyFacility.createCampNearbyFacilityAndLinkToCamp(camp, code);
     }
 }

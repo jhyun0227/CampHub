@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.INNER_AMENITY_CODE;
 public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<CampGlampingInnerAmenity, InnerAmenityCode> {
 
     private final InnerAmenityCodeRepository innerAmenityCodeRepository;
-    private final CampGlampingInnerAmenityRepository campGlampingInnerAmenityRepository;
 
     @Override
-    public List<CampGlampingInnerAmenity> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getGlampInnerFclty());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampGlampingInnerAmenity> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
                 saveCode(saveInnerAmenityCode);
                 addCodeToMap(saveInnerAmenityCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveInnerAmenityCode));
+                createCampAssociationAndLinkToCamp(camp, saveInnerAmenityCode);
             } else {
-                resultList.add(createCampAssociation(camp, innerAmenityCode.get()));
+                createCampAssociationAndLinkToCamp(camp, innerAmenityCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
     }
 
     @Override
-    public void saveCampAssociation(List<CampGlampingInnerAmenity> CampAssociationList) {
-        campGlampingInnerAmenityRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampGlampingInnerAmenity createCampAssociation(Camp camp, InnerAmenityCode code) {
-        return CampGlampingInnerAmenity.createCampGlampingInnerAmenity(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, InnerAmenityCode code) {
+        CampGlampingInnerAmenity.createCampGlampingInnerAmenityAndLinkToCamp(camp, code);
     }
 }

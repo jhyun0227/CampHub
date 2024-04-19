@@ -38,9 +38,11 @@ public class CampCaravanInnerAmenity implements Persistable<CampCaravanInnerAmen
         private Long innerAmntyCdId;
     }
 
-    public static CampCaravanInnerAmenity createCampCaravanInnerAmenity(Camp camp, InnerAmenityCode innerAmenityCode) {
+    public static void createCampCaravanInnerAmenityAndLinkToCamp(Camp camp, InnerAmenityCode innerAmenityCode) {
         CampCaravanInnerAmenityId id = new CampCaravanInnerAmenityId(camp.getCpId(), innerAmenityCode.getInnerAmntyCdId());
-        return new CampCaravanInnerAmenity(id, camp, innerAmenityCode);
+        CampCaravanInnerAmenity campCaravanInnerAmenity = new CampCaravanInnerAmenity(id, camp, innerAmenityCode);
+
+        camp.getCampCaravanInnerAmenityList().add(campCaravanInnerAmenity);
     }
 
     @Override

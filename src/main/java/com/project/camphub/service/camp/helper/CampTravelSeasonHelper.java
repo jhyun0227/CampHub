@@ -23,14 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.SEASON_CODE;
 public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelSeason, SeasonCode> {
 
     private final SeasonCodeRepository seasonCodeRepository;
-    private final CampTravelSeasonRepository campTravelSeasonRepository;
 
     @Override
-    public List<CampTravelSeason> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getTourEraCl());
         if (values == null) {
-            return null;
+            return;
         }
 
         List<CampTravelSeason> resultList = new ArrayList<>();
@@ -45,13 +44,11 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
                 saveCode(saveSeasonCode);
                 addCodeToMap(saveSeasonCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveSeasonCode));
+                createCampAssociationAndLinkToCamp(camp, saveSeasonCode);
             } else {
-                resultList.add(createCampAssociation(camp, seasonCode.get()));
+                createCampAssociationAndLinkToCamp(camp, seasonCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +76,7 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
     }
 
     @Override
-    public void saveCampAssociation(List<CampTravelSeason> CampAssociationList) {
-        campTravelSeasonRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampTravelSeason createCampAssociation(Camp camp, SeasonCode code) {
-        return CampTravelSeason.createCampTravelSeason(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, SeasonCode code) {
+        CampTravelSeason.createCampTravelSeasonAndLinkToCamp(camp, code);
     }
 }

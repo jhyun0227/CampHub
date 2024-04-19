@@ -43,9 +43,6 @@ import static com.project.camphub.common.utils.DateUtils.parseStringToLocalDateT
 public class OpenApiService {
 
     private final CampRepository campRepository;
-    private final CampDetailRepository campDetailRepository;
-    private final CampFacilityRepository campFacilityRepository;
-    private final CampSiteRepository campSiteRepository;
 
     private final CampCodeService campCodeService;
     private final AreaCodeService areaCodeService;
@@ -215,19 +212,22 @@ public class OpenApiService {
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
         Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
 
+        List<Camp> saveCampList = new ArrayList<>();
+
         for (OpenApiResponse.Item item : itemList) {
             Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
-            CampDetail campDetail = CampDetail.apiToEntity(item, camp);
-            CampFacility campFacility = CampFacility.apiToEntity(item, camp);
-            CampSite campSite = CampSite.apiToEntity(item, camp);
+            CampDetail.apiToEntity(item).linkToCamp(camp);
+            CampFacility.apiToEntity(item).linkToCamp(camp);
+            CampSite.apiToEntity(item).linkToCamp(camp);
 
             campAssociationHelpers.forEach(campAssociationHelper -> {
-                List<?> campAssociationEntity = campAssociationHelper.getCampAssociationEntity(item, camp, nameToCodeMaps);
-                if (campAssociationEntity != null) {
-                    campAssociationHelper.saveCampAssociation(camp, campAssociationEntity);
-                }
+                campAssociationHelper.linkCampAssociations(item, camp, nameToCodeMaps);
             });
+
+            saveCampList.add(camp);
         }
+
+        campRepository.saveAll(saveCampList);
     }
 
     private void updateCampList(List<OpenApiResponse.Item> itemList, Map<String, Camp> campMap) {

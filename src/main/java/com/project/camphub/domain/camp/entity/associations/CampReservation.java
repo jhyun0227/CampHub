@@ -38,9 +38,11 @@ public class CampReservation implements Persistable<CampReservation.CampReservat
         private Long resvCdId;
     }
 
-    public static CampReservation createCampReservation(Camp camp, ReservationCode reservationCode) {
+    public static void createCampReservationAndLinkToCamp(Camp camp, ReservationCode reservationCode) {
         CampReservationId id = new CampReservationId(camp.getCpId(), reservationCode.getResvCdId());
-        return new CampReservation(id, camp, reservationCode);
+        CampReservation campReservation = new CampReservation(id, camp, reservationCode);
+
+        camp.getCampReservationList().add(campReservation);
     }
 
     @Override

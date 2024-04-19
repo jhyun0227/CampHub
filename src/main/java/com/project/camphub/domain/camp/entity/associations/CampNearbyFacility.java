@@ -38,9 +38,11 @@ public class CampNearbyFacility implements Persistable<CampNearbyFacility.CampNe
         private Long nrbyFcltCdId;
     }
 
-    public static CampNearbyFacility createCampNearbyFacility(Camp camp, NearbyFacilityCode nearbyFacilityCode) {
+    public static void createCampNearbyFacilityAndLinkToCamp(Camp camp, NearbyFacilityCode nearbyFacilityCode) {
         CampNearbyFacilityId id = new CampNearbyFacilityId(camp.getCpId(), nearbyFacilityCode.getNrbyFcltCdId());
-        return new CampNearbyFacility(id, camp, nearbyFacilityCode);
+        CampNearbyFacility campNearbyFacility = new CampNearbyFacility(id, camp, nearbyFacilityCode);
+
+        camp.getCampNearbyFacilityList().add(campNearbyFacility);
     }
 
     @Override

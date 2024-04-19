@@ -38,9 +38,11 @@ public class CampAmenity implements Persistable<CampAmenity.CampAmenityId> {
         private Long amntyCdId;
     }
 
-    public static CampAmenity createCampAmenity(Camp camp, AmenityCode amenityCode) {
+    public static void createCampAmenityAndLinkToCamp(Camp camp, AmenityCode amenityCode) {
         CampAmenityId id = new CampAmenityId(camp.getCpId(), amenityCode.getAmntyCdId());
-        return new CampAmenity(id, camp, amenityCode);
+        CampAmenity campAmenity = new CampAmenity(id, camp, amenityCode);
+
+        camp.getCampAmenityList().add(campAmenity);
     }
 
     @Override

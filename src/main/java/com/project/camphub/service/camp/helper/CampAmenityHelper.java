@@ -23,17 +23,13 @@ import static com.project.camphub.domain.camp.CampCodeConst.AMENITY_CODE;
 public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, AmenityCode> {
 
     private final AmenityCodeRepository amenityCodeRepository;
-    private final CampAmenityRepository campAmenityRepository;
 
     @Override
-    public List<CampAmenity> getCampAssociationEntity(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-
+    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
         String[] values = convertStringToArray(item.getSbrsCl());
         if (values == null) {
-            return null;
+            return;
         }
-
-        List<CampAmenity> resultList = new ArrayList<>();
 
         Map<String, AmenityCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -45,13 +41,11 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
                 saveCode(saveAmenityCode);
                 addCodeToMap(saveAmenityCode, nameToCodeMaps);
 
-                resultList.add(createCampAssociation(camp, saveAmenityCode));
+                createCampAssociationAndLinkToCamp(camp, saveAmenityCode);
             } else {
-                resultList.add(createCampAssociation(camp, amenityCode.get()));
+                createCampAssociationAndLinkToCamp(camp, amenityCode.get());
             }
         }
-
-        return resultList;
     }
 
     @Override
@@ -79,12 +73,7 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
     }
 
     @Override
-    public void saveCampAssociation(List<CampAmenity> CampAssociationList) {
-        campAmenityRepository.saveAll(CampAssociationList);
-    }
-
-    @Override
-    public CampAmenity createCampAssociation(Camp camp, AmenityCode code) {
-        return CampAmenity.createCampAmenity(camp, code);
+    public void createCampAssociationAndLinkToCamp(Camp camp, AmenityCode code) {
+        CampAmenity.createCampAmenityAndLinkToCamp(camp, code);
     }
 }

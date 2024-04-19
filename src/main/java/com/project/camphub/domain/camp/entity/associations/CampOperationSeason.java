@@ -38,9 +38,11 @@ public class CampOperationSeason implements Persistable<CampOperationSeason.Camp
         private Long seasonCdId;
     }
 
-    public static CampOperationSeason createCampOperationSeason(Camp camp, SeasonCode seasonCode) {
+    public static void createCampOperationSeasonAndLinkToCamp(Camp camp, SeasonCode seasonCode) {
         CampOperationSeasonId id = new CampOperationSeasonId(camp.getCpId(), seasonCode.getSeasonCdId());
-        return new CampOperationSeason(id, camp, seasonCode);
+        CampOperationSeason campOperationSeason = new CampOperationSeason(id, camp, seasonCode);
+
+        camp.getCampOperationSeasonList().add(campOperationSeason);
     }
 
     @Override
