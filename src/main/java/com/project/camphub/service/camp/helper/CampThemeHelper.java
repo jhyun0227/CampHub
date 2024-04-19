@@ -4,8 +4,8 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampTheme;
 import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
+import com.project.camphub.domain.camp.registry.ThemeMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
-import com.project.camphub.repository.camp.associations.CampThemeRepository;
 import com.project.camphub.repository.camp.code.ThemeCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import static com.project.camphub.domain.camp.CampCodeConst.THEME_CODE;
 public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCode> {
 
     private final ThemeCodeRepository themeCodeRepository;
+    private final ThemeMapRegistry themeMapRegistry;
 
     @Override
     public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
@@ -31,8 +32,6 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
         if (values == null) {
             return;
         }
-
-        List<CampTheme> resultList = new ArrayList<>();
 
         Map<String, ThemeCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -72,11 +71,56 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
 
     @Override
     public void addCodeToMap(ThemeCode code, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        themeMapRegistry.getThemeCdMap().put(code.getThemeCdId(), code);
+
         nameToCodeMaps.get(THEME_CODE).put(code.getThemeCdNm(), code);
     }
 
     @Override
     public void createCampAssociationAndLinkToCamp(Camp camp, ThemeCode code) {
         CampTheme.createCampThemeAndLinkToCamp(camp, code);
+    }
+
+    @Override
+    public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        if (!checkUpdate(item, camp)) {
+            return;
+        }
+
+        camp.resetCampThemeList();
+
+        linkCampAssociations(item, camp, nameToCodeMaps);
+    }
+
+    @Override
+    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
+        List<CampTheme> campThemeList = camp.getCampThemeList();
+        String[] values = convertStringToArray(item.getThemaEnvrnCl());
+
+        if (values == null) {
+            if (campThemeList.size() != 0) {
+                camp.resetCampThemeList();
+            }
+
+            return false;
+        }
+
+        if (values.length != campThemeList.size()) {
+            return true;
+        }
+
+        List<Long> themeCdIdList = campThemeList.stream()
+                .map(campTheme -> campTheme.getCampThemeId().getThemeCdId())
+                .toList();
+
+        List<String> themeCdNmList = themeMapRegistry.getThemeCdNmListByIds(themeCdIdList);
+
+        for (String value : values) {
+            if (!themeCdNmList.contains(value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

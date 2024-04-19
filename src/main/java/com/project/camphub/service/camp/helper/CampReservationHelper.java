@@ -4,8 +4,8 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampReservation;
 import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.ReservationCode;
+import com.project.camphub.domain.camp.registry.ReservationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
-import com.project.camphub.repository.camp.associations.CampReservationRepository;
 import com.project.camphub.repository.camp.code.ReservationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import static com.project.camphub.domain.camp.CampCodeConst.RESERVATION_CODE;
 public class CampReservationHelper implements CampAssociationHelper<CampReservation, ReservationCode> {
 
     private final ReservationCodeRepository reservationCodeRepository;
+    private final ReservationMapRegistry reservationMapRegistry;
 
     @Override
     public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
@@ -31,8 +32,6 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
         if (values == null) {
             return;
         }
-
-        List<CampReservation> resultList = new ArrayList<>();
 
         Map<String, ReservationCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -72,11 +71,56 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
 
     @Override
     public void addCodeToMap(ReservationCode code, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        reservationMapRegistry.getResvCdMap().put(code.getResvCdId(), code);
+
         nameToCodeMaps.get(RESERVATION_CODE).put(code.getResvCdNm(), code);
     }
 
     @Override
     public void createCampAssociationAndLinkToCamp(Camp camp, ReservationCode code) {
         CampReservation.createCampReservationAndLinkToCamp(camp, code);
+    }
+
+    @Override
+    public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        if (!checkUpdate(item, camp)) {
+            return;
+        }
+
+        camp.resetCampReservationList();
+
+        linkCampAssociations(item, camp, nameToCodeMaps);
+    }
+
+    @Override
+    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
+        List<CampReservation> campReservationList = camp.getCampReservationList();
+        String[] values = convertStringToArray(item.getResveCl());
+
+        if (values == null) {
+            if (campReservationList.size() != 0) {
+                camp.resetCampReservationList();
+            }
+
+            return false;
+        }
+
+        if (values.length != campReservationList.size()) {
+            return true;
+        }
+
+        List<Long> resvCdIdList = campReservationList.stream()
+                .map(campReservation -> campReservation.getCampReservationId().getResvCdId())
+                .toList();
+
+        List<String> resvCdNmList = reservationMapRegistry.getResvCdNmListByIds(resvCdIdList);
+
+        for (String value : values) {
+            if (!resvCdNmList.contains(value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -4,8 +4,8 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.entity.associations.CampOperationSeason;
 import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.SeasonCode;
+import com.project.camphub.domain.camp.registry.SeasonMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
-import com.project.camphub.repository.camp.associations.CampOperationSeasonRepository;
 import com.project.camphub.repository.camp.code.SeasonCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +23,7 @@ import static com.project.camphub.domain.camp.CampCodeConst.SEASON_CODE;
 public class CampOperationSeasonHelper implements CampAssociationHelper<CampOperationSeason, SeasonCode> {
 
     private final SeasonCodeRepository seasonCodeRepository;
+    private final SeasonMapRegistry seasonMapRegistry;
 
     @Override
     public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
@@ -31,8 +32,6 @@ public class CampOperationSeasonHelper implements CampAssociationHelper<CampOper
         if (values == null) {
             return;
         }
-
-        List<CampOperationSeason> resultList = new ArrayList<>();
 
         Map<String, SeasonCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -72,11 +71,56 @@ public class CampOperationSeasonHelper implements CampAssociationHelper<CampOper
 
     @Override
     public void addCodeToMap(SeasonCode code, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        seasonMapRegistry.getSeasonCdMap().put(code.getSeasonCdId(), code);
+
         nameToCodeMaps.get(SEASON_CODE).put(code.getSeasonCdNm(), code);
     }
 
     @Override
     public void createCampAssociationAndLinkToCamp(Camp camp, SeasonCode code) {
         CampOperationSeason.createCampOperationSeasonAndLinkToCamp(camp, code);
+    }
+
+    @Override
+    public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+        if (!checkUpdate(item, camp)) {
+            return;
+        }
+
+        camp.resetCampOperationSeasonList();
+
+        linkCampAssociations(item, camp, nameToCodeMaps);
+    }
+
+    @Override
+    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
+        List<CampOperationSeason> campOperationSeasonList = camp.getCampOperationSeasonList();
+        String[] values = convertStringToArray(item.getOperPdCl());
+
+        if (values == null) {
+            if (campOperationSeasonList.size() != 0) {
+                camp.resetCampOperationSeasonList();
+            }
+
+            return false;
+        }
+
+        if (values.length != campOperationSeasonList.size()) {
+            return true;
+        }
+
+        List<Long> seasonCdIdList = campOperationSeasonList.stream()
+                .map(campOperationSeason -> campOperationSeason.getCampOperationSeasonId().getSeasonCdId())
+                .toList();
+
+        List<String> seasonCdNmList = seasonMapRegistry.getSeasonCdNmListByIds(seasonCdIdList);
+
+        for (String value : values) {
+            if (!seasonCdNmList.contains(value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
