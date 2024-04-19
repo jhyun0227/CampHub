@@ -249,7 +249,9 @@ public class OpenApiService {
             campFacility.updateCampFacility(item);
             campSite.updateCampSite(item);
 
-
+            campAssociationHelpers.forEach(campAssociationHelper -> {
+                campAssociationHelper.updateCampAssociations(item, camp, nameToCodeMaps);
+            });
         }
     }
 }

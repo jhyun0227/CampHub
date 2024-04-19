@@ -108,6 +108,18 @@ public class Camp implements Persistable<String> {
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampTravelSeason> campTravelSeasonList = new ArrayList<>();
 
+    public void resetCampAmenityList() { this.campAmenityList = new ArrayList<>(); }
+    public void resetCampCaravanInnerAmenityList() { this.campCaravanInnerAmenityList = new ArrayList<>(); }
+    public void resetCampEquipmentRentalList() { this.campEquipmentRentalList = new ArrayList<>(); }
+    public void resetCampGlampingInnerAmenityList() { this.campGlampingInnerAmenityList = new ArrayList<>(); }
+    public void resetCampIndustryList() { this.campIndustryList = new ArrayList<>(); }
+    public void resetCampLocationList() { this.campLocationList = new ArrayList<>(); }
+    public void resetCampNearbyFacilityList() { this.campNearbyFacilityList = new ArrayList<>(); }
+    public void resetCampOperationSeasonList() { this.campOperationSeasonList = new ArrayList<>(); }
+    public void resetCampReservationList() { this.campReservationList = new ArrayList<>(); }
+    public void resetCampThemeList() { this.campThemeList = new ArrayList<>(); }
+    public void resetCampTravelSeasonList() { this.campTravelSeasonList = new ArrayList<>(); }
+
     /**
      * persistable 구현메서드
      * isNew()를 무조건 true를 반환하는 이유

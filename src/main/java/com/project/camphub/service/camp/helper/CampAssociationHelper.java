@@ -20,6 +20,8 @@ public interface CampAssociationHelper<T, D> {
      */
     void addCodeToMap(D code, Map<String, Map<String, CampCode>> nameToCodeMaps);
     void createCampAssociationAndLinkToCamp(Camp camp, D code);
+    void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps);
+    boolean checkUpdate(OpenApiResponse.Item item, Camp camp);
 
     default String[] convertStringToArray(String stringValue) {
         if (!StringUtils.hasText(stringValue)) {
