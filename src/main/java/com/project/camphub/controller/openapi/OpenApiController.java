@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -25,6 +26,19 @@ public class OpenApiController {
     @GetMapping("/init")
     public ResponseEntity<Map<String, Object>> initializeCampList() {
         openApiService.initializeCampList();
+
+        Map<String, Object> result = new HashMap<>();
+        return ResponseEntity.ok()
+                .body(result);
+    }
+
+    /**
+     * 공공 데이터 포털을 통해서 입력 날짜를 기준으로 데이터를 동기화
+     * 연월(6자리), 연월일(8자리)
+     */
+    @GetMapping("/refresh")
+    public ResponseEntity<Map<String, Object>> refreshCampList(@RequestParam("refreshDate") String refreshDate) {
+        openApiService.refreshCampListFromAPI(refreshDate);
 
         Map<String, Object> result = new HashMap<>();
         return ResponseEntity.ok()

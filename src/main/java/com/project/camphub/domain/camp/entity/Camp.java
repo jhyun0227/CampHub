@@ -1,7 +1,6 @@
 package com.project.camphub.domain.camp.entity;
 
 import com.project.camphub.domain.camp.entity.associations.*;
-import com.project.camphub.domain.common.registry.AreaMapRegistry;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
 import com.project.camphub.domain.common.enumaration.YnType;
@@ -15,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.project.camphub.common.utils.CoordinateUtils.*;
-import static com.project.camphub.common.utils.DateUtils.*;
+import static com.project.camphub.common.utils.CoordinateUtils.parseLonOrLatToDouble;
+import static com.project.camphub.common.utils.DateUtils.parseStringToLocalDateTime;
 
 @Entity
 @Getter
@@ -85,26 +84,48 @@ public class Camp implements Persistable<String> {
     public void linkToCampSite(CampSite campSite) { this.campSite = campSite; }
 
     //캠프코드 연관관계
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampAmenity> campAmenityList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampCaravanInnerAmenity> campCaravanInnerAmenityList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampEquipmentRental> campEquipmentRentalList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampIndustry> campIndustryList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampLocation> campLocationList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampNearbyFacility> campNearbyFacilityList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampOperationSeason> campOperationSeasonList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampReservation> campReservationList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampTheme> campThemeList = new ArrayList<>();
+//    @BatchSize(size = 20)
+    @Builder.Default
     @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CampTravelSeason> campTravelSeasonList = new ArrayList<>();
 
@@ -161,24 +182,6 @@ public class Camp implements Persistable<String> {
                 .cpCreateDt(parseStringToLocalDateTime(item.getCreatedtime()))
                 .cpModDt(parseStringToLocalDateTime(item.getModifiedtime()))
                 .cpIsActive(checkIsActive(item.getSyncStatus()))
-
-                /**
-                 * 클래스의 필드에서 new ArrayList<>()로 초기화하더라도
-                 * 빌더 패턴으로 인해 필드의 값이 null로 덮어 씌워지는 문제 발생
-                 * 빌더 패턴 초기화에서 new ArrayList<>() 를 생성하여 반환하도록 설정
-                 */
-                .campAmenityList(new ArrayList<>())
-                .campCaravanInnerAmenityList(new ArrayList<>())
-                .campEquipmentRentalList(new ArrayList<>())
-                .campGlampingInnerAmenityList(new ArrayList<>())
-                .campIndustryList(new ArrayList<>())
-                .campLocationList(new ArrayList<>())
-                .campNearbyFacilityList(new ArrayList<>())
-                .campOperationSeasonList(new ArrayList<>())
-                .campReservationList(new ArrayList<>())
-                .campThemeList(new ArrayList<>())
-                .campTravelSeasonList(new ArrayList<>())
-
                 .build();
     }
 

@@ -28,6 +28,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,7 @@ public class OpenApiService {
                 .collect(Collectors.toList());
 
         //Camp 데이터 조회 (영속성 컨텍스트)
-        List<Camp> findCampList = campRepository.findAllByCpIdIn(itemContentIds);
+        List<Camp> findCampList = campRepository.findCampsByCpIdIn(itemContentIds);
         Map<String, Camp> findCampMap = findCampList.stream()
                 .collect(Collectors.toMap(Camp::getCpId, camp -> camp));
 
@@ -105,7 +106,8 @@ public class OpenApiService {
          * 1. DB를 통해 조회한 CampMaps에서 itemContentId를 이용하여 인스턴스를 가져온다. 인스턴스가 없을 경우 새로 추가되는 데이터로 간주
          *    (item.contentId == camp.cpId), 데이터 저장 List에 담은 후 continue를 통해 다음 반복으로 이동
          *
-         * 2. Item의 데이터 수정 날짜와 DB 수정 날짜가 같을 경우 동일한 수정사항이므로 반복문을 건너 뛴다.
+         * 2. 현재 DB의 수정날짜보다 Item 데이터로 넘어온 수정날짜가 이전일 경우 반복문을 건너 뛴다.
+         *    현재 DB의 수정날짜와 Item 데이터로 넘어온 수정 날짜가 같을경우 동일한 수정사항이므로 반복문을 건너 뛴다.
          *
          * 3. 위의 두 조건이 일치하지 않을 경우 수정 대상 데이터로 간주, 데이터 업데이트 List에 담는다.
          */
@@ -122,10 +124,13 @@ public class OpenApiService {
 
             //2
             Camp camp = optionalCamp.get();
-            boolean equalModified
-                    = camp.getCpModDt().isEqual(parseStringToLocalDateTime(item.getModifiedtime()));
+            LocalDateTime dbCpModDt = camp.getCpModDt();
+            LocalDateTime itemModDt = parseStringToLocalDateTime(item.getModifiedtime());
 
-            if (equalModified) {
+            boolean beforeResult = itemModDt.isBefore(dbCpModDt);
+            boolean equalResult = itemModDt.isEqual(dbCpModDt);
+
+            if (beforeResult || equalResult) {
                 continue;
             }
 
