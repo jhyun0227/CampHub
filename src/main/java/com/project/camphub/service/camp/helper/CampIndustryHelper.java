@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.IndustryCode;
 import com.project.camphub.domain.camp.registry.IndustryMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampIndustryRepository;
 import com.project.camphub.repository.camp.code.IndustryCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.INDUSTRY_CODE;
 @RequiredArgsConstructor
 public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, IndustryCode> {
 
+    private final CampIndustryRepository campIndustryRepository;
     private final IndustryCodeRepository industryCodeRepository;
     private final IndustryMapRegistry industryMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getInduty());
         if (values == null) {
             return;
         }
+
+        List<CampIndustry> saveCampIndustryList = new ArrayList<>();
 
         Map<String, IndustryCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
                 saveCode(saveIndustryCode);
                 addCodeToMap(saveIndustryCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveIndustryCode);
+                saveCampIndustryList.add(CampIndustry.createCampIndustry(camp, saveIndustryCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, industryCode.get());
+                saveCampIndustryList.add(CampIndustry.createCampIndustry(camp, industryCode.get()));
             }
         }
+
+        campIndustryRepository.saveAll(saveCampIndustryList);
     }
 
     @Override
@@ -77,31 +83,27 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, IndustryCode code) {
-        CampIndustry.createCampIndustryAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampIndustry> findCampIndustryList = campIndustryRepository.findByCampIndustryId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampIndustryList)) {
             return;
         }
 
         //초기화
-        camp.resetCampIndustryList();
+        campIndustryRepository.deleteAll(findCampIndustryList);
 
         //재설정
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampIndustry> campIndustryList = camp.getCampIndustryList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampIndustry> campIndustryList) {
         String[] values = convertStringToArray(item.getInduty());
 
         if (values == null) {
             if (campIndustryList.size() != 0) {
-                camp.resetCampIndustryList();
+                campIndustryRepository.deleteAll(campIndustryList);
             }
 
             return false;
@@ -111,11 +113,9 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
             return true;
         }
 
-        List<Long> indstCdIdList = campIndustryList.stream()
-                .map(campIndustry -> campIndustry.getCampIndustryId().getIndstCdId())
+        List<String> indstCdNmList = campIndustryList.stream()
+                .map(campIndustry -> campIndustry.getIndustryCode().getIndstCdNm())
                 .toList();
-
-        List<String> indstCdNmList = industryMapRegistry.getIndstCdNmListByIds(indstCdIdList);
 
         for (String value : values) {
             if (!indstCdNmList.contains(value)) {

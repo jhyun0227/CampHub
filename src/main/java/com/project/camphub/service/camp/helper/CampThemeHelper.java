@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.ThemeCode;
 import com.project.camphub.domain.camp.registry.ThemeMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampThemeRepository;
 import com.project.camphub.repository.camp.code.ThemeCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.THEME_CODE;
 @RequiredArgsConstructor
 public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCode> {
 
+    private final CampThemeRepository campThemeRepository;
     private final ThemeCodeRepository themeCodeRepository;
     private final ThemeMapRegistry themeMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
         if (values == null) {
             return;
         }
+
+        List<CampTheme> saveCampThemeList = new ArrayList<>();
 
         Map<String, ThemeCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
                 saveCode(saveThemeCode);
                 addCodeToMap(saveThemeCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveThemeCode);
+                saveCampThemeList.add(CampTheme.createCampTheme(camp, saveThemeCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, themeCode.get());
+                saveCampThemeList.add(CampTheme.createCampTheme(camp, themeCode.get()));
             }
         }
+
+        campThemeRepository.saveAll(saveCampThemeList);
     }
 
     @Override
@@ -77,29 +83,25 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, ThemeCode code) {
-        CampTheme.createCampThemeAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampTheme> findCampThemeList = campThemeRepository.findByCampThemeId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampThemeList)) {
             return;
         }
 
-        camp.resetCampThemeList();
+        campThemeRepository.deleteAll(findCampThemeList);
 
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampTheme> campThemeList = camp.getCampThemeList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampTheme> campThemeList) {
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
 
         if (values == null) {
             if (campThemeList.size() != 0) {
-                camp.resetCampThemeList();
+                campThemeRepository.deleteAll(campThemeList);
             }
 
             return false;
@@ -109,11 +111,9 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
             return true;
         }
 
-        List<Long> themeCdIdList = campThemeList.stream()
-                .map(campTheme -> campTheme.getCampThemeId().getThemeCdId())
+        List<String> themeCdNmList = campThemeList.stream()
+                .map(campTheme -> campTheme.getThemeCode().getThemeCdNm())
                 .toList();
-
-        List<String> themeCdNmList = themeMapRegistry.getThemeCdNmListByIds(themeCdIdList);
 
         for (String value : values) {
             if (!themeCdNmList.contains(value)) {

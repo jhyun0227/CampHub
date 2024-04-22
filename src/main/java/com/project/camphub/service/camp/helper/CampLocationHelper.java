@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.LocationCode;
 import com.project.camphub.domain.camp.registry.LocationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampLocationRepository;
 import com.project.camphub.repository.camp.code.LocationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.LOCATION_CODE;
 @RequiredArgsConstructor
 public class CampLocationHelper implements CampAssociationHelper<CampLocation, LocationCode> {
 
+    private final CampLocationRepository campLocationRepository;
     private final LocationCodeRepository locationCodeRepository;
     private final LocationMapRegistry locationMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getLctCl());
         if (values == null) {
             return;
         }
+
+        List<CampLocation> saveCampLocationList = new ArrayList<>();
 
         Map<String, LocationCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
                 saveCode(saveLocationCode);
                 addCodeToMap(saveLocationCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveLocationCode);
+                saveCampLocationList.add(CampLocation.createCampLocation(camp, saveLocationCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, locationCode.get());
+                saveCampLocationList.add(CampLocation.createCampLocation(camp, locationCode.get()));
             }
         }
+
+        campLocationRepository.saveAll(saveCampLocationList);
     }
 
     @Override
@@ -77,29 +83,25 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, LocationCode code) {
-        CampLocation.createCampLocationAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampLocation> findCampLocationList = campLocationRepository.findByCampLocationId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampLocationList)) {
             return;
         }
 
-        camp.resetCampLocationList();
+        campLocationRepository.deleteAll(findCampLocationList);
 
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampLocation> campLocationList = camp.getCampLocationList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampLocation> campLocationList) {
         String[] values = convertStringToArray(item.getLctCl());
 
         if (values == null) {
             if (campLocationList.size() != 0) {
-                camp.resetCampLocationList();
+                campLocationRepository.deleteAll(campLocationList);
             }
 
             return false;
@@ -109,11 +111,9 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
             return true;
         }
 
-        List<Long> loctCdIdList = campLocationList.stream()
-                .map(campLocation -> campLocation.getCampLocationId().getLoctCdId())
+        List<String> loctCdNmList = campLocationList.stream()
+                .map(campLocation -> campLocation.getLocationCode().getLoctCdNm())
                 .toList();
-
-        List<String> loctCdNmList = locationMapRegistry.getLoctCdNmListByIds(loctCdIdList);
 
         for (String value : values) {
             if (!loctCdNmList.contains(value)) {

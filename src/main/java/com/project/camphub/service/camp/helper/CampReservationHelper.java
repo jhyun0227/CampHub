@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.ReservationCode;
 import com.project.camphub.domain.camp.registry.ReservationMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampReservationRepository;
 import com.project.camphub.repository.camp.code.ReservationCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.RESERVATION_CODE;
 @RequiredArgsConstructor
 public class CampReservationHelper implements CampAssociationHelper<CampReservation, ReservationCode> {
 
+    private final CampReservationRepository campReservationRepository;
     private final ReservationCodeRepository reservationCodeRepository;
     private final ReservationMapRegistry reservationMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getResveCl());
         if (values == null) {
             return;
         }
+
+        List<CampReservation> saveCampReservationList = new ArrayList<>();
 
         Map<String, ReservationCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
                 saveCode(saveReservationCode);
                 addCodeToMap(saveReservationCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveReservationCode);
+                saveCampReservationList.add(CampReservation.createCampReservation(camp, saveReservationCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, reservationCode.get());
+                saveCampReservationList.add(CampReservation.createCampReservation(camp, reservationCode.get()));
             }
         }
+
+        campReservationRepository.saveAll(saveCampReservationList);
     }
 
     @Override
@@ -77,29 +83,25 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, ReservationCode code) {
-        CampReservation.createCampReservationAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampReservation> findCampReservationList = campReservationRepository.findByCampReservationId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampReservationList)) {
             return;
         }
 
-        camp.resetCampReservationList();
+        campReservationRepository.deleteAll(findCampReservationList);
 
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampReservation> campReservationList = camp.getCampReservationList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampReservation> campReservationList) {
         String[] values = convertStringToArray(item.getResveCl());
 
         if (values == null) {
             if (campReservationList.size() != 0) {
-                camp.resetCampReservationList();
+                campReservationRepository.deleteAll(campReservationList);
             }
 
             return false;
@@ -109,11 +111,9 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
             return true;
         }
 
-        List<Long> resvCdIdList = campReservationList.stream()
-                .map(campReservation -> campReservation.getCampReservationId().getResvCdId())
+        List<String> resvCdNmList = campReservationList.stream()
+                .map(campReservation -> campReservation.getReservationCode().getResvCdNm())
                 .toList();
-
-        List<String> resvCdNmList = reservationMapRegistry.getResvCdNmListByIds(resvCdIdList);
 
         for (String value : values) {
             if (!resvCdNmList.contains(value)) {

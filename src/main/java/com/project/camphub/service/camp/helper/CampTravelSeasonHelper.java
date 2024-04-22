@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.SeasonCode;
 import com.project.camphub.domain.camp.registry.SeasonMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampTravelSeasonRepository;
 import com.project.camphub.repository.camp.code.SeasonCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.SEASON_CODE;
 @RequiredArgsConstructor
 public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelSeason, SeasonCode> {
 
+    private final CampTravelSeasonRepository campTravelSeasonRepository;
     private final SeasonCodeRepository seasonCodeRepository;
     private final SeasonMapRegistry seasonMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getTourEraCl());
         if (values == null) {
             return;
         }
+
+        List<CampTravelSeason> saveCampTravelSeasonList = new ArrayList<>();
 
         Map<String, SeasonCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
                 saveCode(saveSeasonCode);
                 addCodeToMap(saveSeasonCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveSeasonCode);
+                saveCampTravelSeasonList.add(CampTravelSeason.createCampTravelSeason(camp, saveSeasonCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, seasonCode.get());
+                saveCampTravelSeasonList.add(CampTravelSeason.createCampTravelSeason(camp, seasonCode.get()));
             }
         }
+
+        campTravelSeasonRepository.saveAll(saveCampTravelSeasonList);
     }
 
     @Override
@@ -77,29 +83,25 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, SeasonCode code) {
-        CampTravelSeason.createCampTravelSeasonAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampTravelSeason> findCampTravelSeasonList = campTravelSeasonRepository.findByCampTravelSeasonId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampTravelSeasonList)) {
             return;
         }
 
-        camp.resetCampTravelSeasonList();
+        campTravelSeasonRepository.deleteAll(findCampTravelSeasonList);
 
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampTravelSeason> campTravelSeasonList = camp.getCampTravelSeasonList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampTravelSeason> campTravelSeasonList) {
         String[] values = convertStringToArray(item.getTourEraCl());
 
         if (values == null) {
             if (campTravelSeasonList.size() != 0) {
-                camp.resetCampTravelSeasonList();
+                campTravelSeasonRepository.deleteAll(campTravelSeasonList);
             }
 
             return false;
@@ -109,11 +111,9 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
             return true;
         }
 
-        List<Long> seasonCdIdList = campTravelSeasonList.stream()
-                .map(campTravelSeason -> campTravelSeason.getCampTravelSeasonId().getSeasonCdId())
+        List<String> seasonCdNmList = campTravelSeasonList.stream()
+                .map(campTravelSeason -> campTravelSeason.getSeasonCode().getSeasonCdNm())
                 .toList();
-
-        List<String> seasonCdNmList = seasonMapRegistry.getSeasonCdNmListByIds(seasonCdIdList);
 
         for (String value : values) {
             if (!seasonCdNmList.contains(value)) {
