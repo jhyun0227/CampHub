@@ -27,6 +27,9 @@ public class CampTheme implements Persistable<CampTheme.CampThemeId> {
     @JoinColumn(name = "theme_cd_id")
     private ThemeCode themeCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampTheme implements Persistable<CampTheme.CampThemeId> {
 
     public static CampTheme createCampTheme(Camp camp, ThemeCode themeCode) {
         CampThemeId id = new CampThemeId(camp.getCpId(), themeCode.getThemeCdId());
-        return new CampTheme(id, camp, themeCode);
+        return new CampTheme(id, camp, themeCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampTheme implements Persistable<CampTheme.CampThemeId> {
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

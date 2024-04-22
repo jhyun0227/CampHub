@@ -27,6 +27,9 @@ public class CampNearbyFacility implements Persistable<CampNearbyFacility.CampNe
     @JoinColumn(name = "nrby_fclt_cd_id")
     private NearbyFacilityCode nearbyFacilityCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampNearbyFacility implements Persistable<CampNearbyFacility.CampNe
 
     public static CampNearbyFacility createCampNearbyFacility(Camp camp, NearbyFacilityCode nearbyFacilityCode) {
         CampNearbyFacilityId id = new CampNearbyFacilityId(camp.getCpId(), nearbyFacilityCode.getNrbyFcltCdId());
-        return new CampNearbyFacility(id, camp, nearbyFacilityCode);
+        return new CampNearbyFacility(id, camp, nearbyFacilityCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampNearbyFacility implements Persistable<CampNearbyFacility.CampNe
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

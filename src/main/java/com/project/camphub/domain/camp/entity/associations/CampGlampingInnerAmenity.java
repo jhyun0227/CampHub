@@ -27,6 +27,9 @@ public class CampGlampingInnerAmenity implements Persistable<CampGlampingInnerAm
     @JoinColumn(name = "inner_amnty_cd_id")
     private InnerAmenityCode innerAmenityCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampGlampingInnerAmenity implements Persistable<CampGlampingInnerAm
 
     public static CampGlampingInnerAmenity createCampGlampingInnerAmenity(Camp camp, InnerAmenityCode innerAmenityCode) {
         CampGlampingInnerAmenityId id = new CampGlampingInnerAmenityId(camp.getCpId(), innerAmenityCode.getInnerAmntyCdId());
-        return new CampGlampingInnerAmenity(id, camp, innerAmenityCode);
+        return new CampGlampingInnerAmenity(id, camp, innerAmenityCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampGlampingInnerAmenity implements Persistable<CampGlampingInnerAm
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

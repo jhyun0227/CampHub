@@ -27,6 +27,9 @@ public class CampEquipmentRental implements Persistable<CampEquipmentRental.Camp
     @JoinColumn(name = "equip_cd_id")
     private EquipmentCode equipmentCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampEquipmentRental implements Persistable<CampEquipmentRental.Camp
 
     public static CampEquipmentRental createCampEquipmentRental(Camp camp, EquipmentCode equipmentCode) {
         CampEquipmentRentalId id = new CampEquipmentRentalId(camp.getCpId(), equipmentCode.getEquipCdId());
-        return new CampEquipmentRental(id, camp, equipmentCode);
+        return new CampEquipmentRental(id, camp, equipmentCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampEquipmentRental implements Persistable<CampEquipmentRental.Camp
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

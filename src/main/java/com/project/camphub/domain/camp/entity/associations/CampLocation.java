@@ -27,6 +27,9 @@ public class CampLocation implements Persistable<CampLocation.CampLocationId> {
     @JoinColumn(name = "loct_cd_id")
     private LocationCode locationCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampLocation implements Persistable<CampLocation.CampLocationId> {
 
     public static CampLocation createCampLocation(Camp camp, LocationCode locationCode) {
         CampLocationId id = new CampLocationId(camp.getCpId(), locationCode.getLoctCdId());
-        return new CampLocation(id, camp, locationCode);
+        return new CampLocation(id, camp, locationCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampLocation implements Persistable<CampLocation.CampLocationId> {
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

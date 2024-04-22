@@ -27,6 +27,9 @@ public class CampIndustry implements Persistable<CampIndustry.CampIndustryId> {
     @JoinColumn(name = "indst_cd_id")
     private IndustryCode industryCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampIndustry implements Persistable<CampIndustry.CampIndustryId> {
 
     public static CampIndustry createCampIndustry(Camp camp, IndustryCode industryCode) {
         CampIndustryId id = new CampIndustryId(camp.getCpId(), industryCode.getIndstCdId());
-        return new CampIndustry(id, camp, industryCode);
+        return new CampIndustry(id, camp, industryCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampIndustry implements Persistable<CampIndustry.CampIndustryId> {
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

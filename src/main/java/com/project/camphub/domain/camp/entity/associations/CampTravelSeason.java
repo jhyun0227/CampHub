@@ -27,6 +27,9 @@ public class CampTravelSeason implements Persistable<CampTravelSeason.CampTravel
     @JoinColumn(name = "season_cd_id")
     private SeasonCode seasonCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampTravelSeason implements Persistable<CampTravelSeason.CampTravel
 
     public static CampTravelSeason createCampTravelSeason(Camp camp, SeasonCode seasonCode) {
         CampTravelSeasonId id = new CampTravelSeasonId(camp.getCpId(), seasonCode.getSeasonCdId());
-        return new CampTravelSeason(id, camp, seasonCode);
+        return new CampTravelSeason(id, camp, seasonCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampTravelSeason implements Persistable<CampTravelSeason.CampTravel
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

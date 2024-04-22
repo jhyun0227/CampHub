@@ -27,6 +27,9 @@ public class CampAmenity implements Persistable<CampAmenity.CampAmenityId> {
     @JoinColumn(name = "amnty_cd_id")
     private AmenityCode amenityCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampAmenity implements Persistable<CampAmenity.CampAmenityId> {
 
     public static CampAmenity createCampAmenity(Camp camp, AmenityCode amenityCode) {
         CampAmenityId id = new CampAmenityId(camp.getCpId(), amenityCode.getAmntyCdId());
-        return new CampAmenity(id, camp, amenityCode);
+        return new CampAmenity(id, camp, amenityCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampAmenity implements Persistable<CampAmenity.CampAmenityId> {
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }

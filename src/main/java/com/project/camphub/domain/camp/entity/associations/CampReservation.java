@@ -27,6 +27,9 @@ public class CampReservation implements Persistable<CampReservation.CampReservat
     @JoinColumn(name = "resv_cd_id")
     private ReservationCode reservationCode;
 
+    @Transient
+    private boolean isNew = false;
+
     @Embeddable
     @Getter
     @NoArgsConstructor
@@ -40,7 +43,7 @@ public class CampReservation implements Persistable<CampReservation.CampReservat
 
     public static CampReservation createCampReservation(Camp camp, ReservationCode reservationCode) {
         CampReservationId id = new CampReservationId(camp.getCpId(), reservationCode.getResvCdId());
-        return new CampReservation(id, camp, reservationCode);
+        return new CampReservation(id, camp, reservationCode, true);
     }
 
     @Override
@@ -50,6 +53,6 @@ public class CampReservation implements Persistable<CampReservation.CampReservat
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 }
