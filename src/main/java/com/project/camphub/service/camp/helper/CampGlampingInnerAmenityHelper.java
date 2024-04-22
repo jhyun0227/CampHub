@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.InnerAmenityCode;
 import com.project.camphub.domain.camp.registry.InnerAmenityMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampGlampingInnerAmenityRepository;
 import com.project.camphub.repository.camp.code.InnerAmenityCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.INNER_AMENITY_CODE;
 @RequiredArgsConstructor
 public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<CampGlampingInnerAmenity, InnerAmenityCode> {
 
+    private final CampGlampingInnerAmenityRepository campGlampingInnerAmenityRepository;
     private final InnerAmenityCodeRepository innerAmenityCodeRepository;
     private final InnerAmenityMapRegistry innerAmenityMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getGlampInnerFclty());
         if (values == null) {
             return;
         }
+
+        List<CampGlampingInnerAmenity> saveCampGlampingInnerAmenityList = new ArrayList<>();
 
         Map<String, InnerAmenityCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
                 saveCode(saveInnerAmenityCode);
                 addCodeToMap(saveInnerAmenityCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveInnerAmenityCode);
+                saveCampGlampingInnerAmenityList.add(CampGlampingInnerAmenity.createCampGlampingInnerAmenity(camp, saveInnerAmenityCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, innerAmenityCode.get());
+                saveCampGlampingInnerAmenityList.add(CampGlampingInnerAmenity.createCampGlampingInnerAmenity(camp, innerAmenityCode.get()));
             }
         }
+
+        campGlampingInnerAmenityRepository.saveAll(saveCampGlampingInnerAmenityList);
     }
 
     @Override
@@ -79,29 +85,26 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, InnerAmenityCode code) {
-        CampGlampingInnerAmenity.createCampGlampingInnerAmenityAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampGlampingInnerAmenity> findCampGlampingInnerAmenityList
+                = campGlampingInnerAmenityRepository.findByCampGlampingInnerAmenityId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampGlampingInnerAmenityList)) {
             return;
         }
 
-        camp.resetCampGlampingInnerAmenityList();
+        campGlampingInnerAmenityRepository.deleteAll(findCampGlampingInnerAmenityList);
 
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = camp.getCampGlampingInnerAmenityList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampGlampingInnerAmenity> campGlampingInnerAmenityList) {
         String[] values = convertStringToArray(item.getGlampInnerFclty());
 
         if (values == null) {
             if (campGlampingInnerAmenityList.size() != 0) {
-                camp.resetCampGlampingInnerAmenityList();
+                campGlampingInnerAmenityRepository.deleteAll(campGlampingInnerAmenityList);
             }
 
             return false;
@@ -111,11 +114,9 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
             return true;
         }
 
-        List<Long> innerAmntyCdIdList = campGlampingInnerAmenityList.stream()
-                .map(campGlampingInnerAmenity -> campGlampingInnerAmenity.getCampGlampingInnerAmenityId().getInnerAmntyCdId())
+        List<String> innerAmntyCdNmList = campGlampingInnerAmenityList.stream()
+                .map(campGlampingInnerAmenity -> campGlampingInnerAmenity.getInnerAmenityCode().getInnerAmntyCdNm())
                 .toList();
-
-        List<String> innerAmntyCdNmList = innerAmenityMapRegistry.getInnerAmntyCdNmListByIds(innerAmntyCdIdList);
 
         for (String value : values) {
             if (!innerAmntyCdNmList.contains(value)) {
