@@ -93,7 +93,7 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
         }
 
         //초기화
-        campEquipmentRentalRepository.deleteAll();
+        campEquipmentRentalRepository.deleteAll(findCampEquipmentRentalList);
 
         //재설정
         insertCampAssociations(item, camp, nameToCodeMaps);
@@ -109,7 +109,7 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
          * 기존으 데이터가 없을 경우 업데이트 해당X
          */
         if (values == null) {
-            if (campEquipmentRentalList.size() != 0) {
+            if (!campEquipmentRentalList.isEmpty()) {
                 //기존에 데이터가 있었다면 초기화
                 campEquipmentRentalRepository.deleteAll(campEquipmentRentalList);
             }

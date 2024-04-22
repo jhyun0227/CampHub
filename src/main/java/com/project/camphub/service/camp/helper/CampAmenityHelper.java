@@ -110,7 +110,7 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
          * 기존으 데이터가 없을 경우 업데이트 해당X
          */
         if (values == null) {
-            if (campAmenityList.size() != 0) {
+            if (!campAmenityList.isEmpty()) {
                 //기존에 데이터가 있었다면 초기화
                 campAmenityRepository.deleteAll(campAmenityList);
             }

@@ -103,7 +103,7 @@ public class CampGlampingInnerAmenityHelper implements CampAssociationHelper<Cam
         String[] values = convertStringToArray(item.getGlampInnerFclty());
 
         if (values == null) {
-            if (campGlampingInnerAmenityList.size() != 0) {
+            if (!campGlampingInnerAmenityList.isEmpty()) {
                 campGlampingInnerAmenityRepository.deleteAll(campGlampingInnerAmenityList);
             }
 

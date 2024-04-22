@@ -52,6 +52,8 @@ public class CampCaravanInnerAmenityHelper implements CampAssociationHelper<Camp
                 saveCampCaravanInnerAmenityList.add(CampCaravanInnerAmenity.createCampCaravanInnerAmenity(camp, innerAmenityCode.get()));
             }
         }
+
+        campCaravanInnerAmenityRepository.saveAll(saveCampCaravanInnerAmenityList);
     }
 
     @Override
@@ -109,7 +111,7 @@ public class CampCaravanInnerAmenityHelper implements CampAssociationHelper<Camp
          * 기존으 데이터가 없을 경우 업데이트 해당X
          */
         if (values == null) {
-            if (campCaravanInnerAmenityList.size() != 0) {
+            if (!campCaravanInnerAmenityList.isEmpty()) {
                 //기존에 데이터가 있었다면 초기화
                 campCaravanInnerAmenityRepository.deleteAll(campCaravanInnerAmenityList);
             }

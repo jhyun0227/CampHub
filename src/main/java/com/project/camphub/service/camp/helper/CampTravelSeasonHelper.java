@@ -100,7 +100,7 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
         String[] values = convertStringToArray(item.getTourEraCl());
 
         if (values == null) {
-            if (campTravelSeasonList.size() != 0) {
+            if (!campTravelSeasonList.isEmpty()) {
                 campTravelSeasonRepository.deleteAll(campTravelSeasonList);
             }
 

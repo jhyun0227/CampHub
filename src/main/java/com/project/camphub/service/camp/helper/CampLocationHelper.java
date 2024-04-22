@@ -100,7 +100,7 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
         String[] values = convertStringToArray(item.getLctCl());
 
         if (values == null) {
-            if (campLocationList.size() != 0) {
+            if (!campLocationList.isEmpty()) {
                 campLocationRepository.deleteAll(campLocationList);
             }
 

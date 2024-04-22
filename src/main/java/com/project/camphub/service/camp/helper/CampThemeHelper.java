@@ -100,7 +100,7 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
 
         if (values == null) {
-            if (campThemeList.size() != 0) {
+            if (!campThemeList.isEmpty()) {
                 campThemeRepository.deleteAll(campThemeList);
             }
 

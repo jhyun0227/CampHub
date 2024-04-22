@@ -100,7 +100,7 @@ public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearb
         String[] values = convertStringToArray(item.getPosblFcltyCl());
 
         if (values == null) {
-            if (campNearbyFacilityList.size() != 0) {
+            if (!campNearbyFacilityList.isEmpty()) {
                 campNearbyFacilityRepository.deleteAll(campNearbyFacilityList);
             }
 

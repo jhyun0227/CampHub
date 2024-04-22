@@ -102,7 +102,7 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
         String[] values = convertStringToArray(item.getInduty());
 
         if (values == null) {
-            if (campIndustryList.size() != 0) {
+            if (!campIndustryList.isEmpty()) {
                 campIndustryRepository.deleteAll(campIndustryList);
             }
 

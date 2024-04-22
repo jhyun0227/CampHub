@@ -100,7 +100,7 @@ public class CampOperationSeasonHelper implements CampAssociationHelper<CampOper
         String[] values = convertStringToArray(item.getOperPdCl());
 
         if (values == null) {
-            if (campOperationSeasonList.size() != 0) {
+            if (!campOperationSeasonList.isEmpty()) {
                 campOperationSeasonRepository.deleteAll(campOperationSeasonList);
             }
 

@@ -100,7 +100,7 @@ public class CampReservationHelper implements CampAssociationHelper<CampReservat
         String[] values = convertStringToArray(item.getResveCl());
 
         if (values == null) {
-            if (campReservationList.size() != 0) {
+            if (!campReservationList.isEmpty()) {
                 campReservationRepository.deleteAll(campReservationList);
             }
 
