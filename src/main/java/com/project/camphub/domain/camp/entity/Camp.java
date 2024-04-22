@@ -86,60 +86,48 @@ public class Camp implements Persistable<String> {
     //캠프코드 연관관계
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampAmenity> campAmenityList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampCaravanInnerAmenity> campCaravanInnerAmenityList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampEquipmentRental> campEquipmentRentalList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampGlampingInnerAmenity> campGlampingInnerAmenityList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampIndustry> campIndustryList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampLocation> campLocationList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampNearbyFacility> campNearbyFacilityList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampOperationSeason> campOperationSeasonList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampReservation> campReservationList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampTheme> campThemeList = new ArrayList<>();
 //    @BatchSize(size = 20)
     @Builder.Default
-    @OneToMany(mappedBy = "camp", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "camp")
     private List<CampTravelSeason> campTravelSeasonList = new ArrayList<>();
-
-    public void resetCampAmenityList() { this.campAmenityList = new ArrayList<>(); }
-    public void resetCampCaravanInnerAmenityList() { this.campCaravanInnerAmenityList = new ArrayList<>(); }
-    public void resetCampEquipmentRentalList() { this.campEquipmentRentalList = new ArrayList<>(); }
-    public void resetCampGlampingInnerAmenityList() { this.campGlampingInnerAmenityList = new ArrayList<>(); }
-    public void resetCampIndustryList() { this.campIndustryList = new ArrayList<>(); }
-    public void resetCampLocationList() { this.campLocationList = new ArrayList<>(); }
-    public void resetCampNearbyFacilityList() { this.campNearbyFacilityList = new ArrayList<>(); }
-    public void resetCampOperationSeasonList() { this.campOperationSeasonList = new ArrayList<>(); }
-    public void resetCampReservationList() { this.campReservationList = new ArrayList<>(); }
-    public void resetCampThemeList() { this.campThemeList = new ArrayList<>(); }
-    public void resetCampTravelSeasonList() { this.campTravelSeasonList = new ArrayList<>(); }
 
     /**
      * persistable 구현메서드

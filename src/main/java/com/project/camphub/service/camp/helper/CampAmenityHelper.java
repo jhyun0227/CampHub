@@ -24,15 +24,18 @@ import static com.project.camphub.domain.camp.CampCodeConst.AMENITY_CODE;
 @RequiredArgsConstructor
 public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, AmenityCode> {
 
+    private final CampAmenityRepository campAmenityRepository;
     private final AmenityCodeRepository amenityCodeRepository;
     private final AmenityMapRegistry amenityMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
         String[] values = convertStringToArray(item.getSbrsCl());
         if (values == null) {
             return;
         }
+
+        List<CampAmenity> saveCampAmenity = new ArrayList<>();
 
         Map<String, AmenityCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -44,11 +47,13 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
                 saveCode(saveAmenityCode);
                 addCodeToMap(saveAmenityCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveAmenityCode);
+                saveCampAmenity.add(createCampAssociation(camp, saveAmenityCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, amenityCode.get());
+                saveCampAmenity.add(createCampAssociation(camp, amenityCode.get()));
             }
         }
+
+        campAmenityRepository.saveAll(saveCampAmenity);
     }
 
     @Override
@@ -80,26 +85,28 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, AmenityCode code) {
-        CampAmenity.createCampAmenityAndLinkToCamp(camp, code);
+    public CampAmenity createCampAssociation(Camp camp, AmenityCode code) {
+        return CampAmenity.createCampAmenity(camp, code);
     }
 
     @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+
+        List<CampAmenity> findCampAmenityList = campAmenityRepository.findByCampAmenityId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampAmenityList)) {
             return;
         }
 
         //초기화
-        camp.resetCampAmenityList();
+        campAmenityRepository.deleteAll(findCampAmenityList);
 
         //재설정
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampAmenity> campAmenityList = camp.getCampAmenityList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampAmenity> campAmenityList) {
         String[] values = convertStringToArray(item.getSbrsCl());
 
         /**
@@ -110,7 +117,7 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
         if (values == null) {
             if (campAmenityList.size() != 0) {
                 //기존에 데이터가 있었다면 초기화
-                camp.resetCampAmenityList();
+                campAmenityRepository.deleteAll(campAmenityList);
             }
 
             return false;
@@ -123,15 +130,10 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
 
         /**
          * 변경된 항목이 있는지 확인
-         * 기존 데이터베이스에 등록된 코드명을 List로 만든 후
-         * API를 통해 전달된 값들을 포함하는지 확인한다.
-         * 새로 전달된 값들 중 하나라도 기존 데이터베이스로 생성한 List에 포함되지 않는다면 업데이트 대상O
          */
-        List<Long> amntyCdIdList = campAmenityList.stream()
-                .map(campAmenity -> campAmenity.getCampAmenityId().getAmntyCdId())
+        List<String> amntyCdNmList = campAmenityList.stream()
+                .map(campAmenity -> campAmenity.getAmenityCode().getAmntyCdNm())
                 .toList();
-
-        List<String> amntyCdNmList = amenityMapRegistry.getAmntyCdNmListByIds(amntyCdIdList);
 
         //새로 전달된 값과 비교, 기존 DB에 없으면 업데이트 사항O
         for (String value : values) {
