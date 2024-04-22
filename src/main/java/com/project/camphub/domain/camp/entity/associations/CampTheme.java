@@ -38,11 +38,9 @@ public class CampTheme implements Persistable<CampTheme.CampThemeId> {
         private Long themeCdId;
     }
 
-    public static void createCampThemeAndLinkToCamp(Camp camp, ThemeCode themeCode) {
+    public static CampTheme createCampTheme(Camp camp, ThemeCode themeCode) {
         CampThemeId id = new CampThemeId(camp.getCpId(), themeCode.getThemeCdId());
-        CampTheme campTheme = new CampTheme(id, camp, themeCode);
-
-        camp.getCampThemeList().add(campTheme);
+        return new CampTheme(id, camp, themeCode);
     }
 
     @Override

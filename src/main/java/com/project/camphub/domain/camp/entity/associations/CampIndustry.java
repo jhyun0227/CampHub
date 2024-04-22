@@ -38,11 +38,9 @@ public class CampIndustry implements Persistable<CampIndustry.CampIndustryId> {
         private Long indstCdId;
     }
 
-    public static void createCampIndustryAndLinkToCamp(Camp camp, IndustryCode industryCode) {
+    public static CampIndustry createCampIndustry(Camp camp, IndustryCode industryCode) {
         CampIndustryId id = new CampIndustryId(camp.getCpId(), industryCode.getIndstCdId());
-        CampIndustry campIndustry = new CampIndustry(id, camp, industryCode);
-
-        camp.getCampIndustryList().add(campIndustry);
+        return new CampIndustry(id, camp, industryCode);
     }
 
     @Override

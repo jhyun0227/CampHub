@@ -38,11 +38,9 @@ public class CampEquipmentRental implements Persistable<CampEquipmentRental.Camp
         private Long equipCdId;
     }
 
-    public static void createCampEquipmentRentalAndLinkToCamp(Camp camp, EquipmentCode equipmentCode) {
+    public static CampEquipmentRental createCampEquipmentRental(Camp camp, EquipmentCode equipmentCode) {
         CampEquipmentRentalId id = new CampEquipmentRentalId(camp.getCpId(), equipmentCode.getEquipCdId());
-        CampEquipmentRental campEquipmentRental = new CampEquipmentRental(id, camp, equipmentCode);
-
-        camp.getCampEquipmentRentalList().add(campEquipmentRental);
+        return new CampEquipmentRental(id, camp, equipmentCode);
     }
 
     @Override
