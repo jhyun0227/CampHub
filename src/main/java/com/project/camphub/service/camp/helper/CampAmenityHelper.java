@@ -35,7 +35,7 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
             return;
         }
 
-        List<CampAmenity> saveCampAmenity = new ArrayList<>();
+        List<CampAmenity> saveCampAmenityList = new ArrayList<>();
 
         Map<String, AmenityCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -47,13 +47,13 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
                 saveCode(saveAmenityCode);
                 addCodeToMap(saveAmenityCode, nameToCodeMaps);
 
-                saveCampAmenity.add(createCampAssociation(camp, saveAmenityCode));
+                saveCampAmenityList.add(CampAmenity.createCampAmenity(camp, saveAmenityCode));
             } else {
-                saveCampAmenity.add(createCampAssociation(camp, amenityCode.get()));
+                saveCampAmenityList.add(CampAmenity.createCampAmenity(camp, amenityCode.get()));
             }
         }
 
-        campAmenityRepository.saveAll(saveCampAmenity);
+        campAmenityRepository.saveAll(saveCampAmenityList);
     }
 
     @Override
@@ -82,11 +82,6 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
 
         //지역변수에서 사용하는 CodeMaps
         nameToCodeMaps.get(AMENITY_CODE).put(code.getAmntyCdNm(), code);
-    }
-
-    @Override
-    public CampAmenity createCampAssociation(Camp camp, AmenityCode code) {
-        return CampAmenity.createCampAmenity(camp, code);
     }
 
     @Override

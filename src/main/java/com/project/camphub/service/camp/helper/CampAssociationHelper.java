@@ -19,7 +19,6 @@ public interface CampAssociationHelper<T, D> {
      * nameToCodeMap은 현재 Item에서만 사용, 추가 중복값이 없기 때문에 넣지 않는다.
      */
     void addCodeToMap(D code, Map<String, Map<String, CampCode>> nameToCodeMaps);
-    T createCampAssociation(Camp camp, D code);
     void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps);
     boolean checkUpdate(OpenApiResponse.Item item, List<T> campAssociationList);
 
