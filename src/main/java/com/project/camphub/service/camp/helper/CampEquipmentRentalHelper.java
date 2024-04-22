@@ -6,6 +6,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.camp.entity.code.EquipmentCode;
 import com.project.camphub.domain.camp.registry.EquipmentMapRegistry;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
+import com.project.camphub.repository.camp.associations.CampEquipmentRentalRepository;
 import com.project.camphub.repository.camp.code.EquipmentCodeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,16 +23,19 @@ import static com.project.camphub.domain.camp.CampCodeConst.EQUIPMENT_CODE;
 @RequiredArgsConstructor
 public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEquipmentRental, EquipmentCode> {
 
+    private final CampEquipmentRentalRepository campEquipmentRentalRepository;
     private final EquipmentCodeRepository equipmentCodeRepository;
     private final EquipmentMapRegistry equipmentMapRegistry;
 
     @Override
-    public void linkCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
 
         String[] values = convertStringToArray(item.getEqpmnLendCl());
         if (values == null) {
             return;
         }
+
+        List<CampEquipmentRental> saveCampEquipmentRentalList = new ArrayList<>();
 
         Map<String, EquipmentCode> nameToCodeMap = getNameToCodeMap(nameToCodeMaps);
         for (String value : values) {
@@ -43,11 +47,13 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
                 saveCode(saveEquipmentCode);
                 addCodeToMap(saveEquipmentCode, nameToCodeMaps);
 
-                createCampAssociationAndLinkToCamp(camp, saveEquipmentCode);
+                saveCampEquipmentRentalList.add(CampEquipmentRental.createCampEquipmentRental(camp, saveEquipmentCode));
             } else {
-                createCampAssociationAndLinkToCamp(camp, equipmentCode.get());
+                saveCampEquipmentRentalList.add(CampEquipmentRental.createCampEquipmentRental(camp, equipmentCode.get()));
             }
         }
+
+        campEquipmentRentalRepository.saveAll(saveCampEquipmentRentalList);
     }
 
     @Override
@@ -79,26 +85,22 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
     }
 
     @Override
-    public void createCampAssociationAndLinkToCamp(Camp camp, EquipmentCode code) {
-        CampEquipmentRental.createCampEquipmentRentalAndLinkToCamp(camp, code);
-    }
-
-    @Override
     public void updateCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
-        if (!checkUpdate(item, camp)) {
+        List<CampEquipmentRental> findCampEquipmentRentalList = campEquipmentRentalRepository.findByCampEquipmentRentalId_CpId(camp.getCpId());
+
+        if (!checkUpdate(item, findCampEquipmentRentalList)) {
             return;
         }
 
         //초기화
-        camp.resetCampEquipmentRentalList();
+        campEquipmentRentalRepository.deleteAll();
 
         //재설정
-        linkCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps);
     }
 
     @Override
-    public boolean checkUpdate(OpenApiResponse.Item item, Camp camp) {
-        List<CampEquipmentRental> campEquipmentRentalList = camp.getCampEquipmentRentalList();
+    public boolean checkUpdate(OpenApiResponse.Item item, List<CampEquipmentRental> campEquipmentRentalList) {
         String[] values = convertStringToArray(item.getEqpmnLendCl());
 
         /**
@@ -109,7 +111,7 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
         if (values == null) {
             if (campEquipmentRentalList.size() != 0) {
                 //기존에 데이터가 있었다면 초기화
-                camp.resetCampEquipmentRentalList();
+                campEquipmentRentalRepository.deleteAll(campEquipmentRentalList);
             }
 
             return false;
@@ -126,11 +128,9 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
          * API를 통해 전달된 값들을 포함하는지 확인한다.
          * 새로 전달된 값들 중 하나라도 기존 데이터베이스로 생성한 List에 포함되지 않는다면 업데이트 대상O
          */
-        List<Long> equipCdIdList = campEquipmentRentalList.stream()
-                .map(campEquipmentRental -> campEquipmentRental.getCampEquipmentRentalId().getEquipCdId())
+        List<String> equipCdNmList = campEquipmentRentalList.stream()
+                .map(campEquipmentRental -> campEquipmentRental.getEquipmentCode().getEquipCdNm())
                 .toList();
-
-        List<String> equipCdNmList = equipmentMapRegistry.getEquipCdNmListByIds(equipCdIdList);
 
         //새로 전달된 값과 비교, 기존 DB에 없으면 업데이트 사항O
         for (String value : values) {
