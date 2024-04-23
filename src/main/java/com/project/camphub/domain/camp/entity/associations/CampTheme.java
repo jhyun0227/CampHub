@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampTheme implements Persistable<CampTheme.CampThemeId> {
+public class CampTheme implements Persistable<CampTheme.CampThemeId>, CampAssociation {
 
     @EmbeddedId
     private CampThemeId campThemeId;
@@ -54,5 +54,10 @@ public class CampTheme implements Persistable<CampTheme.CampThemeId> {
     @Override
     public boolean isNew() {
         return isNew;
+    }
+
+    @Override
+    public String getCampCodeNm() {
+        return themeCode.getThemeCdNm();
     }
 }

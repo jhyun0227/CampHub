@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampGlampingInnerAmenity implements Persistable<CampGlampingInnerAmenity.CampGlampingInnerAmenityId> {
+public class CampGlampingInnerAmenity implements Persistable<CampGlampingInnerAmenity.CampGlampingInnerAmenityId>, CampAssociation {
 
     @EmbeddedId
     private CampGlampingInnerAmenityId campGlampingInnerAmenityId;
@@ -54,5 +54,10 @@ public class CampGlampingInnerAmenity implements Persistable<CampGlampingInnerAm
     @Override
     public boolean isNew() {
         return isNew;
+    }
+
+    @Override
+    public String getCampCodeNm() {
+        return innerAmenityCode.getInnerAmntyCdNm();
     }
 }

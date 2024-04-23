@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CampTravelSeason implements Persistable<CampTravelSeason.CampTravelSeasonId> {
+public class CampTravelSeason implements Persistable<CampTravelSeason.CampTravelSeasonId>, CampAssociation {
 
     @EmbeddedId
     private CampTravelSeasonId campTravelSeasonId;
@@ -54,5 +54,10 @@ public class CampTravelSeason implements Persistable<CampTravelSeason.CampTravel
     @Override
     public boolean isNew() {
         return isNew;
+    }
+
+    @Override
+    public String getCampCodeNm() {
+        return seasonCode.getSeasonCdNm();
     }
 }
