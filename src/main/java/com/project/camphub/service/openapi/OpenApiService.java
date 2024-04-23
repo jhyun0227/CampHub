@@ -226,24 +226,20 @@ public class OpenApiService {
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
         Map<String, DistrictCode> nameToDistrictCodeMap = areaCodeService.getNameToDistrictCodeMap();
 
-        List<Camp> saveCampList = new ArrayList<>();
-
         for (OpenApiResponse.Item item : itemList) {
             Camp camp = Camp.apiToEntity(item, nameToProvinceCodeMap, nameToDistrictCodeMap);
             CampDetail.apiToEntity(item).linkToCamp(camp);
             CampFacility.apiToEntity(item).linkToCamp(camp);
             CampSite.apiToEntity(item).linkToCamp(camp);
 
+            campRepository.save(camp);
+
             campAssociationHelpers.forEach(campAssociationHelper -> {
                 campAssociationHelper.insertCampAssociations(item, camp, nameToCodeMaps, CampAssociationHelper.INSERT);
             });
-
-            saveCampList.add(camp);
         }
 
-        campRepository.saveAll(saveCampList);
-
-        log.info("insertCampList 종료, saveCampList.size() = {}", saveCampList.size());
+        log.info("insertCampList 종료, saveCampList.size() = {}", itemList.size());
     }
 
     private void updateCampList(List<OpenApiResponse.Item> itemList, Map<String, Camp> campMap) {
