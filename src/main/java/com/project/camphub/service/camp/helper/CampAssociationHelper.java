@@ -1,6 +1,7 @@
 package com.project.camphub.service.camp.helper;
 
 import com.project.camphub.domain.camp.entity.Camp;
+import com.project.camphub.domain.camp.entity.associations.CampAssociation;
 import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import org.springframework.util.StringUtils;
@@ -10,7 +11,10 @@ import java.util.Map;
 
 public interface CampAssociationHelper<T, D> {
 
-    void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps);
+    String INSERT = "I";
+    String UPDATE = "U";
+
+    void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status);
     Map<String, D> getNameToCodeMap(Map<String, Map<String, CampCode>> nameToCodeMaps);
     void saveCode(D code);
 
@@ -38,5 +42,19 @@ public interface CampAssociationHelper<T, D> {
         }
 
         return values;
+    }
+
+    default String campAssociationsToString(List<? extends CampAssociation> campAssociationList) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < campAssociationList.size(); i++) {
+            if (i != campAssociationList.size() - 1) {
+                sb.append(campAssociationList.get(i).getCampCodeNm()).append(", ");
+            } else {
+                sb.append(campAssociationList.get(i));
+            }
+        }
+
+        return sb.toString();
     }
 }

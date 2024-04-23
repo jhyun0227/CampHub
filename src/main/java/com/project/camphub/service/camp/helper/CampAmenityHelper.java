@@ -29,7 +29,7 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
     private final AmenityMapRegistry amenityMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
         String[] values = convertStringToArray(item.getSbrsCl());
         if (values == null) {
             return;
@@ -51,6 +51,10 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
             } else {
                 saveCampAmenityList.add(CampAmenity.createCampAmenity(camp, amenityCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampAmenityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampAmenityList));
         }
 
         campAmenityRepository.saveAll(saveCampAmenityList);
@@ -93,11 +97,14 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
             return;
         }
 
+
+        log.info("CampAmenityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampAmenityList));
+
         //초기화
         campAmenityRepository.deleteAll(findCampAmenityList);
 
         //재설정
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

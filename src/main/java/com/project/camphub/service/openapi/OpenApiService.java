@@ -235,7 +235,7 @@ public class OpenApiService {
             CampSite.apiToEntity(item).linkToCamp(camp);
 
             campAssociationHelpers.forEach(campAssociationHelper -> {
-                campAssociationHelper.insertCampAssociations(item, camp, nameToCodeMaps);
+                campAssociationHelper.insertCampAssociations(item, camp, nameToCodeMaps, CampAssociationHelper.INSERT);
             });
 
             saveCampList.add(camp);
