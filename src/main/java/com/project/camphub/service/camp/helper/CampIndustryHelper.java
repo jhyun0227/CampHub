@@ -28,7 +28,7 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
     private final IndustryMapRegistry industryMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getInduty());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
             } else {
                 saveCampIndustryList.add(CampIndustry.createCampIndustry(camp, industryCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampIndustryHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampIndustryList));
         }
 
         campIndustryRepository.saveAll(saveCampIndustryList);
@@ -90,11 +94,13 @@ public class CampIndustryHelper implements CampAssociationHelper<CampIndustry, I
             return;
         }
 
+        log.info("CampIndustryHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampIndustryList));
+
         //초기화
         campIndustryRepository.deleteAll(findCampIndustryList);
 
         //재설정
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

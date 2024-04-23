@@ -28,7 +28,7 @@ public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearb
     private final NearbyFacilityMapRegistry nearbyFacilityMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getPosblFcltyCl());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearb
             } else {
                 saveCampNearbyFacilityList.add(CampNearbyFacility.createCampNearbyFacility(camp, nearbyFacilityCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampNearbyFacilityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampNearbyFacilityList));
         }
 
         campNearbyFacilityRepository.saveAll(saveCampNearbyFacilityList);
@@ -90,9 +94,11 @@ public class CampNearbyFacilityHelper implements CampAssociationHelper<CampNearb
             return;
         }
 
+        log.info("CampNearbyFacilityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampNearbyFacilityList));
+
         campNearbyFacilityRepository.deleteAll(findCampNearbyFacilityList);
 
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

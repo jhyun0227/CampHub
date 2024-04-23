@@ -28,7 +28,7 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
     private final ThemeMapRegistry themeMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getThemaEnvrnCl());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
             } else {
                 saveCampThemeList.add(CampTheme.createCampTheme(camp, themeCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampThemeHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampThemeList));
         }
 
         campThemeRepository.saveAll(saveCampThemeList);
@@ -90,9 +94,11 @@ public class CampThemeHelper implements CampAssociationHelper<CampTheme, ThemeCo
             return;
         }
 
+        log.info("CampThemeHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampThemeList));
+
         campThemeRepository.deleteAll(findCampThemeList);
 
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

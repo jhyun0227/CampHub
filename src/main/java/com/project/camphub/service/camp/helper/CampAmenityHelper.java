@@ -97,7 +97,6 @@ public class CampAmenityHelper implements CampAssociationHelper<CampAmenity, Ame
             return;
         }
 
-
         log.info("CampAmenityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampAmenityList));
 
         //초기화

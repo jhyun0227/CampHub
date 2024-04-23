@@ -28,7 +28,7 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
     private final LocationMapRegistry locationMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getLctCl());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
             } else {
                 saveCampLocationList.add(CampLocation.createCampLocation(camp, locationCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampLocationHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampLocationList));
         }
 
         campLocationRepository.saveAll(saveCampLocationList);
@@ -90,9 +94,11 @@ public class CampLocationHelper implements CampAssociationHelper<CampLocation, L
             return;
         }
 
+        log.info("CampLocationHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampLocationList));
+
         campLocationRepository.deleteAll(findCampLocationList);
 
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

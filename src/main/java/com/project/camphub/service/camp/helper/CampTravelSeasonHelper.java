@@ -28,7 +28,7 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
     private final SeasonMapRegistry seasonMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getTourEraCl());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
             } else {
                 saveCampTravelSeasonList.add(CampTravelSeason.createCampTravelSeason(camp, seasonCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampTravelSeasonHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampTravelSeasonList));
         }
 
         campTravelSeasonRepository.saveAll(saveCampTravelSeasonList);
@@ -90,9 +94,11 @@ public class CampTravelSeasonHelper implements CampAssociationHelper<CampTravelS
             return;
         }
 
+        log.info("CampTravelSeasonHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampTravelSeasonList));
+
         campTravelSeasonRepository.deleteAll(findCampTravelSeasonList);
 
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

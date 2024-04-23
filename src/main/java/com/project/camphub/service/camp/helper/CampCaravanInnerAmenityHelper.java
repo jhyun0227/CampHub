@@ -28,7 +28,7 @@ public class CampCaravanInnerAmenityHelper implements CampAssociationHelper<Camp
     private final InnerAmenityMapRegistry innerAmenityMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getCaravInnerFclty());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampCaravanInnerAmenityHelper implements CampAssociationHelper<Camp
             } else {
                 saveCampCaravanInnerAmenityList.add(CampCaravanInnerAmenity.createCampCaravanInnerAmenity(camp, innerAmenityCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampCaravanInnerAmenityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampCaravanInnerAmenityList));
         }
 
         campCaravanInnerAmenityRepository.saveAll(saveCampCaravanInnerAmenityList);
@@ -94,11 +98,13 @@ public class CampCaravanInnerAmenityHelper implements CampAssociationHelper<Camp
             return;
         }
 
+        log.info("CampCaravanInnerAmenityHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampCaravanInnerAmenity));
+
         //초기화
         campCaravanInnerAmenityRepository.deleteAll(findCampCaravanInnerAmenity);
 
         //재설정
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override

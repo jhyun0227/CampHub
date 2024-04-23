@@ -28,7 +28,7 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
     private final EquipmentMapRegistry equipmentMapRegistry;
 
     @Override
-    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps) {
+    public void insertCampAssociations(OpenApiResponse.Item item, Camp camp, Map<String, Map<String, CampCode>> nameToCodeMaps, String status) {
 
         String[] values = convertStringToArray(item.getEqpmnLendCl());
         if (values == null) {
@@ -51,6 +51,10 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
             } else {
                 saveCampEquipmentRentalList.add(CampEquipmentRental.createCampEquipmentRental(camp, equipmentCode.get()));
             }
+        }
+
+        if (UPDATE.equals(status)) {
+            log.info("CampEquipmentRentalHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 수정값 = {}", camp.getCpId(), campAssociationsToString(saveCampEquipmentRentalList));
         }
 
         campEquipmentRentalRepository.saveAll(saveCampEquipmentRentalList);
@@ -92,11 +96,13 @@ public class CampEquipmentRentalHelper implements CampAssociationHelper<CampEqui
             return;
         }
 
+        log.info("CampEquipmentRentalHelper.updateCampAssociations 업데이트 조건 충족. cpId = {}, 기존값 = {}", camp.getCpId(), campAssociationsToString(findCampEquipmentRentalList));
+
         //초기화
         campEquipmentRentalRepository.deleteAll(findCampEquipmentRentalList);
 
         //재설정
-        insertCampAssociations(item, camp, nameToCodeMaps);
+        insertCampAssociations(item, camp, nameToCodeMaps, UPDATE);
     }
 
     @Override
