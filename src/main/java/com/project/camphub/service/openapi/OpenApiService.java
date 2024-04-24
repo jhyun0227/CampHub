@@ -139,8 +139,12 @@ public class OpenApiService {
         }
 
         //저장 및 수정 진행
-        insertCampList(newCampItemList);
-        updateCampList(updateCampItemList, findCampMap);
+        if (!newCampItemList.isEmpty()) {
+            insertCampList(newCampItemList);
+        }
+        if (!updateCampItemList.isEmpty()) {
+            updateCampList(updateCampItemList, findCampMap);
+        }
 
         log.info("refreshCampListFromAPI 완료");
     }
