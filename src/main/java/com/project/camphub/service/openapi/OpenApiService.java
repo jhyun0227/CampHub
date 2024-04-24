@@ -63,7 +63,7 @@ public class OpenApiService {
         int maxPageCount = getMaxPageCount(null);
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, null);
-        log.info("initializeCampList 실행, itemList.size() = {}", itemList.size());
+        log.info("initializeCampList 실행, itemList.size()={}", itemList.size());
 
         if (itemList.isEmpty()) {
             log.info("initializeCampList 실행, 초기화 데이터 없음");
@@ -84,10 +84,10 @@ public class OpenApiService {
         int maxPageCount = getMaxPageCount(modDate);
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, modDate);
-        log.info("refreshCampListFromAPI 실행, itemList.size() = {}", itemList.size());
+        log.info("refreshCampListFromAPI 실행, itemList.size()={}", itemList.size());
 
         if (itemList.isEmpty()) {
-            log.info("refreshCampListFromAPI 실행, 리프레시 데이터 없음. 해당날짜 = {}", modDate);
+            log.info("refreshCampListFromAPI 실행, 리프레시 데이터 없음. 해당날짜={}", modDate);
             return;
         }
 
@@ -139,12 +139,8 @@ public class OpenApiService {
         }
 
         //저장 및 수정 진행
-        if (!newCampItemList.isEmpty()) {
-            insertCampList(newCampItemList);
-        }
-        if (!updateCampItemList.isEmpty()) {
-            updateCampList(updateCampItemList, findCampMap);
-        }
+        insertCampList(newCampItemList);
+        updateCampList(updateCampItemList, findCampMap);
 
         log.info("refreshCampListFromAPI 완료");
     }
@@ -187,7 +183,7 @@ public class OpenApiService {
         Mono<OpenApiResponse> findTotalCountResponse = fetchCampList(1, 1, modDate);
         int totalCount = findTotalCountResponse.map(openApiResponse -> openApiResponse.getResponse().getBody().getTotalCount()).block().intValue();
 
-        log.info("getMaxPageCount 실행, totalCount = {}",  totalCount);
+        log.info("getMaxPageCount 실행, totalCount={}",  totalCount);
 
         return calculatePagesRequired(totalCount);
     }
@@ -204,8 +200,8 @@ public class OpenApiService {
      * 하나의 페이지당 한 개의 OpenApiResponse 응답을 반환, 응답안의 Item 인스턴스들을 flatMap을 통해 하나의 리스트로 반환
      */
     private List<OpenApiResponse.Item> getOpenApiResponseItemList(int maxPageCount, String modDate) {
-        log.info("maxPageCount = {}", maxPageCount);
-        log.info("modDate = {}", modDate == null ? "날짜 없음" : modDate);
+        log.info("maxPageCount={}", maxPageCount);
+        log.info("modDate={}", modDate == null ? "날짜 없음" : modDate);
 
         List<OpenApiResponse> openApiResponseList = Flux.range(1, maxPageCount)
                 .flatMap(page -> fetchCampList(numOfRows, page, modDate) // 각 페이지에 대한 요청
@@ -225,6 +221,11 @@ public class OpenApiService {
     private void insertCampList(List<OpenApiResponse.Item> itemList) {
         log.info("insertCampList 시작");
 
+        if (itemList.isEmpty()) {
+            log.info("insertCampList 종료, 저장할 데이터 없음");
+            return;
+        }
+
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
         Map<String, ProvinceCode> nameToProvinceCodeMap = areaCodeService.getNameToProvinceCodeMap();
@@ -243,11 +244,16 @@ public class OpenApiService {
             });
         }
 
-        log.info("insertCampList 종료, saveCampList.size() = {}", itemList.size());
+        log.info("insertCampList 종료, saveCampList.size()={}", itemList.size());
     }
 
     private void updateCampList(List<OpenApiResponse.Item> itemList, Map<String, Camp> campMap) {
         log.info("updateCampList 시작");
+
+        if (itemList.isEmpty()) {
+            log.info("updateCampList 종료, 수정할 데이터 없음");
+            return;
+        }
 
         //캠프코드, 시도코드, 시군구 코드
         Map<String, Map<String, CampCode>> nameToCodeMaps = campCodeService.getNameToCodeMaps();
@@ -270,6 +276,6 @@ public class OpenApiService {
             });
         }
 
-        log.info("updateCampList 종료, updateCampList.size() = {}", itemList.size());
+        log.info("updateCampList 종료, updateCampList.size()={}", itemList.size());
     }
 }
