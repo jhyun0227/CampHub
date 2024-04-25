@@ -5,6 +5,7 @@ import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.registry.*;
 import com.project.camphub.domain.common.dto.Response;
 import com.project.camphub.domain.common.enumaration.ResponseCode;
+import com.project.camphub.exception.error.NotFoundException;
 import com.project.camphub.repository.camp.CampRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class CampService {
         Optional<Camp> optionalCamp = campRepository.findByCpId(cpId);
 
         if (optionalCamp.isEmpty()) {
-            return null;
+            throw new NotFoundException("존재하지 않는 캠프입니다.");
         }
 
         Camp camp = optionalCamp.get();
