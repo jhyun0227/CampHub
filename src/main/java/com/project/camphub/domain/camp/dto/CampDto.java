@@ -1,7 +1,7 @@
 package com.project.camphub.domain.camp.dto;
 
 import com.project.camphub.domain.camp.entity.Camp;
-import com.project.camphub.domain.common.enumaration.YnType;
+import com.project.camphub.common.dto.enumaration.YnType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -47,9 +47,9 @@ public class CampDto {
     private Integer cpdResStaffCnt;
     private LocalDateTime cpdOffStartDt;
     private LocalDateTime cpdOffEndDt;
-    private String cpdCultEvYnValue;
+    private YnType cpdCultEvYn;
     private String cpdCultEvNm;
-    private String cpdExprPrgmYnValue;
+    private YnType cpdExprPrgmYn;
     private String cpdExprPrgmNm;
     private String cpdAnimEntTypeValue;
     private YnType cpdPrvtCrvYn;
@@ -136,9 +136,9 @@ public class CampDto {
                 .cpdResStaffCnt(camp.getCampDetail().getCpdResStaffCnt())
                 .cpdOffStartDt(camp.getCampDetail().getCpdOffStartDt())
                 .cpdOffEndDt(camp.getCampDetail().getCpdOffEndDt())
-                .cpdCultEvYnValue(camp.getCampDetail().getCpdCultEvYn().getDescription())
+                .cpdCultEvYn(camp.getCampDetail().getCpdCultEvYn())
                 .cpdCultEvNm(camp.getCampDetail().getCpdCultEvNm())
-                .cpdExprPrgmYnValue(camp.getCampDetail().getCpdExprPrgmYn().getDescription())
+                .cpdExprPrgmYn(camp.getCampDetail().getCpdExprPrgmYn())
                 .cpdExprPrgmNm(camp.getCampDetail().getCpdExprPrgmNm())
                 .cpdAnimEntTypeValue(camp.getCampDetail().getCpdAnimEntType().getDescription())
                 .cpdPrvtCrvYn(camp.getCampDetail().getCpdPrvtCrvYn())

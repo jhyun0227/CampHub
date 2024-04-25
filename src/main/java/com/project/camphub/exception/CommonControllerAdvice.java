@@ -1,7 +1,7 @@
 package com.project.camphub.exception;
 
-import com.project.camphub.domain.common.dto.Response;
-import com.project.camphub.domain.common.enumaration.ResponseCode;
+import com.project.camphub.common.dto.Response;
+import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.exception.error.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

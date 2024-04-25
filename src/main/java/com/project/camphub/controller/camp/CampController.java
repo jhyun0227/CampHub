@@ -1,7 +1,7 @@
 package com.project.camphub.controller.camp;
 
 import com.project.camphub.domain.camp.dto.CampDto;
-import com.project.camphub.domain.common.dto.Response;
+import com.project.camphub.common.dto.Response;
 import com.project.camphub.service.camp.CampService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

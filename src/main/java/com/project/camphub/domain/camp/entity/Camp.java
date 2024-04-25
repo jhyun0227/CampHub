@@ -3,7 +3,7 @@ package com.project.camphub.domain.camp.entity;
 import com.project.camphub.domain.camp.entity.associations.*;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
-import com.project.camphub.domain.common.enumaration.YnType;
+import com.project.camphub.common.dto.enumaration.YnType;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;

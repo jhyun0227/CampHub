@@ -1,7 +1,7 @@
 package com.project.camphub.domain.camp.entity;
 
 import com.project.camphub.domain.camp.enumeration.*;
-import com.project.camphub.domain.common.enumaration.YnType;
+import com.project.camphub.common.dto.enumaration.YnType;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.project.camphub.domain.common.enumaration;
+package com.project.camphub.common.dto.enumaration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
