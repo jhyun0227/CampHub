@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -22,7 +22,6 @@ public class NearbyFacilityMapRegistry {
     private final NearbyFacilityCodeRepository nearbyFacilityCodeRepository;
 
     private final Map<Long, NearbyFacilityCode> nrbyFcltCdMap = new HashMap<>();
-//    private final Map<String, NearbyFacilityCode> nameToNrbyFcltCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,35 +32,21 @@ public class NearbyFacilityMapRegistry {
         setNearbyFacilityCodeMaps(nrbyFcltCdList);
 
         log.info("nrbyFcltCdMap.size()={}", nrbyFcltCdMap.size());
-//        log.info("nameToNrbyFcltCdMap.size()={}", nameToNrbyFcltCdMap.size());
         log.info("NearbyFacilityMapRegistry.init() 종료");
     }
 
     private void setNearbyFacilityCodeMaps(List<NearbyFacilityCode> nrbyFcltCdList) {
-        nrbyFcltCdList.forEach(nrbyFcltCd -> {
-            nrbyFcltCdMap.put(nrbyFcltCd.getNrbyFcltCdId(), nrbyFcltCd);
-//            nameToNrbyFcltCdMap.put(nrbyFcltCd.getNrbyFcltCdNm(), nrbyFcltCd);
-        });
+        nrbyFcltCdList.forEach(nrbyFcltCd ->
+                nrbyFcltCdMap.put(nrbyFcltCd.getNrbyFcltCdId(), nrbyFcltCd));
     }
 
-    public NearbyFacilityCode findByNrbyFcltCdId(Long nrbyFcltCdId) {
-        return nrbyFcltCdMap.get(nrbyFcltCdId);
-    }
+    public List<String> getNrbyFcltCdNmList(List<Long> nrbyFcltCdIdList) {
+        if (nrbyFcltCdIdList.isEmpty()) {
+            return null;
+        }
 
-    /*
-    public NearbyFacilityCode findByNrbyFcltCdNm(String nrbyFcltCdNm) {
-        return nameToNrbyFcltCdMap.get(nrbyFcltCdNm);
-    }
-
-    public void addNearbyFacilityCodeMaps(NearbyFacilityCode nearbyFacilityCode) {
-        nrbyFcltCdMap.put(nearbyFacilityCode.getNrbyFcltCdId(), nearbyFacilityCode);
-        nameToNrbyFcltCdMap.put(nearbyFacilityCode.getNrbyFcltCdNm(), nearbyFacilityCode);
-    }
-    */
-
-    public List<String> getNrbyFcltCdNmListByIds(List<Long> nrbyFcltCdIdList) {
         return nrbyFcltCdIdList.stream()
                 .map(nrbyFcltCdId -> nrbyFcltCdMap.get(nrbyFcltCdId).getNrbyFcltCdNm())
-                .collect(Collectors.toList());
+                .toList();
     }
 }

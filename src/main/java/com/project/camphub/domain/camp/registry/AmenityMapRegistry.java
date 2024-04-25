@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -22,7 +22,6 @@ public class AmenityMapRegistry {
     private final AmenityCodeRepository amenityCodeRepository;
 
     private final Map<Long, AmenityCode> amntyCdMap = new HashMap<>();
-//    private final Map<String, AmenityCode> nameToAmntyCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,35 +32,21 @@ public class AmenityMapRegistry {
         setAmenityCodeMaps(amntyCdList);
 
         log.info("amntyCdMap.size()={}", amntyCdMap.size());
-//        log.info("nameToAmntyCdMap.size()={}", nameToAmntyCdMap.size());
         log.info("AmenityMapRegistry.init() 종료");
     }
 
     private void setAmenityCodeMaps(List<AmenityCode> amntyCdList) {
-        amntyCdList.forEach(amntyCd -> {
-            amntyCdMap.put(amntyCd.getAmntyCdId(), amntyCd);
-//            nameToAmntyCdMap.put(amntyCd.getAmntyCdNm(), amntyCd);
-        });
+        amntyCdList.forEach(amntyCd ->
+                amntyCdMap.put(amntyCd.getAmntyCdId(), amntyCd));
     }
 
-    public AmenityCode findByAmntyCdId(Long amntyCdId) {
-        return amntyCdMap.get(amntyCdId);
-    }
+    public List<String> getAmntyCdNmList(List<Long> amntyCdIdList) {
+        if (amntyCdIdList.isEmpty()) {
+            return null;
+        }
 
-    /*
-    public AmenityCode findByAmntyCdNm(String amntyCdNm) {
-        return nameToAmntyCdMap.get(amntyCdNm);
-    }
-
-    public void addAmenityCodeMaps (AmenityCode amenityCode) {
-        amntyCdMap.put(amenityCode.getAmntyCdId(), amenityCode);
-        nameToAmntyCdMap.put(amenityCode.getAmntyCdNm(), amenityCode);
-    }
-    */
-
-    public List<String> getAmntyCdNmListByIds(List<Long> amntyCdIdList) {
         return amntyCdIdList.stream()
                 .map(amntyCdId -> amntyCdMap.get(amntyCdId).getAmntyCdNm())
-                .collect(Collectors.toList());
+                .toList();
     }
 }

@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -22,7 +22,6 @@ public class ThemeMapRegistry {
     private final ThemeCodeRepository themeCodeRepository;
     
     private final Map<Long, ThemeCode> themeCdMap = new HashMap<>();
-//    private final Map<String, ThemeCode> nameToThemeCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,35 +32,21 @@ public class ThemeMapRegistry {
         setThemeCodeMaps(themeCdList);
 
         log.info("themeCdMap.size()={}", themeCdMap.size());
-//        log.info("nameToThemeCdMap.size()={}", nameToThemeCdMap.size());
         log.info("ThemeMapRegistry.init() 종료");
     }
 
     private void setThemeCodeMaps(List<ThemeCode> themeCdList) {
-        themeCdList.forEach(themeCd -> {
-            themeCdMap.put(themeCd.getThemeCdId(), themeCd);
-//            nameToThemeCdMap.put(themeCd.getThemeCdNm(), themeCd);
-        });
+        themeCdList.forEach(themeCd ->
+                themeCdMap.put(themeCd.getThemeCdId(), themeCd));
     }
 
-    public ThemeCode findByThemeCdId(Long themeCdId) {
-        return themeCdMap.get(themeCdId);
-    }
+    public List<String> getThemeCdNmList(List<Long> themeCdIdList) {
+        if (themeCdIdList.isEmpty()) {
+            return null;
+        }
 
-    /*
-    public ThemeCode findByThemeCdNm(String themeCdNm) {
-        return nameToThemeCdMap.get(themeCdNm);
-    }
-
-    public void addThemeCodeMaps(ThemeCode themeCode) {
-        themeCdMap.put(themeCode.getThemeCdId(), themeCode);
-        nameToThemeCdMap.put(themeCode.getThemeCdNm(), themeCode);
-    }
-    */
-
-    public List<String> getThemeCdNmListByIds(List<Long> themeCdIdList) {
         return themeCdIdList.stream()
                 .map(themeCdId -> themeCdMap.get(themeCdId).getThemeCdNm())
-                .collect(Collectors.toList());
+                .toList();
     }
 }

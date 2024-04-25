@@ -206,4 +206,60 @@ public class Camp implements Persistable<String> {
         this.cpModDt = parseStringToLocalDateTime(item.getModifiedtime());
         this.cpIsActive = checkIsActive(item.getSyncStatus());
     }
+
+    public List<Long> getCampAmenityIdList() {
+        return campAmenityList.stream()
+                .map(campAmenity -> campAmenity.getAmenityCode().getAmntyCdId())
+                .toList();
+    }
+    public List<Long> getCampCaravanInnerAmenityIdList() {
+        return campCaravanInnerAmenityList.stream()
+                .map(campCaravanInnerAmenity -> campCaravanInnerAmenity.getCampCaravanInnerAmenityId().getInnerAmntyCdId())
+                .toList();
+    }
+    public List<Long> getCampEquipmentRentalIdList() {
+        return campEquipmentRentalList.stream()
+                .map(campEquipmentRental -> campEquipmentRental.getCampEquipmentRentalId().getEquipCdId())
+                .toList();
+    }
+    public List<Long> getCampGlampingInnerAmenityIdList() {
+        return campGlampingInnerAmenityList.stream()
+                .map(campGlampingInnerAmenity -> campGlampingInnerAmenity.getCampGlampingInnerAmenityId().getInnerAmntyCdId())
+                .toList();
+    }
+    public List<Long> getCampIndustryIdList() {
+        return campIndustryList.stream()
+                .map(campIndustry -> campIndustry.getCampIndustryId().getIndstCdId())
+                .toList();
+    }
+    public List<Long> getCampLocationIdList() {
+        return campLocationList.stream()
+                .map(campLocation -> campLocation.getCampLocationId().getLoctCdId())
+                .toList();
+    }
+    public List<Long> getCampNearbyFacilityIdList() {
+        return campNearbyFacilityList.stream()
+                .map(campNearbyFacility -> campNearbyFacility.getCampNearbyFacilityId().getNrbyFcltCdId())
+                .toList();
+    }
+    public List<Long> getCampOperationSeasonIdList() {
+        return campOperationSeasonList.stream()
+                .map(campOperationSeason -> campOperationSeason.getCampOperationSeasonId().getSeasonCdId())
+                .toList();
+    }
+    public List<Long> getCampReservationIdList() {
+        return campReservationList.stream()
+                .map(campReservation -> campReservation.getCampReservationId().getResvCdId())
+                .toList();
+    }
+    public List<Long> getCampThemeIdList() {
+        return campThemeList.stream()
+                .map(campTheme -> campTheme.getCampThemeId().getThemeCdId())
+                .toList();
+    }
+    public List<Long> getCampTravelSeasonIdList() {
+        return campTravelSeasonList.stream()
+                .map(campTravelSeason -> campTravelSeason.getCampTravelSeasonId().getSeasonCdId())
+                .toList();
+    }
 }

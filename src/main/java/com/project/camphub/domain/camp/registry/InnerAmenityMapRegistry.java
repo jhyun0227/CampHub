@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -22,7 +22,6 @@ public class InnerAmenityMapRegistry {
     private final InnerAmenityCodeRepository innerAmenityCodeRepository;
 
     private final Map<Long, InnerAmenityCode> innerAmntyCdMap = new HashMap<>();
-//    private final Map<String, InnerAmenityCode> nameToInnerAmntyCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,35 +32,21 @@ public class InnerAmenityMapRegistry {
         setInnerAmenityCodeMaps(innerAmntyCdList);
 
         log.info("innerAmntyCdMap.size()={}", innerAmntyCdMap.size());
-//        log.info("nameToInnerAmntyCdMap.size()={}", nameToInnerAmntyCdMap.size());
         log.info("InnerAmenityMapRegistry.init() 종료");
     }
 
     private void setInnerAmenityCodeMaps(List<InnerAmenityCode> innerAmntyCdList) {
-        innerAmntyCdList.forEach(innerAmntyCd -> {
-            innerAmntyCdMap.put(innerAmntyCd.getInnerAmntyCdId(), innerAmntyCd);
-//            nameToInnerAmntyCdMap.put(innerAmntyCd.getInnerAmntyCdNm(), innerAmntyCd);
-        });
+        innerAmntyCdList.forEach(innerAmntyCd ->
+                innerAmntyCdMap.put(innerAmntyCd.getInnerAmntyCdId(), innerAmntyCd));
     }
 
-    public InnerAmenityCode findByInnerAmntyCdId(Long innerAmntyCdId) {
-        return innerAmntyCdMap.get(innerAmntyCdId);
-    }
+    public List<String> getInnerAmntyCdNmList(List<Long> innerAmntyCdIdList) {
+        if (innerAmntyCdIdList.isEmpty()) {
+            return null;
+        }
 
-    /*
-    public InnerAmenityCode findByInnerAmntyCdNm(String innerAmntyCdNm) {
-        return nameToInnerAmntyCdMap.get(innerAmntyCdNm);
-    }
-
-    public void addInnerAmenityCodeMaps(InnerAmenityCode innerAmenityCode) {
-        innerAmntyCdMap.put(innerAmenityCode.getInnerAmntyCdId(), innerAmenityCode);
-        nameToInnerAmntyCdMap.put(innerAmenityCode.getInnerAmntyCdNm(), innerAmenityCode);
-    }
-    */
-
-    public List<String> getInnerAmntyCdNmListByIds(List<Long> innerAmntyCdIdList) {
         return innerAmntyCdIdList.stream()
                 .map(innerAmntyCdId -> innerAmntyCdMap.get(innerAmntyCdId).getInnerAmntyCdNm())
-                .collect(Collectors.toList());
+                .toList();
     }
 }

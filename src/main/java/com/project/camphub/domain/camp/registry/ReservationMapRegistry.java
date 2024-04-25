@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -22,7 +22,6 @@ public class ReservationMapRegistry {
     private final ReservationCodeRepository reservationCodeRepository;
 
     private final Map<Long, ReservationCode> resvCdMap = new HashMap<>();
-//    private final Map<String, ReservationCode> nameToResvCdMap = new HashMap<>();
 
     @PostConstruct
     public void init() {
@@ -33,35 +32,21 @@ public class ReservationMapRegistry {
         setReservationCodeMaps(resvCdList);
 
         log.info("resvCdMap.size()={}", resvCdMap.size());
-//        log.info("nameToResvCdMap.size()={}", nameToResvCdMap.size());
         log.info("ReservationMapRegistry.init() 종료");
     }
 
     private void setReservationCodeMaps(List<ReservationCode> resvCdList) {
-        resvCdList.forEach(resvCd -> {
-            resvCdMap.put(resvCd.getResvCdId(), resvCd);
-//            nameToResvCdMap.put(resvCd.getResvCdNm(), resvCd);
-        });
+        resvCdList.forEach(resvCd ->
+                resvCdMap.put(resvCd.getResvCdId(), resvCd));
     }
 
-    public ReservationCode findByResvCdId(Long resvCdId) {
-        return resvCdMap.get(resvCdId);
-    }
+    public List<String> getResvCdNmList(List<Long> resvCdIdList) {
+        if (resvCdIdList.isEmpty()) {
+            return null;
+        }
 
-    /*
-    public ReservationCode findByResvCdNm(String resvCdNm) {
-        return nameToResvCdMap.get(resvCdNm);
-    }
-
-    public void addReservationCodeMaps(ReservationCode reservationCode) {
-        resvCdMap.put(reservationCode.getResvCdId(), reservationCode);
-        nameToResvCdMap.put(reservationCode.getResvCdNm(), reservationCode);
-    }
-    */
-
-    public List<String> getResvCdNmListByIds(List<Long> resvCdIdList) {
         return resvCdIdList.stream()
                 .map(resvCdId -> resvCdMap.get(resvCdId).getResvCdNm())
-                .collect(Collectors.toList());
+                .toList();
     }
 }
