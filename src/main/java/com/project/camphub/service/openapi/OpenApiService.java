@@ -175,34 +175,8 @@ public class OpenApiService {
                         }
                 )
                 .retrieve()
-                .bodyToMono(OpenApiResponse.class)
-                /*
-                .onErrorResume(InvalidFormatException.class, invalidFormatException -> {
-
-                    String originalMessage = invalidFormatException.getOriginalMessage();
-                    String parsingFailedMessage = "Cannot coerce empty String (\"\") to `com.project.camphub.domain.openapi.dto.OpenApiResponse$Items`";
-
-                    if (originalMessage.contains(parsingFailedMessage)) {
-                        return Mono.just(createEmptyOpenApiResponse());
-                    }
-
-                    throw new OpenApiFetchException(invalidFormatException);
-                })
-                */
-                ;
+                .bodyToMono(OpenApiResponse.class);
     }
-
-    /*
-    private OpenApiResponse createEmptyOpenApiResponse() {
-        OpenApiResponse openApiResponse = new OpenApiResponse();
-        OpenApiResponse.Response response = new OpenApiResponse.Response();
-        OpenApiResponse.Body body = new OpenApiResponse.Body();
-        response.setBody(body);
-        openApiResponse.setResponse(response);
-
-        return openApiResponse;
-    }
-    */
 
     /**
      * 데이터 초기화 및 데이터 리프레쉬 시에 요청할 페이지의 수를 구하는 메서드
