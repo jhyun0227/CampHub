@@ -67,6 +67,8 @@ public class Camp implements Persistable<String> {
     private LocalDateTime cpCreateDt;
     private LocalDateTime cpModDt;
 
+    private Integer cpReadCount;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 1)
     private YnType cpIsActive;
@@ -163,6 +165,7 @@ public class Camp implements Persistable<String> {
                 .cpPermitDt(parseStringToLocalDateTime(item.getPrmisnDe()))
                 .cpCreateDt(parseStringToLocalDateTime(item.getCreatedtime()))
                 .cpModDt(parseStringToLocalDateTime(item.getModifiedtime()))
+                .cpReadCount(0)
                 .cpIsActive(checkIsActive(item.getSyncStatus()))
                 .isNew(true)
                 .build();
@@ -261,5 +264,9 @@ public class Camp implements Persistable<String> {
         return campTravelSeasonList.stream()
                 .map(campTravelSeason -> campTravelSeason.getCampTravelSeasonId().getSeasonCdId())
                 .toList();
+    }
+
+    public void addReadCount() {
+        this.cpReadCount++;
     }
 }

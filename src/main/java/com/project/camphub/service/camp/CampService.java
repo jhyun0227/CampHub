@@ -10,11 +10,13 @@ import com.project.camphub.repository.camp.CampRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CampService {
 
@@ -39,6 +41,8 @@ public class CampService {
         }
 
         Camp camp = optionalCamp.get();
+        camp.addReadCount();
+
         CampDto campDto = CampDto.entityToDto(camp);
 
         setAssociations(camp, campDto);

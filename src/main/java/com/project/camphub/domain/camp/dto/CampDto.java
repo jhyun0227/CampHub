@@ -33,6 +33,7 @@ public class CampDto {
     private LocalDateTime cpPermitDt;
     private LocalDateTime cpCreateDt;
     private LocalDateTime cpModDt;
+    private Integer cpReadCount;
     private YnType cpIsActive;
 
     private String cpdIntro;
@@ -122,6 +123,7 @@ public class CampDto {
                 .cpPermitDt(camp.getCpPermitDt())
                 .cpCreateDt(camp.getCpCreateDt())
                 .cpModDt(camp.getCpModDt())
+                .cpReadCount(camp.getCpReadCount())
                 .cpIsActive(camp.getCpIsActive())
 
                 .cpdIntro(camp.getCampDetail().getCpdIntro())

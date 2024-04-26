@@ -37,6 +37,7 @@ CREATE TABLE `camp` (
                         `cp_permit_dt` datetime(6) DEFAULT NULL,
                         `cp_create_dt` datetime(6) DEFAULT NULL,
                         `cp_mod_dt` datetime(6) DEFAULT NULL,
+                        `cp_read_count` int DEFAULT '0',
                         `cp_is_active` enum('Y','N') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                         PRIMARY KEY (`cp_id`),
                         KEY `idx_camp_provCdId` (`cp_prov_cd_id`),
