@@ -1,7 +1,8 @@
 package com.project.camphub.domain.openapi.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.project.camphub.config.jackson.ItemsDeserializer;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class OpenApiResponse {
     }
 
     @Data
+    @JsonDeserialize(using = ItemsDeserializer.class)
     public static class Items {
         private List<Item> item;
     }

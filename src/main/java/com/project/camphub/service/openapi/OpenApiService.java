@@ -61,6 +61,11 @@ public class OpenApiService {
 
         int maxPageCount = getMaxPageCount(null);
 
+        if (maxPageCount == 0) {
+            log.info("initializeCampList 완료, OpenApiResponse.Items 응답 데이터 없음");
+            return Response.success(ResponseCode.CODE_200, "OpenApiResponse.Items 응답 데이터 없음",null);
+        }
+
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, null);
         log.info("initializeCampList 실행, itemList.size()={}", itemList.size());
 
@@ -78,6 +83,11 @@ public class OpenApiService {
         log.info("refreshCampListFromAPI 시작");
 
         int maxPageCount = getMaxPageCount(modDate);
+
+        if (maxPageCount == 0) {
+            log.info("refreshCampListFromAPI 완료, OpenApiResponse.Items 응답 데이터 없음");
+            return Response.success(ResponseCode.CODE_200, "OpenApiResponse.Items 응답 데이터 없음",null);
+        }
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, modDate);
         log.info("refreshCampListFromAPI 실행, itemList.size()={}", itemList.size());
@@ -202,18 +212,16 @@ public class OpenApiService {
     private int getMaxPageCount(String modDate) {
         OpenApiResponse openApiResponse = fetchCampList(1, 1, modDate).block();
 
-        int totalCount = openApiResponse.getResponse().getBody().getTotalCount();
-
         /**
-         * 파싱 데이터가 없을 경우, fetchCampList 예외처리에서 초기화가 되지 않은 OpenApiResponse를 전달한다.
-         * totalCount는 0으로 반환되어진다.
+         * @JsonDeserialize(using = ItemsDeserializer.class)
+         * OpenAPI를 통해서 조회 날짜에 변경된 데이터가 없을 경우 JSON 데이터에 배열이 아닌 "" 문자열로 데이터가 전달되어 InvalidFormatException가 발생한다.
+         * "" 문자열이 전달될 경우 빈 List를 반환하도록 Deserializer를 구현하였다.
          */
-        /*
-        if (totalCount == 0) {
+        if (openApiResponse.getResponse().getBody().getItems().getItem().isEmpty()) {
             return 0;
         }
-         */
 
+        int totalCount = openApiResponse.getResponse().getBody().getTotalCount();
         log.info("getMaxPageCount 실행, totalCount={}",  totalCount);
 
         return calculatePagesRequired(totalCount);
