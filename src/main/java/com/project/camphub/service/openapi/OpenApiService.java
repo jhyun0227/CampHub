@@ -275,6 +275,7 @@ public class OpenApiService {
             });
         }
 
+//        log.info("saveCampIds = {}", getCampIds(itemList));
         log.info("insertCampList 종료, saveCampList.size()={}", itemList.size());
     }
 
@@ -307,6 +308,21 @@ public class OpenApiService {
             });
         }
 
+        log.info("updateCampIds = {}", getCampIds(itemList));
         log.info("updateCampList 종료, updateCampList.size()={}", itemList.size());
+    }
+
+    private String getCampIds(List<OpenApiResponse.Item> itemList) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < itemList.size(); i++) {
+            if (i != itemList.size() - 1) {
+                sb.append(itemList.get(i).getContentId()).append(", ");
+            } else {
+                sb.append(itemList.get(i).getContentId());
+            }
+        }
+
+        return sb.toString();
     }
 }
