@@ -1,4 +1,4 @@
-package com.project.camphub.exception.error;
+package com.project.camphub.exception.common;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException() {

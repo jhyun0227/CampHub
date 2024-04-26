@@ -1,5 +1,7 @@
 package com.project.camphub.service.openapi;
 
+import com.project.camphub.common.dto.Response;
+import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
 import com.project.camphub.domain.camp.entity.Camp;
@@ -10,10 +12,7 @@ import com.project.camphub.domain.camp.entity.code.CampCode;
 import com.project.camphub.domain.common.entity.area.DistrictCode;
 import com.project.camphub.domain.common.entity.area.ProvinceCode;
 import com.project.camphub.domain.openapi.dto.OpenApiResponse;
-import com.project.camphub.repository.camp.CampDetailRepository;
-import com.project.camphub.repository.camp.CampFacilityRepository;
 import com.project.camphub.repository.camp.CampRepository;
-import com.project.camphub.repository.camp.CampSiteRepository;
 import com.project.camphub.service.camp.code.CampCodeService;
 import com.project.camphub.service.camp.helper.CampAssociationHelper;
 import com.project.camphub.service.common.area.AreaCodeService;
@@ -57,7 +56,7 @@ public class OpenApiService {
     /**
      * 데이터 초기화
      */
-    public void initializeCampList() {
+    public Response<Void> initializeCampList() {
         log.info("initializeCampList 시작");
 
         int maxPageCount = getMaxPageCount(null);
@@ -65,31 +64,23 @@ public class OpenApiService {
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, null);
         log.info("initializeCampList 실행, itemList.size()={}", itemList.size());
 
-        if (itemList.isEmpty()) {
-            log.info("initializeCampList 실행, 초기화 데이터 없음");
-            return;
-        }
-
         insertCampList(itemList);
 
         log.info("initializeCampList 완료");
+
+        return Response.success(ResponseCode.CODE_200, null);
     }
 
     /**
      * 데이터 동기화 및 수정
      */
-    public void refreshCampListFromAPI(String modDate) {
+    public Response<Void> refreshCampListFromAPI(String modDate) {
         log.info("refreshCampListFromAPI 시작");
 
         int maxPageCount = getMaxPageCount(modDate);
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, modDate);
         log.info("refreshCampListFromAPI 실행, itemList.size()={}", itemList.size());
-
-        if (itemList.isEmpty()) {
-            log.info("refreshCampListFromAPI 실행, 리프레시 데이터 없음. 해당날짜={}", modDate);
-            return;
-        }
 
         //기존에 적재된 데이터인지 조회에 필요한 idList
         List<String> itemContentIds = itemList.stream()
@@ -143,6 +134,8 @@ public class OpenApiService {
         updateCampList(updateCampItemList, findCampMap);
 
         log.info("refreshCampListFromAPI 완료");
+
+        return Response.success(ResponseCode.CODE_200, null);
     }
 
     /**
@@ -172,16 +165,54 @@ public class OpenApiService {
                         }
                 )
                 .retrieve()
-                .bodyToMono(OpenApiResponse.class);
+                .bodyToMono(OpenApiResponse.class)
+                /*
+                .onErrorResume(InvalidFormatException.class, invalidFormatException -> {
+
+                    String originalMessage = invalidFormatException.getOriginalMessage();
+                    String parsingFailedMessage = "Cannot coerce empty String (\"\") to `com.project.camphub.domain.openapi.dto.OpenApiResponse$Items`";
+
+                    if (originalMessage.contains(parsingFailedMessage)) {
+                        return Mono.just(createEmptyOpenApiResponse());
+                    }
+
+                    throw new OpenApiFetchException(invalidFormatException);
+                })
+                */
+                ;
     }
+
+    /*
+    private OpenApiResponse createEmptyOpenApiResponse() {
+        OpenApiResponse openApiResponse = new OpenApiResponse();
+        OpenApiResponse.Response response = new OpenApiResponse.Response();
+        OpenApiResponse.Body body = new OpenApiResponse.Body();
+        response.setBody(body);
+        openApiResponse.setResponse(response);
+
+        return openApiResponse;
+    }
+    */
 
     /**
      * 데이터 초기화 및 데이터 리프레쉬 시에 요청할 페이지의 수를 구하는 메서드
      * OpenAPI 요청은 1번에 최대 100개 가능
+     * 전달되는 데이터가 없어 파싱이 안될경우 빈 객체를 반환 받음
      */
     private int getMaxPageCount(String modDate) {
-        Mono<OpenApiResponse> findTotalCountResponse = fetchCampList(1, 1, modDate);
-        int totalCount = findTotalCountResponse.map(openApiResponse -> openApiResponse.getResponse().getBody().getTotalCount()).block().intValue();
+        OpenApiResponse openApiResponse = fetchCampList(1, 1, modDate).block();
+
+        int totalCount = openApiResponse.getResponse().getBody().getTotalCount();
+
+        /**
+         * 파싱 데이터가 없을 경우, fetchCampList 예외처리에서 초기화가 되지 않은 OpenApiResponse를 전달한다.
+         * totalCount는 0으로 반환되어진다.
+         */
+        /*
+        if (totalCount == 0) {
+            return 0;
+        }
+         */
 
         log.info("getMaxPageCount 실행, totalCount={}",  totalCount);
 
