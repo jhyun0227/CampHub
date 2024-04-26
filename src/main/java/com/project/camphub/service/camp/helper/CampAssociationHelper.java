@@ -51,7 +51,7 @@ public interface CampAssociationHelper<T, D> {
             if (i != campAssociationList.size() - 1) {
                 sb.append(campAssociationList.get(i).getCampCodeNm()).append(", ");
             } else {
-                sb.append(campAssociationList.get(i));
+                sb.append(campAssociationList.get(i).getCampCodeNm());
             }
         }
 
