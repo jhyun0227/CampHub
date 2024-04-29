@@ -1,6 +1,6 @@
 package com.project.camphub.exception;
 
-import com.project.camphub.common.dto.Response;
+import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.exception.openapi.OpenApiFetchException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class OpenApiControllerAdvice {
 
     @ExceptionHandler(OpenApiFetchException.class)
-    public ResponseEntity<Response<Void>> openApiFetchException(OpenApiFetchException e) {
+    public ResponseEntity<ResponseDto<Void>> openApiFetchException(OpenApiFetchException e) {
         log.error("openApiFetchException = {}", e);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Response.exception(ResponseCode.CODE_500, "OpenApi 호출 예외 발생, 로그 확인"));
+                .body(ResponseDto.exception(ResponseCode.CODE_500, "OpenApi 호출 예외 발생, 로그 확인"));
     }
 }

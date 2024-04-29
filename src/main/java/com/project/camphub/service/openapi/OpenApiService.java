@@ -1,6 +1,6 @@
 package com.project.camphub.service.openapi;
 
-import com.project.camphub.common.dto.Response;
+import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.config.webclient.PropertiesValue;
 import com.project.camphub.config.webclient.WebClientFactory;
@@ -56,14 +56,14 @@ public class OpenApiService {
     /**
      * 데이터 초기화
      */
-    public Response<Void> initializeCampList() {
+    public ResponseDto<Void> initializeCampList() {
         log.info("initializeCampList 시작");
 
         int maxPageCount = getMaxPageCount(null);
 
         if (maxPageCount == 0) {
             log.info("initializeCampList 완료, OpenApiResponse.Items 응답 데이터 없음");
-            return Response.success(ResponseCode.CODE_200, "OpenApiResponse.Items 응답 데이터 없음",null);
+            return ResponseDto.success(ResponseCode.CODE_200, "OpenApiResponse.Items 응답 데이터 없음",null);
         }
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, null);
@@ -73,20 +73,20 @@ public class OpenApiService {
 
         log.info("initializeCampList 완료");
 
-        return Response.success(ResponseCode.CODE_200, null);
+        return ResponseDto.success(ResponseCode.CODE_200, null);
     }
 
     /**
      * 데이터 동기화 및 수정
      */
-    public Response<Void> refreshCampListFromAPI(String modDate) {
+    public ResponseDto<Void> refreshCampListFromAPI(String modDate) {
         log.info("refreshCampListFromAPI 시작");
 
         int maxPageCount = getMaxPageCount(modDate);
 
         if (maxPageCount == 0) {
             log.info("refreshCampListFromAPI 완료, OpenApiResponse.Items 응답 데이터 없음");
-            return Response.success(ResponseCode.CODE_200, "OpenApiResponse.Items 응답 데이터 없음",null);
+            return ResponseDto.success(ResponseCode.CODE_200, "OpenApiResponse.Items 응답 데이터 없음",null);
         }
 
         List<OpenApiResponse.Item> itemList = getOpenApiResponseItemList(maxPageCount, modDate);
@@ -145,7 +145,7 @@ public class OpenApiService {
 
         log.info("refreshCampListFromAPI 완료");
 
-        return Response.success(ResponseCode.CODE_200, null);
+        return ResponseDto.success(ResponseCode.CODE_200, null);
     }
 
     /**

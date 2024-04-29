@@ -1,6 +1,6 @@
 package com.project.camphub.service.camp;
 
-import com.project.camphub.common.dto.Response;
+import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.domain.camp.dto.CampDto;
 import com.project.camphub.domain.camp.entity.Camp;
@@ -32,7 +32,7 @@ public class CampService {
     private final SeasonMapRegistry seasonMapRegistry;
     private final ThemeMapRegistry themeMapRegistry;
 
-    public Response<CampDto> findById(String cpId) {
+    public ResponseDto<CampDto> findById(String cpId) {
 
         Optional<Camp> optionalCamp = campRepository.findByCpId(cpId);
 
@@ -47,7 +47,7 @@ public class CampService {
 
         setAssociations(camp, campDto);
 
-        return Response.success(ResponseCode.CODE_200, campDto);
+        return ResponseDto.success(ResponseCode.CODE_200, campDto);
     }
 
     /**

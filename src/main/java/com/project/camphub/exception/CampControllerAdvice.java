@@ -1,6 +1,6 @@
 package com.project.camphub.exception;
 
-import com.project.camphub.common.dto.Response;
+import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.exception.camp.CampNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CampControllerAdvice {
 
     @ExceptionHandler(CampNotFoundException.class)
-    public ResponseEntity<Response<Void>> campNotFoundException(CampNotFoundException e) {
+    public ResponseEntity<ResponseDto<Void>> campNotFoundException(CampNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Response.exception(ResponseCode.CODE_404, e.getMessage()));
+                .body(ResponseDto.exception(ResponseCode.CODE_404, e.getMessage()));
     }
 }
