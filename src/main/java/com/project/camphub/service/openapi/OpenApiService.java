@@ -257,7 +257,7 @@ public class OpenApiService {
             });
         }
 
-//        log.info("saveCampIds = {}", getCampIds(itemList));
+        log.info("saveCampIds = {}", getCampIds(itemList));
         log.info("insertCampList 종료, saveCampList.size()={}", itemList.size());
     }
 

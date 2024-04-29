@@ -189,7 +189,7 @@ public class Camp implements Persistable<String> {
     }
 
     public void updateCamp(OpenApiResponse.Item item, Map<String, ProvinceCode> provinceCodeMap, Map<String, DistrictCode> districtCodeMap) {
-        this.cpName = item.getFeatureNm();
+        this.cpName = item.getFacltNm();
         this.cpTel = item.getTel();
         this.cpHomepageUrl = item.getHomepage();
         this.cpResvUrl = item.getResveUrl();
