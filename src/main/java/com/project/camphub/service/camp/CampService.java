@@ -34,7 +34,7 @@ public class CampService {
 
     public ResponseDto<CampDto> findById(String cpId) {
 
-        Camp camp = campRepository.findById(cpId)
+        Camp camp = campRepository.findByCpId(cpId)
                 .orElseThrow(() -> new CampNotFoundException("존재하지 않는 캠핑장입니다."));
 
         camp.addReadCount();
