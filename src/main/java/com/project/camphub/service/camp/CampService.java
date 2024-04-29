@@ -34,17 +34,12 @@ public class CampService {
 
     public ResponseDto<CampDto> findById(String cpId) {
 
-        Optional<Camp> optionalCamp = campRepository.findByCpId(cpId);
+        Camp camp = campRepository.findById(cpId)
+                .orElseThrow(() -> new CampNotFoundException("존재하지 않는 캠핑장입니다."));
 
-        if (optionalCamp.isEmpty()) {
-            throw new CampNotFoundException("존재하지 않는 캠핑장입니다.");
-        }
-
-        Camp camp = optionalCamp.get();
         camp.addReadCount();
 
         CampDto campDto = CampDto.entityToDto(camp);
-
         setAssociations(camp, campDto);
 
         return ResponseDto.success(ResponseCode.CODE_200, campDto);
