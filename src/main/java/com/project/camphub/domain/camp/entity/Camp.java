@@ -22,7 +22,9 @@ import static com.project.camphub.common.utils.DateUtils.parseStringToLocalDateT
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-//@ToString
+@ToString(exclude = {"campDetail", "campFacility", "campSite", "campAmenityList", "campCaravanInnerAmenityList", "campEquipmentRentalList",
+        "campGlampingInnerAmenityList", "campIndustryList", "campLocationList", "campNearbyFacilityList", "campOperationSeasonList",
+        "campOperationSeasonList", "campThemeList", "campTravelSeasonList"})
 public class Camp implements Persistable<String> {
 
     @Id
