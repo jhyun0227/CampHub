@@ -3,16 +3,20 @@ package com.project.camphub.service.camp;
 import com.project.camphub.common.dto.ResponseDto;
 import com.project.camphub.common.dto.enumaration.ResponseCode;
 import com.project.camphub.domain.camp.dto.CampDto;
+import com.project.camphub.domain.camp.dto.CampListDto;
+import com.project.camphub.domain.camp.dto.CampSearchCondDto;
 import com.project.camphub.domain.camp.entity.Camp;
 import com.project.camphub.domain.camp.registry.*;
 import com.project.camphub.exception.camp.CampNotFoundException;
 import com.project.camphub.repository.camp.CampRepository;
+import com.project.camphub.repository.camp.QuerydslCampRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -21,6 +25,7 @@ import java.util.Optional;
 public class CampService {
 
     private final CampRepository campRepository;
+    private final QuerydslCampRepository querydslCampRepository;
 
     private final AmenityMapRegistry amenityMapRegistry;
     private final EquipmentMapRegistry equipmentMapRegistry;
@@ -32,7 +37,7 @@ public class CampService {
     private final SeasonMapRegistry seasonMapRegistry;
     private final ThemeMapRegistry themeMapRegistry;
 
-    public ResponseDto<CampDto> findById(String cpId) {
+    public ResponseDto<CampDto> findCampById(String cpId) {
 
         Camp camp = campRepository.findByCpId(cpId)
                 .orElseThrow(() -> new CampNotFoundException("존재하지 않는 캠핑장입니다."));
@@ -43,6 +48,19 @@ public class CampService {
         setAssociations(camp, campDto);
 
         return ResponseDto.success(ResponseCode.CODE_200, campDto);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseDto<List<CampListDto>> findCampListByCond(CampSearchCondDto campSearchCondDto) {
+
+        List<Camp> findCampList = querydslCampRepository.findCampListByCond(campSearchCondDto);
+
+        List<CampListDto> resultList = new ArrayList<>();
+        findCampList.forEach(camp -> {
+            resultList.add(CampListDto.entityToDto(camp));
+        });
+
+        return ResponseDto.success(ResponseCode.CODE_200, resultList);
     }
 
     /**

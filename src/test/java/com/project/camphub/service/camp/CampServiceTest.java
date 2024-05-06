@@ -26,7 +26,7 @@ class CampServiceTest {
     void findById_success() {
         String cpId = "10";
 
-        ResponseDto<CampDto> responseDto = campService.findById(cpId);
+        ResponseDto<CampDto> responseDto = campService.findCampById(cpId);
 
         Assertions.assertThat(responseDto.code()).isEqualTo(200);
 
@@ -40,7 +40,7 @@ class CampServiceTest {
     void findById_fail() {
         String cpId = "123123";
 
-        Assertions.assertThatThrownBy(() -> campService.findById(cpId))
+        Assertions.assertThatThrownBy(() -> campService.findCampById(cpId))
                 .isInstanceOf(CampNotFoundException.class);
     }
 }
