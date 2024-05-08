@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    container_name: camphub-mysql
+    container_name: mysql
     image: mysql:8.3.0
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -12,13 +12,16 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /Users/junho/docker/camphub:/var/lib/mysql
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - C:\project\docker\camphub:/var/lib/mysql
+      - ..\..\src\main\resources\db\init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
     networks:
-      - camphub-network
+      - network
 
   app:
-    container_name: camphub-app
+    container_name: app
     build:
       context: .
       dockerfile: Dockerfile
@@ -31,9 +34,8 @@ services:
     depends_on:
       - db
     networks:
-      - camphub-network
+      - network
 
 networks:
-  camphub-network:
-    name: camphub-network
+  network:
     driver: bridge
