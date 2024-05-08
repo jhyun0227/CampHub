@@ -24,7 +24,7 @@ import static com.project.camphub.common.utils.DateUtils.parseStringToLocalDateT
 @Builder
 @ToString(exclude = {"campDetail", "campFacility", "campSite", "campAmenityList", "campCaravanInnerAmenityList", "campEquipmentRentalList",
         "campGlampingInnerAmenityList", "campIndustryList", "campLocationList", "campNearbyFacilityList", "campOperationSeasonList",
-        "campOperationSeasonList", "campReservationList", "campThemeList", "campTravelSeasonList"})
+        "campReservationList", "campThemeList", "campTravelSeasonList"})
 public class Camp implements Persistable<String> {
 
     @Id
