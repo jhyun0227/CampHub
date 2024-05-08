@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: camphub-mysql
+    image: mysql:8.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: camphub
+      MYSQL_USER: camphub
+      MYSQL_PASSWORD: camphub
+    ports:
+      - "3306:3306"
+    volumes:
+      - /Users/junho/docker/camphub:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - camphub-network
+
+  app:
+    container_name: camphub-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/camphub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: camphub
+      SPRING_DATASOURCE_PASSWORD: camphub
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - camphub-network
+
+networks:
+  camphub-network:
+    name: camphub-network
+    driver: bridge
