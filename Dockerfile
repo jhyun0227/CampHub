@@ -1,5 +1,7 @@
+# 사용할 이미지
 FROM openjdk:21
 
+# 도커내 작업할 디렉토리
 WORKDIR /app
 
 # Gradle 빌드 결과물인 JAR 파일을 지정

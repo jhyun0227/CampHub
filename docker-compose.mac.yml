@@ -24,7 +24,7 @@ services:
     container_name: app
     build:
       context: .
-      dockerfile: Dockerfile.mac
+      dockerfile: Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/camphub?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: camphub
